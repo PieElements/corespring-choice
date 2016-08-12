@@ -38,4 +38,4 @@ var CorespringMultipleChoiceReact = React.createClass({
   }
 });
 
-// module.exports = CorespringMultipleChoiceReact;
+module.exports = CorespringMultipleChoiceReact;
