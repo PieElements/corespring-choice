@@ -44,9 +44,110 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../scripts/example\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var CorespringMultipleChoiceReact = __webpack_require__(1);
 
-	pie.framework('react').register('corespring-multiple-choice', Main);
+	var Main = React.createClass({
+	  displayName: 'Main',
+
+	  handlePlotterChange: function (event) {
+	    this.props.session.response = event.values;
+	  },
+	  handleTrackInteraction: function () {
+	    // console.log('handle track interaction changed', arguments);     
+	  },
+	  render: function () {
+
+	    var starting;
+	    if (this.props.session.response) {
+	      starting = this.props.session.response;
+	    } else {
+	      starting = _.map(this.props.model.categories, function () {
+	        return 1;
+	      });
+	    }
+
+	    var isStatic = this.props.model.env.mode !== 'gather';
+	    var correct, message;
+
+	    if (this.props.model.outcome && this.props.model.env.mode === 'evaluate') {
+	      correct = this.props.model.outcome.correctness === 'correct';
+	      message = this.props.model.outcome.feedback;
+	    }
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(CorespringMultipleChoiceReact, null)
+	    );
+	  }
+	});
+
+	// module.exports = Main;
+
+	pie.framework('react').register('corpesring-multiple-choice-react', Main);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	var CorespringChoiceButton = React.createClass({ displayName: 'CorespringChoiceButton',
+	  render: function () {
+	    return React.createElement(
+	      "label",
+	      { className: "corespring-choice-button" },
+	      React.createElement("input", { type: this.props.mode, name: "group" }),
+	      React.createElement(
+	        "span",
+	        null,
+	        this.props['display-key'],
+	        ". "
+	      ),
+	      React.createElement(
+	        "span",
+	        null,
+	        this.props.label
+	      )
+	    );
+	  }
+	});
+
+	var CorespringMultipleChoiceReact = React.createClass({
+	  displayName: 'CorespringMultipleChoiceReact',
+	  propTypes: {
+	    prompt: React.PropTypes.string.isRequired,
+	    choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']).isRequired,
+	    keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired
+	  },
+
+	  _indexToSymbol(index) {
+	    return this.props.keyMode === 'numbers' ? index + 1 : String.fromCharCode(97 + index).toUpperCase();
+	  },
+
+	  render: function () {
+	    console.log('render!');
+	    var self = this;
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "div",
+	        { className: "prompt" },
+	        this.props.prompt
+	      ),
+	      React.createElement(
+	        "div",
+	        null,
+	        this.props.choices.map(function (choice, index) {
+	          return React.createElement(CorespringChoiceButton, { mode: self.props.choiceMode, label: choice.label, "display-key": self._indexToSymbol(index) });
+	        })
+	      )
+	    );
+	  }
+	});
+
+	// module.exports = CorespringMultipleChoiceReact;
+
 
 /***/ }
 /******/ ]);

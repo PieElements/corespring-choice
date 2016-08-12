@@ -3,7 +3,7 @@
     {
       "id": "1",
       "component": {
-        "name": "corespring-multiple-choice",
+        "name": "corespring-multiple-choice-react",
         "version": "1.0.0"
       },
       "model": {

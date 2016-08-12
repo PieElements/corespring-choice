@@ -1,42 +1,41 @@
-var CorespringChoiceButton = React.createClass({displayName: 'CorespringChoiceButton',
-  render: function() {
-    return (
-      <label className="corespring-choice-button">
-        <input type={this.props.mode} name="group"></input>
-        <span>{this.props['display-key']}. </span>
-        <span>{this.props.label}</span>
-      </label>
+var CorespringMultipleChoiceReact = require('./corespring-multiple-choice-react');
+
+var Main = React.createClass({
+  displayName: 'Main',
+
+  handlePlotterChange: function (event) {
+    this.props.session.response = event.values;
+  },
+  handleTrackInteraction: function () {
+    // console.log('handle track interaction changed', arguments);     
+  },
+  render: function () {
+
+    var starting;
+    if (this.props.session.response) {
+      starting = this.props.session.response;
+    } else {
+      starting = _.map(this.props.model.categories, function () {
+        return 1;
+      });
+    }
+
+    var isStatic = this.props.model.env.mode !== 'gather';
+    var correct, message;
+
+    if (this.props.model.outcome && this.props.model.env.mode === 'evaluate') {
+      correct = this.props.model.outcome.correctness === 'correct';
+      message = this.props.model.outcome.feedback;
+    }
+
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(CorespringMultipleChoiceReact, null)
     );
   }
 });
 
-var CorespringMultipleChoice = React.createClass({
-  displayName: 'CorespringMultipleChoice',
-  propTypes: {
-    prompt: React.PropTypes.string.isRequired,
-    choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']).isRequired,
-    keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired
-  },
+// module.exports = Main;
 
-  _indexToSymbol(index) {
-    return (this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase();
-  },
-  
-  render: function() {
-    var self = this;
-    return (
-      <div>
-        <div className="prompt">{this.props.prompt}</div>
-        <div>{
-          this.props.choices.map(function(choice, index) {
-            return <CorespringChoiceButton mode={self.props.choiceMode} label={choice.label} display-key={self._indexToSymbol(index)}/>;
-          })
-        }</div>
-      </div>
-    );
-  }
-});
-
-// module.exports = CorespringMultipleChoice;
-
-pie.framework('react').register('corespring-multiple-choice', CorespringMultipleChoice);
+pie.framework('react').register('corpesring-multiple-choice-react', Main);

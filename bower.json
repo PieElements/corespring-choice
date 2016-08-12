@@ -1,28 +1,25 @@
 {
   "name": "corespring-multiple-choice-react",
-  "authors": [
-    "Ben Burton <benjamin.joseph.burton@gmail.com>"
-  ],
-  "description": "A multiple choice (React) component",
+  "version" : "1.0.0",
   "main" : [
     "dist/bundle.js",
     "dist/index.css"
   ],
-  "moduleType": [],
-  "keywords": [
-    "react"
-  ],
-  "license": "MIT",
-  "homepage": "",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
   "dependencies": {
-    "react": "~15.3.0"
+    "react" : "~15.0.1",
+    "pie-react-support" : "git@github.com:PieLabs/pie-react-support.git",
+    "lodash"  : "~4.11.2"
+  },
+  "overrides" : {
+    "react" : {
+      "main": {
+        "swap" : {
+          "react.js" : "react-with-addons.js"
+        },
+        "add" : [
+          "react-dom.js"
+        ]
+      } 
+    }
   }
 }
