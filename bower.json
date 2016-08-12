@@ -1,0 +1,28 @@
+{
+  "name": "corespring-multiple-choice-react",
+  "authors": [
+    "Ben Burton <benjamin.joseph.burton@gmail.com>"
+  ],
+  "description": "A multiple choice (React) component",
+  "main" : [
+    "dist/bundle.js",
+    "dist/index.css"
+  ],
+  "moduleType": [],
+  "keywords": [
+    "react"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~15.3.0"
+  }
+}
