@@ -27,6 +27,7 @@ var CorespringMultipleChoiceReact = React.createClass({
     var self = this;
     return (
       <div>
+        <span>TODO...</span>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           this.props.choices.map(function(choice, index) {
@@ -38,4 +39,4 @@ var CorespringMultipleChoiceReact = React.createClass({
   }
 });
 
-// module.exports = CorespringMultipleChoiceReact;
+module.exports = CorespringMultipleChoiceReact;

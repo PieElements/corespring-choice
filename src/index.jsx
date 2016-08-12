@@ -25,13 +25,19 @@ var Main = React.createClass({
       correct = this.props.model.outcome.correctness === 'correct';
       message = this.props.model.outcome.feedback;
     }
+
+    var choices = [];
      
     return <div>
-        <CorespringMultipleChoiceReact/>
+        <CorespringMultipleChoiceReact 
+          prompt={this.props.model.prompt} 
+          choiceMode={this.props.model.choiceMode}
+          keyMode={this.props.model.keyMode}
+          choices={choices}/>
       </div>;
   } 
 });
 
 // module.exports = Main;
 
-pie.framework('react').register('corpesring-multiple-choice-react', Main);
+pie.framework('react').register('corespring-multiple-choice-react', Main);
