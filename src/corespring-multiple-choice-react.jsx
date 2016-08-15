@@ -1,8 +1,11 @@
 var CorespringChoiceButton = React.createClass({displayName: 'CorespringChoiceButton',
+  onChange: function(el) {
+    console.log('el.target', el.target);
+  },
   render: function() {
     return (
       <label className="corespring-choice-button">
-        <input type={this.props.mode} name="group"></input>
+        <input type={this.props.mode} name="group" value={this.props['choice-id']} onChange={this.onChange}></input>
         <span>{this.props['display-key']}. </span>
         <span>{this.props.label}</span>
       </label>
@@ -23,14 +26,13 @@ var CorespringMultipleChoiceReact = React.createClass({
   },
   
   render: function() {
-    console.log('render!');
     var self = this;
     return (
       <div>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           this.props.choices.map(function(choice, index) {
-            return <CorespringChoiceButton mode={self.props.choiceMode} label={choice.label} display-key={self._indexToSymbol(index)}/>;
+            return <CorespringChoiceButton mode={self.props.choiceMode} choice-id={choice.id} label={choice.label} key={index} display-key={self._indexToSymbol(index)}/>;
           })
         }</div>
       </div>
