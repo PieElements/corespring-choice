@@ -35,6 +35,7 @@ var CorespringMultipleChoiceReact = React.createClass({
   onChange: function(value) {
     // set the parent session value.
     this.props.session.value = [value];
+    console.log('session', this.props.session);
   },
   _indexToSymbol(index) {
     return (this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase();

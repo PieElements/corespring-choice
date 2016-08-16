@@ -36,7 +36,8 @@ var Main = React.createClass({
           prompt={this.props.model.prompt} 
           choiceMode={this.props.model.choiceMode}
           keyMode={this.props.model.keyMode}
-          choices={this.props.model.choices} />
+          choices={this.props.model.choices}
+          session={this.props.session} />
       </div>;
   } 
 });

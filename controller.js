@@ -14,13 +14,7 @@ exports.model = function(question, session, env) {
 
     console.log('session', session);
 
-    // var allCorrect = _.isEqual(session.value.sort(), question.correctResponse.sort());
-    // console.log('session.value: allCorrect', allCorrect, session.value, typeof (session.value), 'question.correctResponse: ', question.correctResponse, typeof (question.correctResponse));
-
-    // if (!allCorrect) {
-    //   base.config.correctResponse = question.correctResponse;
-    // }
-    // base.outcomes = createOutcomes(allCorrect);
+    var allCorrect = _.isEqual(session.value.sort(), question.correctResponse.sort());
   }
 
   console.log('return: ', JSON.stringify(out, null, '  '));
