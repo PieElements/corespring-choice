@@ -1,11 +1,15 @@
-var CorespringChoiceButton = React.createClass({displayName: 'CorespringChoiceButton',
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Checkbox from 'material-ui/Checkbox';
+
+var CorespringRadioButton = React.createClass({displayName: 'CorespringChoiceButton',
   onChange: function(el) {
-    console.log('el.target', el.target);
+    this.props.onChange(el.target.value);
+    //el.target.value;
   },
   render: function() {
     return (
       <label className="corespring-choice-button">
-        <input type={this.props.mode} name="group" value={this.props['choice-id']} onChange={this.onChange}></input>
+        <input type="radio" name={this.props['component-id']} value={this.props.value} onChange={this.onChange}></input>
         <span>{this.props['display-key']}. </span>
         <span>{this.props.label}</span>
       </label>
@@ -15,24 +19,36 @@ var CorespringChoiceButton = React.createClass({displayName: 'CorespringChoiceBu
 
 var CorespringMultipleChoiceReact = React.createClass({
   displayName: 'CorespringMultipleChoiceReact',
+  getDefaultProps: function() {
+    return {
+      session: {
+        value: []
+      }
+    };
+  },
   propTypes: {
     prompt: React.PropTypes.string.isRequired,
     choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']).isRequired,
-    keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired
+    keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired,
+    session: React.PropTypes.object
   },
-
+  onChange: function(value) {
+    // set the parent session value.
+    this.props.session.value = [value];
+  },
   _indexToSymbol(index) {
     return (this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase();
   },
   
   render: function() {
     var self = this;
+    var componentId = "replace-me";
     return (
       <div>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           this.props.choices.map(function(choice, index) {
-            return <CorespringChoiceButton mode={self.props.choiceMode} choice-id={choice.id} label={choice.label} key={index} display-key={self._indexToSymbol(index)}/>;
+            return <CorespringRadioButton onChange={self.onChange} value={choice.value} label={choice.label} key={index} component-id={componentId} display-key={self._indexToSymbol(index)}/>;
           })
         }</div>
       </div>
