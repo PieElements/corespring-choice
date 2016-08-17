@@ -19,16 +19,18 @@ var Main = React.createClass({
     var isStatic = this.props.model.env.mode !== 'gather';
     var correct, message;
     
-    if (this.props.model.outcome && this.props.model.env.mode === 'evaluate') {
-      correct = this.props.model.outcome.correctness === 'correct';
-      message = this.props.model.outcome.feedback;
+    if (this.props.model.outcomes && this.props.model.env.mode === 'evaluate') {
+      correct = this.props.model.outcomes.correctness === 'correct';
+      message = this.props.model.outcomes.feedback;
     }
 
-    return (
+    console.log(this.props);
 
+    return (
       <div>
         <MuiThemeProvider>
           <CorespringMultipleChoiceReact
+            outcomes={this.props.model.outcomes}
             prompt={this.props.model.prompt} 
             choiceMode={this.props.model.choiceMode}
             keyMode={this.props.model.keyMode}

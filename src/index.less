@@ -2,8 +2,51 @@
   display: block;
   font-weight: normal;
 
-  input[type=radio] {
+  input[type=checkbox] {
     margin-right: 10px;
   }
 
+}
+
+svg {
+  width: 25px;
+  float: left;
+}
+
+.label{
+  position: absolute;
+  left: 30px;
+  height: 25px;
+  line-height: 28px;
+  vertical-align: middle;
+  color: #1a9cff;
+  font-family: sans-serif;
+}
+
+.show-icon-background {
+  fill: white;
+}
+
+.hide-icon-background {
+  fill: #bce2ff;
+}
+
+.show-icon-border {
+  fill: #bce2ff;
+}
+
+.show-icon-foreground, .hide-icon-foreground {
+  fill: #1a9cff;
+}
+
+.root{
+  position: relative;
+}
+
+.svg-holder{
+  position: absolute;
+}
+
+.svg-holder > svg {
+  position: absolute;
 }
