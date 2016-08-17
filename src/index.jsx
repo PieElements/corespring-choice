@@ -1,16 +1,9 @@
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 var CorespringMultipleChoiceReact = require('./corespring-multiple-choice-react');
 
 var Main = React.createClass({
-
-  handlePlotterChange: function(event) {
-    this.props.session.response = event.values;
-  },
-
-  handleTrackInteraction: function() {
-    // console.log('handle track interaction changed', arguments);     
-  },
 
   render: function() {
     var starting;
@@ -22,7 +15,7 @@ var Main = React.createClass({
         return 1;
       });
     }
-    
+
     var isStatic = this.props.model.env.mode !== 'gather';
     var correct, message;
     
@@ -31,14 +24,19 @@ var Main = React.createClass({
       message = this.props.model.outcome.feedback;
     }
 
-    return <div>
-        <CorespringMultipleChoiceReact 
-          prompt={this.props.model.prompt} 
-          choiceMode={this.props.model.choiceMode}
-          keyMode={this.props.model.keyMode}
-          choices={this.props.model.choices}
-          session={this.props.session} />
-      </div>;
+    return (
+
+      <div>
+        <MuiThemeProvider>
+          <CorespringMultipleChoiceReact
+            prompt={this.props.model.prompt} 
+            choiceMode={this.props.model.choiceMode}
+            keyMode={this.props.model.keyMode}
+            choices={this.props.model.choices}
+            session={this.props.session} />
+        </MuiThemeProvider>
+      </div>
+    );
   } 
 });
 
