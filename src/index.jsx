@@ -24,13 +24,12 @@ var Main = React.createClass({
       message = this.props.model.outcomes.feedback;
     }
 
-    console.log(this.props);
-
     return (
       <div>
         <MuiThemeProvider>
           <CorespringMultipleChoiceReact
             outcomes={this.props.model.outcomes}
+            correctResponse={this.props.model.config.correctResponse}
             prompt={this.props.model.prompt} 
             choiceMode={this.props.model.choiceMode}
             keyMode={this.props.model.keyMode}
