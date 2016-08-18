@@ -146,6 +146,7 @@ var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
         <CorespringFeedbackTick correctness={self.props.correctness} />
         <div className="checkbox-holder">
           <Checkbox
+            disabled={self.props.disabled}
             checked={self._checked()}
             onCheck={self.onCheck}
             label={this.props['display-key'] + '. ' + this.props.label} />
@@ -231,7 +232,7 @@ var CorespringMultipleChoiceReact = React.createClass({
   },
 
   _correct: function(choice) {
-        var outcome, response;
+    var outcome, response;
     if (this.state.showCorrect && this.props.correctResponse) {
       for (var i in this.props.correctResponse) {
         response = this.props.correctResponse[i];
@@ -256,6 +257,10 @@ var CorespringMultipleChoiceReact = React.createClass({
       } 
     }
   },
+
+  disabled: function() {
+    return this.props.mode !== 'gather';
+  },
   
   render: function() {
     var self = this;
@@ -270,7 +275,7 @@ var CorespringMultipleChoiceReact = React.createClass({
             var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
             return (
               <div className={choiceClass} key={index}>
-                <CorespringCheckbox onChange={self.onChange} correct={self._correct(choice)} correctness={self._correctness(choice)} feedback={self._feedback(choice)} label={choice.label} value={choice.value} component-id={componentId} display-key={self._indexToSymbol(index)} />
+                <CorespringCheckbox disabled={self.disabled()} onChange={self.onChange} correct={self._correct(choice)} correctness={self._correctness(choice)} feedback={self._feedback(choice)} label={choice.label} value={choice.value} component-id={componentId} display-key={self._indexToSymbol(index)} />
               </div>
             )
           })

@@ -24,6 +24,8 @@ var Main = React.createClass({
       message = this.props.model.outcomes.feedback;
     }
 
+    console.log('props', this.props);
+
     return (
       <div>
         <MuiThemeProvider>
@@ -34,7 +36,8 @@ var Main = React.createClass({
             choiceMode={this.props.model.choiceMode}
             keyMode={this.props.model.keyMode}
             choices={this.props.model.choices}
-            session={this.props.session} />
+            session={this.props.session}
+            mode={this.props.model.env.mode} />
         </MuiThemeProvider>
       </div>
     );
