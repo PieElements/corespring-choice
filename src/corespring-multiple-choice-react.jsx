@@ -15,6 +15,44 @@ var CorespringRadioButton = React.createClass({displayName: 'CorespringChoiceBut
   }
 });
 
+var CorespringFeedbackTick = React.createClass({displayName: 'CorespringFeedbackTick',
+  render: function() {
+    var self = this;
+    return (
+      <div className="feedback-tick">{
+        (function() {
+          if (self.props.correctness === 'incorrect') {
+            return (
+              <svg
+                  className="incorrect-icon"
+                  preserveAspectRatio="xMinYMin meet" x="0px" y="0px" viewBox="0 0 44 40" style={{"enableBackground": "new 0 0 44 40"}}>
+                <g>
+                  <rect x="11" y="17.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.852 19.2507)" className="incorrect-background" width="16.6"
+                    height="3.7"></rect>
+                  <rect x="17.4" y="10.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.8175 19.209)" className="incorrect-background" width="3.7"
+                    height="16.6"></rect>
+                </g>
+              </svg>
+            );
+          } else if (self.props.correctness === 'correct') {
+            return (
+              <svg 
+                  className="correct-icon"
+                  preserveAspectRatio="xMinYMin meet" version="1.1" x="0px" y="0px" viewBox="0 0 44 40" style={{"enableBackground": "new 0 0 44 40"}}>
+                <g>
+                  <g>
+                    <polygon className="correct-background" points="19.1,28.6 11.8,22.3 14.4,19.2 17.9,22.1 23.9,11.4 27.5,13.4"></polygon>
+                  </g>
+                </g>
+              </svg>
+            );
+          }
+        })()
+      }</div>
+    );
+  }
+});
+
 var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'CorespringShowCorrectAnswerToggle',
   getDefaultProps: function() {
     return {
@@ -32,7 +70,7 @@ var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'Corespr
         (function() {
           if (self.props.show) {
             return (
-              <div class="root" onClick={self.onClick}>
+              <div className="corespring-correct-answer-toggle" onClick={self.onClick}>
                 <div class="svg-holder">{
                   (function() {
                     if (self.props.toggle) {
@@ -75,7 +113,7 @@ var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'Corespr
 });
 
 var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
-  onChange: function(el) {
+  onCheck: function(el) {
     this.props.onChange({
       value: this.props.value, 
       selected: el.target.checked
@@ -84,10 +122,14 @@ var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
   render: function() {
     var self = this;
     return (
-      <label className="corespring-choice-button">
-        <input type="checkbox" onChange={self.onChange}/>
-        {this.props['display-key'] + '. ' + this.props.label}
-      </label>
+      <div className="corespring-checkbox">
+        <CorespringFeedbackTick correctness={self.props.correctness} />
+        <div className="checkbox-holder">
+          <Checkbox
+            onCheck={self.onCheck}
+            label={this.props['display-key'] + '. ' + this.props.label} />
+        </div>
+      </div>
     );
   }
 });
@@ -110,6 +152,7 @@ var CorespringMultipleChoiceReact = React.createClass({
     prompt: React.PropTypes.string.isRequired,
     choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']).isRequired,
     keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired,
+    outcomes: React.PropTypes.object,
     session: React.PropTypes.object
   },
   toggle: function() {
@@ -128,8 +171,21 @@ var CorespringMultipleChoiceReact = React.createClass({
       this.props.session.value.splice(index, 1);
     }
   },
-  _indexToSymbol(index) {
+  
+  _indexToSymbol: function(index) {
     return (this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase();
+  },
+
+  _correctness: function(choice) {
+    if (this.props.outcomes) {
+      var outcome;
+      for (var i in this.props.outcomes) {
+        outcome = this.props.outcomes[i];
+        if (outcome.value === choice.value) {
+          return outcome.correct ? 'correct' : 'incorrect';
+        }
+      }
+    }
   },
 
   hideShow: function() {
@@ -141,12 +197,17 @@ var CorespringMultipleChoiceReact = React.createClass({
     console.log('this.props', this.props);
     var componentId = "replace-me";
     return (
-      <div>
+      <div className="corespring-multiple-choice-react">
         <CorespringShowCorrectAnswerToggle show={self.props.outcomes.length !== 0} onClick={self.toggle} toggle={self.state.showCorrect}/>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           this.props.choices.map(function(choice, index) {
-            return <CorespringCheckbox onChange={self.onChange} label={choice.label} key={index} value={choice.value} component-id={componentId} display-key={self._indexToSymbol(index)}/>;
+            var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
+            return (
+              <div className={choiceClass} key={index}>
+                <CorespringCheckbox onChange={self.onChange} correctness={self._correctness(choice)} label={choice.label} value={choice.value} component-id={componentId} display-key={self._indexToSymbol(index)}/>
+              </div>
+            )
           })
         }</div>
       </div>

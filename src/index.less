@@ -1,52 +1,79 @@
-.corespring-choice-button {
-  display: block;
-  font-weight: normal;
+.corespring-multiple-choice-react {
+  
+  .prompt {
+    color: black;
+    height: 43px;
+    line-height: 43px;
+    vertical-align: middle;
+  }
 
-  input[type=checkbox] {
-    margin-right: 10px;
+  .corespring-correct-answer-toggle {
+    svg {
+      display: none;
+    }
+  }
+
+  .choice {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E0DEE0;
+
+    &.last {
+      border-bottom: none;
+    }
+
+  }
+
+  .corespring-checkbox {
+    width: auto;
+    display: inline-block;
+
+    input[type=checkbox] {
+      width: auto;
+      display: inline-block;
+      border-color: #a2d4f2;
+    }
+
+    .feedback-tick {
+      position: relative;
+      width: 33px;
+      height: 33px;
+      float: left;
+      vertical-align: top;
+      display: inline-block;
+      top: -5px;
+
+      svg {
+        position: absolute;
+        display: inline-block;
+        width: 33px;
+        height: 33px;
+        vertical-align: middle;
+
+        .incorrect-background {
+          fill: orange;
+        }
+
+        .correct-background {
+          fill: green;
+        }
+      }
+    }
+
+    .checkbox-holder {
+      display: inline-block;
+      width: auto;
+
+      label {
+        width: auto !important;
+      }
+
+      div div div {
+        margin-right: 8px !important;
+      }
+    }
+
   }
 
 }
 
-svg {
-  width: 25px;
-  float: left;
-}
-
-.label{
-  position: absolute;
-  left: 30px;
-  height: 25px;
-  line-height: 28px;
-  vertical-align: middle;
-  color: #1a9cff;
-  font-family: sans-serif;
-}
-
-.show-icon-background {
-  fill: white;
-}
-
-.hide-icon-background {
-  fill: #bce2ff;
-}
-
-.show-icon-border {
-  fill: #bce2ff;
-}
-
-.show-icon-foreground, .hide-icon-foreground {
-  fill: #1a9cff;
-}
-
-.root{
-  position: relative;
-}
-
-.svg-holder{
-  position: absolute;
-}
-
-.svg-holder > svg {
-  position: absolute;
-}

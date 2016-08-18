@@ -67,9 +67,9 @@ exports.model = function(question, session, env) {
     black_on_rose: 'black-on-rose',
     white_on_black: 'white-on-black',
     black_on_white: 'default'
-  }
+  };
 
-  if(env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]){
+  if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]){
     base.className = map[env.accessibility.colorContrast];
   }
 
