@@ -33,7 +33,7 @@
         }
       },
       "model": {
-        "prompt": "This is a prompt...",
+        "prompt": "Choose the 2 tastiest things",
         "choiceMode": "radio",
         "keyMode": "numbers",
         "disabled": false,
