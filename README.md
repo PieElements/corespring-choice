@@ -1,15 +1,16 @@
-# Build 
+# corespring-pie-multiple-choice
 
-Note: Haven't streamlined this yet... for now: 
+A multiple choice component for [pie](http://github.com/PieLabs/pie).
 
-```shell
-npm install -g webpack less
-npm install babel-cli
-babel --presets react src/index.jsx --out-file dist/index.js
-webpack dist/index.js dist/bundle.js
-lessc src/index.less dist/index.css
-```
+## Build
 
-# Run Demo
-    cd serve-pie-demo
-    serve-pie
+    ./compile.sh
+
+## Run
+
+You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.
+
+    git clone git@github.com/corespring/corespring-multiple-choice-react.git 
+    cd corespring-multiple-choice-react
+    serve-pie 
+    # > go to localhost:5000
