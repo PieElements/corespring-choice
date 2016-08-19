@@ -34,7 +34,7 @@
       },
       "model": {
         "prompt": "Choose the 2 tastiest things",
-        "choiceMode": "radio",
+        "choiceMode": "checkbox",
         "keyMode": "numbers",
         "disabled": false,
         "choices": [
