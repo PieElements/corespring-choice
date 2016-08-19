@@ -1,4 +1,4 @@
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import RadioButton from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
 
 var CorespringFeedbackTick = React.createClass({displayName: 'CorespringFeedbackTick',
@@ -104,20 +104,48 @@ var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'Corespr
 });
 
 
-var CorespringRadioButton = React.createClass({displayName: 'CorespringChoiceButton',
-  onChange: function(el) {
-    this.props.onChange({
-      value: el.target.value, 
-      selected: true
-    });
+var CorespringRadioButton = React.createClass({displayName: 'CorespringRadioButton',
+  getInitialState: function() {
+    return {
+      userValue: false,
+      checked: false
+    };
   },
+
+  onCheck: function(el) {
+    var self = this;
+    this.props.onChange({
+      value: this.props.value
+    });
+    this.setState({userValue: !this.state.checked});
+    this.setState({checked: !this.state.checked});
+  },
+
+  selectionChanged: function(value) {
+    if (this.props.value !== value) {
+      this.state.checked = false;
+      this.forceUpdate();
+    }
+  },
+
+  _checked: function() {
+    return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
+  },
+
   render: function() {
     var self = this;
     return (
-      <RadioButton
-        disabled={self.props.disabled}
-        value={self.props.value}
-        label={self.props.label} />
+      <div className="corespring-radio-button">
+        <CorespringFeedbackTick correctness={self.props.correctness} />
+        <div className="checkbox-holder">
+          <RadioButton
+            disabled={self.props.disabled}
+            checked={self._checked()}
+            onCheck={self.onCheck}
+            label={this.props['display-key'] + '. ' + this.props.label} />
+        </div>
+        <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
+      </div>
     );
   }
 });
@@ -198,10 +226,19 @@ var CorespringMultipleChoiceReact = React.createClass({
     var selected = options.selected;
     var index = this.props.session.value.indexOf(value);
 
-    if (selected && index < 0) {
-      this.props.session.value.push(value);
-    } else if (!selected && index >= 0) {
-      this.props.session.value.splice(index, 1);
+    if (selected === undefined) {
+      for (var i in this.refs) {
+        if (this.refs[i].selectionChanged) {
+          this.refs[i].selectionChanged(value);
+        }
+      }
+      this.props.session.value = [value];
+    } else {
+      if (selected && index < 0) {
+        this.props.session.value.push(value);
+      } else if (!selected && index >= 0) {
+        this.props.session.value.splice(index, 1);
+      }
     }
   },
 
@@ -266,7 +303,7 @@ var CorespringMultipleChoiceReact = React.createClass({
   disabled: function() {
     return this.props.mode !== 'gather';
   },
-  
+
   render: function() {
     var self = this;
     var componentId = "replace-me";
@@ -299,16 +336,25 @@ var CorespringMultipleChoiceReact = React.createClass({
               );
             } else {
               return (
-                <RadioButtonGroup name={componentId}>{
-                  self.props.choices.map(function(choice, index) {
-                    var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
-                    return (
-                      <div className={choiceClass} key={index}>
-                        <CorespringRadioButton/>
-                      </div>
-                    );
-                  })
-                }</RadioButtonGroup>
+                self.props.choices.map(function(choice, index) {
+                  var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
+                  var ref = "choice-" + index;
+                  return (
+                    <div className={choiceClass} key={index}>
+                      <CorespringRadioButton
+                          ref={ref}
+                          disabled={self.disabled()}
+                          onChange={self.onChange}
+                          correct={self._correct(choice)}
+                          correctness={self._correctness(choice)}
+                          feedback={self._feedback(choice)}
+                          label={choice.label}
+                          value={choice.value}
+                          component-id={componentId}
+                          display-key={self._indexToSymbol(index)} />
+                    </div>
+                  );
+                })
               );
             }
           })()  
