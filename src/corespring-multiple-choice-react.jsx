@@ -1,20 +1,6 @@
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
 
-var CorespringRadioButton = React.createClass({displayName: 'CorespringChoiceButton',
-  onChange: function(el) {
-    this.props.onChange({
-      value: el.target.value, 
-      selected: true
-    });
-  },
-  render: function() {
-    return (
-      <div></div>
-    );
-  }
-});
-
 var CorespringFeedbackTick = React.createClass({displayName: 'CorespringFeedbackTick',
   render: function() {
     var correctClass = "correct-icon" + (this.props.correctness === 'correct' ? '' : ' hide');
@@ -115,6 +101,25 @@ var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'Corespr
     );
   }
 
+});
+
+
+var CorespringRadioButton = React.createClass({displayName: 'CorespringChoiceButton',
+  onChange: function(el) {
+    this.props.onChange({
+      value: el.target.value, 
+      selected: true
+    });
+  },
+  render: function() {
+    var self = this;
+    return (
+      <RadioButton
+        disabled={self.props.disabled}
+        value={self.props.value}
+        label={self.props.label} />
+    );
+  }
 });
 
 var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
@@ -271,14 +276,42 @@ var CorespringMultipleChoiceReact = React.createClass({
         <CorespringShowCorrectAnswerToggle show={self.props.outcomes.length !== 0} onClick={self.toggle} toggle={self.state.showCorrect}/>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
-          this.props.choices.map(function(choice, index) {
-            var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
-            return (
-              <div className={choiceClass} key={index}>
-                <CorespringCheckbox disabled={self.disabled()} onChange={self.onChange} correct={self._correct(choice)} correctness={self._correctness(choice)} feedback={self._feedback(choice)} label={choice.label} value={choice.value} component-id={componentId} display-key={self._indexToSymbol(index)} />
-              </div>
-            )
-          })
+          (function() {
+            if (self.props.choiceMode === 'checkbox') {
+              return (
+                self.props.choices.map(function(choice, index) {
+                  var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
+                  return (
+                    <div className={choiceClass} key={index}>
+                      <CorespringCheckbox
+                          disabled={self.disabled()}
+                          onChange={self.onChange}
+                          correct={self._correct(choice)}
+                          correctness={self._correctness(choice)}
+                          feedback={self._feedback(choice)}
+                          label={choice.label}
+                          value={choice.value}
+                          component-id={componentId}
+                          display-key={self._indexToSymbol(index)} />
+                    </div>
+                  );
+                })
+              );
+            } else {
+              return (
+                <RadioButtonGroup name={componentId}>{
+                  self.props.choices.map(function(choice, index) {
+                    var choiceClass = "choice" + (index === self.props.choices.length - 1 ? ' last' : '');
+                    return (
+                      <div className={choiceClass} key={index}>
+                        <CorespringRadioButton/>
+                      </div>
+                    );
+                  })
+                }</RadioButtonGroup>
+              );
+            }
+          })()  
         }</div>
       </div>
     );
