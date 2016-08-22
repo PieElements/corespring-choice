@@ -2,7 +2,7 @@ var CorespringShowCorrectAnswerToggle = require('./corespring-show-correct-answe
 var CorespringRadioButton = require('./corespring-radio-button');
 var CorespringCheckbox = require('./corespring-checkbox');
 
-var CorespringMultipleChoiceReact = React.createClass({
+module.exports = React.createClass({
   displayName: 'CorespringMultipleChoiceReact',
 
   getDefaultProps: function() {
@@ -175,5 +175,3 @@ var CorespringMultipleChoiceReact = React.createClass({
     );
   }
 });
-
-module.exports = CorespringMultipleChoiceReact;

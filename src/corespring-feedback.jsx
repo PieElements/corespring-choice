@@ -1,4 +1,4 @@
-var CorespringFeedback = React.createClass({displayName: 'CorepsringFeedback',
+module.exports = React.createClass({displayName: 'CorepsringFeedback',
   render: function() {
     var self = this;
     var feedbackClass = "corespring-feedback " + this.props.correctness;
@@ -9,5 +9,3 @@ var CorespringFeedback = React.createClass({displayName: 'CorepsringFeedback',
     }
   }
 });
-
-module.exports = CorespringFeedback;

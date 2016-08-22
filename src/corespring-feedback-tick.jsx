@@ -1,4 +1,4 @@
-var CorespringFeedbackTick = React.createClass({displayName: 'CorespringFeedbackTick',
+module.exports = React.createClass({displayName: 'CorespringFeedbackTick',
   render: function() {
     var correctClass = "correct-icon" + (this.props.correctness === 'correct' ? '' : ' hide');
     var incorrectClass = "incorrect-icon" + (this.props.correctness === 'incorrect' ? '' : ' hide');
@@ -28,5 +28,3 @@ var CorespringFeedbackTick = React.createClass({displayName: 'CorespringFeedback
     );
   }
 });
-
-module.exports = CorespringFeedbackTick;

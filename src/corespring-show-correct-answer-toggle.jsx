@@ -1,4 +1,4 @@
-var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'CorespringShowCorrectAnswerToggle',
+module.exports = React.createClass({displayName: 'CorespringShowCorrectAnswerToggle',
   getDefaultProps: function() {
     return {
       showMessage: 'Show correct answer',
@@ -56,5 +56,3 @@ var CorespringShowCorrectAnswerToggle = React.createClass({displayName: 'Corespr
   }
 
 });
-
-module.exports = CorespringShowCorrectAnswerToggle;

@@ -3,7 +3,7 @@ import RadioButton from 'material-ui/RadioButton';
 var CorespringFeedbackTick = require('./corespring-feedback-tick');
 var CorespringFeedback = require('./corespring-feedback');
 
-var CorespringRadioButton = React.createClass({displayName: 'CorespringRadioButton',
+module.exports = React.createClass({displayName: 'CorespringRadioButton',
   getInitialState: function() {
     return {
       userValue: false,
@@ -48,5 +48,3 @@ var CorespringRadioButton = React.createClass({displayName: 'CorespringRadioButt
     );
   }
 });
-
-module.exports = CorespringRadioButton;

@@ -3,7 +3,7 @@ import Checkbox from 'material-ui/Checkbox';
 var CorespringFeedbackTick = require('./corespring-feedback-tick');
 var CorespringFeedback = require('./corespring-feedback');
 
-var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
+module.exports = React.createClass({displayName: 'CorespringCheckbox',
   getInitialState: function() {
     return {
       userValue: false,
@@ -42,5 +42,3 @@ var CorespringCheckbox = React.createClass({displayName: 'CorespringCheckbox',
     );
   }
 });
-
-module.exports = CorespringCheckbox;
