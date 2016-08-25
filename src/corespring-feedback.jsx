@@ -1,4 +1,11 @@
-module.exports = React.createClass({displayName: 'CorepsringFeedback',
+module.exports = React.createClass({
+  displayName: 'CorepsringFeedback',
+  
+  propTypes: {
+    correctness: React.Proptypes.string,
+    feedback: React.PropTypes.string
+  },
+
   render: function() {
     var self = this;
     var feedbackClass = "corespring-feedback " + this.props.correctness;

@@ -3,7 +3,18 @@ import RadioButton from 'material-ui/RadioButton';
 var CorespringFeedbackTick = require('./corespring-feedback-tick');
 var CorespringFeedback = require('./corespring-feedback');
 
-module.exports = React.createClass({displayName: 'CorespringRadioButton',
+module.exports = React.createClass({
+  displayName: 'CorespringRadioButton',
+  
+  propTypes: {
+    correct: React.PropTypes.bool,
+    disabled: React.PropTypes.bool,
+    'display-key': React.PropTypes.string,
+    feedback: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    label: React.PropTypes.string
+  },
+
   getInitialState: function() {
     return {
       userValue: false,
@@ -41,7 +52,7 @@ module.exports = React.createClass({displayName: 'CorespringRadioButton',
             disabled={self.props.disabled}
             checked={self._checked()}
             onCheck={self.onCheck}
-            label={this.props['display-key'] + '. ' + this.props.label} />
+            label={self.props['display-key'] + '. ' + self.props.label} />
         </div>
         <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
       </div>

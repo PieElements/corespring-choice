@@ -63,7 +63,7 @@ module.exports = React.createClass({
   },
   
   _indexToSymbol: function(index) {
-    return (this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase();
+    return ((this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase()).toString();
   },
 
   _correctness: function(choice) {

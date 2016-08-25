@@ -1,13 +1,25 @@
-module.exports = React.createClass({displayName: 'CorespringShowCorrectAnswerToggle',
+module.exports = React.createClass({
+  displayName: 'CorespringShowCorrectAnswerToggle',
+  
+  propTypes: {
+    onClick: React.PropTypes.func,
+    show: React.PropTypes.bool,
+    toggle: React.PropTypes.bool,
+    hideMessage: React.PropTypes.string,
+    showMessage: React.PropTypes.string
+  },
+  
   getDefaultProps: function() {
     return {
       showMessage: 'Show correct answer',
       hideMessage: 'Hide correct answer'
     };
   },
+  
   onClick: function() {
     this.props.onClick();
   },
+  
   render: function() {
     var self = this;
     return (

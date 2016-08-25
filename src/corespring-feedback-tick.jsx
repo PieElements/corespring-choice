@@ -1,4 +1,11 @@
-module.exports = React.createClass({displayName: 'CorespringFeedbackTick',
+module.exports = React.createClass({
+
+  displayName: 'CorespringFeedbackTick',
+  
+  propTypes: {
+    correctness: React.PropTypes.string
+  },
+
   render: function() {
     var correctClass = "correct-icon" + (this.props.correctness === 'correct' ? '' : ' hide');
     var incorrectClass = "incorrect-icon" + (this.props.correctness === 'incorrect' ? '' : ' hide');
