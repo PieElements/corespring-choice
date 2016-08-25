@@ -1,8 +1,10 @@
+import React from 'react';
+
 module.exports = React.createClass({
   displayName: 'CorepsringFeedback',
   
   propTypes: {
-    correctness: React.Proptypes.string,
+    correctness: React.PropTypes.string,
     feedback: React.PropTypes.string
   },
 
