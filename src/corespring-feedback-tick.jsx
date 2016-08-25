@@ -1,3 +1,5 @@
+import React from 'react';
+
 module.exports = React.createClass({
 
   displayName: 'CorespringFeedbackTick',
