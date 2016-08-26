@@ -20,7 +20,7 @@
       "js",
       "jsx"
     ],
-    "unmockedModulePathPatterns" : [
+    "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react/",
       "<rootDir>/node_modules/react-dom/",
       "<rootDir>/node_modules/react-addons-test-utils/"
@@ -29,6 +29,7 @@
   "dependencies": {
     "material-ui": "^0.15.4",
     "react": "~15.0.1",
+    "react-addons-test-utils": "^15.3.1",
     "react-dom": "^15.0.1",
     "react-tap-event-plugin": "^1.0.0"
   }

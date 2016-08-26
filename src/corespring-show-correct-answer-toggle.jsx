@@ -1,3 +1,5 @@
+import React from 'react';
+
 module.exports = React.createClass({
   displayName: 'CorespringShowCorrectAnswerToggle',
   
@@ -23,11 +25,11 @@ module.exports = React.createClass({
   render: function() {
     var self = this;
     return (
-      <div>{
+      <div onClick={self.onClick}>{
         (function() {
           if (self.props.show) {
             return (
-              <div className="corespring-correct-answer-toggle" onClick={self.onClick}>
+              <div className="corespring-correct-answer-toggle">
                 <div className="svg-holder">{
                   (function() {
                     if (self.props.toggle) {
