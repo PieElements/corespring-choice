@@ -2,6 +2,11 @@
 
 A multiple choice component for [pie](http://github.com/PieLabs/pie).
 
+## Setup
+
+    npm install
+    bower install
+
 ## Build
 
     ./compile.sh
