@@ -1,37 +1,22 @@
-var CorespringShowCorrectAnswerToggle = require('./corespring-show-correct-answer-toggle');
-var CorespringRadioButton = require('./corespring-radio-button');
-var CorespringCheckbox = require('./corespring-checkbox');
+import CorespringShowCorrectAnswerToggle from './corespring-show-correct-answer-toggle.jsx';
+import CorespringRadioButton from './corespring-radio-button.jsx';
+import CorespringCheckbox from './corespring-checkbox.jsx';
 
-module.exports = React.createClass({
-  displayName: 'CorespringMultipleChoiceReact',
+class CorespringMultipleChoiceReact extends React.Component {
 
-  getDefaultProps: function() {
-    return {
-      session: {
-        value: []
-      }
-    };
-  },
-  
-  getInitialState: function() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       showCorrect: false
-    };
-  },
-  
-  propTypes: {
-    prompt: React.PropTypes.string.isRequired,
-    choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']).isRequired,
-    keyMode: React.PropTypes.oneOf(['numbers', 'letters']).isRequired,
-    outcomes: React.PropTypes.array,
-    session: React.PropTypes.object
-  },
-  
-  toggle: function() {
-    this.setState({showCorrect: !this.state.showCorrect});
-  },
+    }
+  }
 
-  onChange: function(options) {
+  toggle() {
+    this.setState({showCorrect: !this.state.showCorrect});
+  }
+
+  onChange(options) {
+    console.log('onChange', options, this.props, this)
     this.props.session.value = this.props.session.value || [];
 
     var value = options.value;
@@ -52,21 +37,21 @@ module.exports = React.createClass({
         this.props.session.value.splice(index, 1);
       }
     }
-  },
+  }
 
-  isChecked: function(value) {
+  isChecked(value) {
     if (this.props.session.value) {
       return this.props.session.value.indexOf(value) >= 0;
     } else {
       return false;
     }
-  },
-  
-  _indexToSymbol: function(index) {
-    return ((this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase()).toString();
-  },
+  }
 
-  _correctness: function(choice) {
+  _indexToSymbol(index) {
+    return ((this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase()).toString();
+  }
+
+  _correctness(choice) {
     var outcome, response;
     if (this.state.showCorrect && this.props.correctResponse) {
       for (var i in this.props.correctResponse) {
@@ -83,9 +68,9 @@ module.exports = React.createClass({
         }
       }
     }
-  },
+  }
 
-  _correct: function(choice) {
+  _correct(choice) {
     var outcome, response;
     if (this.state.showCorrect && this.props.correctResponse) {
       for (var i in this.props.correctResponse) {
@@ -98,9 +83,9 @@ module.exports = React.createClass({
     } else {
       return undefined;
     }
-  },
+  }
 
-  _feedback: function(choice) {
+  _feedback(choice) {
     if (this.props.outcomes && !this.state.showCorrect) {
       var outcome;
       for (var i in this.props.outcomes) {
@@ -108,21 +93,21 @@ module.exports = React.createClass({
         if (outcome.value === choice.value) {
           return outcome.feedback;
         }
-      } 
+      }
     }
-  },
+  }
 
-  disabled: function() {
+  disabled() {
     return this.props.mode !== 'gather';
-  },
+  }
 
-  render: function() {
+  render() {
     var self = this;
     var componentId = "replace-me";
-    
+
     return (
       <div className="corespring-multiple-choice-react">
-        <CorespringShowCorrectAnswerToggle show={self.props.outcomes.length !== 0} onClick={self.toggle} toggle={self.state.showCorrect}/>
+        <CorespringShowCorrectAnswerToggle show={self.props.outcomes.length !== 0} onClick={self.toggle.bind(self)} toggle={self.state.showCorrect}/>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           (function() {
@@ -134,7 +119,7 @@ module.exports = React.createClass({
                     <div className={choiceClass} key={index}>
                       <CorespringCheckbox
                           disabled={self.disabled()}
-                          onChange={self.onChange}
+                          onChange={self.onChange.bind(self)}
                           correct={self._correct(choice)}
                           correctness={self._correctness(choice)}
                           feedback={self._feedback(choice)}
@@ -156,7 +141,7 @@ module.exports = React.createClass({
                       <CorespringRadioButton
                           ref={ref}
                           disabled={self.disabled()}
-                          onChange={self.onChange}
+                          onChange={self.onChange.bind(self)}
                           correct={self._correct(choice)}
                           correctness={self._correctness(choice)}
                           feedback={self._feedback(choice)}
@@ -169,9 +154,27 @@ module.exports = React.createClass({
                 })
               );
             }
-          })()  
+          })()
         }</div>
       </div>
     );
   }
-});
+}
+
+CorespringMultipleChoiceReact.propTypes = {
+  choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']),
+  keyMode: React.PropTypes.oneOf(['numbers', 'letters']),
+  model: React.PropTypes.object,
+  outcomes: React.PropTypes.array,
+  prompt: React.PropTypes.string,
+  session: React.PropTypes.object
+};
+
+CorespringMultipleChoiceReact.defaultProps = {
+  session: {
+    value: []
+  }
+};
+
+
+export default CorespringMultipleChoiceReact;

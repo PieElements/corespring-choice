@@ -1,18 +1,42 @@
-const webpack = require('webpack');
-module.exports = {
-  entry: './dist/index.js',
+var webpack = require('webpack');
+var path = require('path');
+
+var BUILD_DIR = path.resolve(__dirname, 'dist');
+var APP_DIR = path.resolve(__dirname, 'src');
+
+var isProd = true; //(process.env.NODE_ENV === 'production');
+
+var config = {
+  entry: APP_DIR + (isProd ? '/index.jsx' : '/demo.jsx'),
   output: {
-    path: './dist',
-    filename: 'bundle.js'
+    path: BUILD_DIR,
+    filename: 'bundle.js',
+    publicPath: "/static/"
   },
-  externals: {
+  externals: isProd ? {
     'react': 'React',
     'react-dom': 'ReactDOM',
     'react-dom/server': 'ReactDOMServer',
     'react/lib/ReactTransitionGroup': 'React.addons.TransitionGroup',
     'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
-  },
-  plugins: [
-    //new webpack.IgnorePlugin(/^react$/)
-  ]
+  } : {},
+  module : {
+    loaders : [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: "babel",
+        include: APP_DIR,
+        query: {
+          presets: isProd ? [ 'es2015', 'react'] : [ 'es2015', 'react', 'react-hmre' ]
+        }
+      },
+      {
+        test: /\.less$/,
+        loader: "style!css!less"
+      }
+    ]
+  }
 };
+
+module.exports = config;

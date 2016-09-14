@@ -2,8 +2,7 @@
   "name": "corespring-multiple-choice-react",
   "version" : "1.0.0",
   "main" : [
-    "dist/bundle.js",
-    "dist/index.css"
+    "dist/bundle.js"
   ],
   "dependencies": {
     "react" : "~15.0.1",
@@ -19,7 +18,7 @@
         "add" : [
           "react-dom.js"
         ]
-      } 
+      }
     }
   }
 }

@@ -1,33 +1,17 @@
-module.exports = React.createClass({
-  displayName: 'CorespringShowCorrectAnswerToggle',
+class CorespringShowCorrectAnswerToggle extends React.Component {
   
-  propTypes: {
-    onClick: React.PropTypes.func,
-    show: React.PropTypes.bool,
-    toggle: React.PropTypes.bool,
-    hideMessage: React.PropTypes.string,
-    showMessage: React.PropTypes.string
-  },
-  
-  getDefaultProps: function() {
-    return {
-      showMessage: 'Show correct answer',
-      hideMessage: 'Hide correct answer'
-    };
-  },
-  
-  onClick: function() {
+  onClick() {
     this.props.onClick();
-  },
+  }
   
-  render: function() {
+  render() {
     var self = this;
     return (
       <div>{
         (function() {
           if (self.props.show) {
             return (
-              <div className="corespring-correct-answer-toggle" onClick={self.onClick}>
+              <div className="corespring-correct-answer-toggle" onClick={self.onClick.bind(self)}>
                 <div className="svg-holder">{
                   (function() {
                     if (self.props.toggle) {
@@ -66,5 +50,20 @@ module.exports = React.createClass({
       }</div>
     );
   }
+}
 
-});
+CorespringShowCorrectAnswerToggle.propTypes = {
+  onClick: React.PropTypes.func,
+  show: React.PropTypes.bool,
+  toggle: React.PropTypes.bool,
+  hideMessage: React.PropTypes.string,
+  showMessage: React.PropTypes.string
+};
+
+CorespringShowCorrectAnswerToggle.defaultProps = {
+  showMessage: 'Show correct answer',
+  hideMessage: 'Hide correct answer'
+};
+
+
+export default CorespringShowCorrectAnswerToggle
