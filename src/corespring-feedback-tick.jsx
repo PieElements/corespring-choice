@@ -1,3 +1,4 @@
+import React from 'react';
 class CorespringFeedbackTick extends React.Component {
 
   render() {

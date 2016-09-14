@@ -1,3 +1,5 @@
+import React from 'react';
+
 class CorespringShowCorrectAnswerToggle extends React.Component {
   
   onClick() {

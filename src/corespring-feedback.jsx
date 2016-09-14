@@ -1,3 +1,5 @@
+import React from 'react'; 
+
 class CorespringFeedback extends React.Component {
 
   render() {

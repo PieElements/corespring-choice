@@ -1,3 +1,4 @@
+import React from 'react';
 import CorespringShowCorrectAnswerToggle from './corespring-show-correct-answer-toggle.jsx';
 import CorespringRadioButton from './corespring-radio-button.jsx';
 import CorespringCheckbox from './corespring-checkbox.jsx';
