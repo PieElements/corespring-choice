@@ -2,6 +2,7 @@
   "name": "corespring-multiple-choice-react",
   "version": "0.0.1",
   "private": true,
+  "main" : "src/index.js",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --inline --hot",
     "dist": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js",
