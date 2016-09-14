@@ -2,6 +2,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import CorespringMultipleChoiceReact from './corespring-multiple-choice-react.jsx';
+import _ from 'lodash';
 
 var style = require('!style!css!less!./index.less');
 

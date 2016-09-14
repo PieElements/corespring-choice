@@ -4,14 +4,20 @@ A multiple choice component for [pie](http://github.com/PieLabs/pie).
 
 ## Setup
 
-    npm install
-    bower install
+```
+npm install
+```
 
-## Build
+## Demo Build
 
-    ./compile.sh
+```
+webpack
+cd demo-build
+python -m SimpleHTTPServer
+# the go to localhost:8000/demo.html
+```
 
-## Run
+~~## ServePie - Run~~
 
 You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.
 

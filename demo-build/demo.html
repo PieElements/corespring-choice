@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.js"></script>-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.js"></script>
+    <script src="bundle.js"></script>
+    <script type="text/javascript">
+
+      document.addEventListener('DOMContentLoaded', function(){
+        console.log('content loaded');
+        //can't reliably expect the element to upgraded at this point.'
+
+        setTimeout(function(){
+        var el = document.querySelector('corespring-multiple-choice-react');
+
+        el.model = { 
+          env : {
+            mode: 'gather'
+          },
+          config: {},
+          outcomes: [],
+          "prompt": "Choose the 2 tastiest things",
+          "choiceMode": "checkbox",
+          "keyMode": "numbers",
+          "disabled": false,
+          "choices": [
+            {
+              "label": "Apple",
+              "value": "apple"
+            },
+            {
+              "label": "Banana",
+              "value": "banana"
+            },
+            {
+              "label": "Carrot",
+              "value": "carrot"
+            },
+            {
+              "label": "Donut",
+              "value": "donut"
+            }]
+          };
+
+          el.session = {};
+
+        }, 100);
+      })
+    </script>
+  </head>
+  <body>
+    <corespring-multiple-choice-react></corespring-multiple-choice-react>
+  </body>
+</html>

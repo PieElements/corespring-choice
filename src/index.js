@@ -2,6 +2,8 @@ import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+var style = require('!style!css!less!./index.less');
+
 export default class CorespringMultiplechoiceReact extends HTMLElement{
 
   constructor(){
@@ -43,6 +45,11 @@ export default class CorespringMultiplechoiceReact extends HTMLElement{
   createdCallback() {
     console.log('created');
     this._rerender();
+  }
+
+  attachedCallback(){
+    console.log('attached');
+    this.innerHTML = '!!!';
   }
 
 }

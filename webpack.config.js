@@ -1,42 +1,31 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
 
-var BUILD_DIR = path.resolve(__dirname, 'dist');
-var APP_DIR = path.resolve(__dirname, 'src');
-
-var isProd = true; //(process.env.NODE_ENV === 'production');
-
-var config = {
-  entry: APP_DIR + (isProd ? '/index.jsx' : '/demo.jsx'),
-  output: {
-    path: BUILD_DIR,
-    filename: 'bundle.js',
-    publicPath: "/static/"
+module.exports = {
+  entry: {
+    demo: './src/demo.js'
   },
-  externals: isProd ? {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'react-dom/server': 'ReactDOMServer',
-    'react/lib/ReactTransitionGroup': 'React.addons.TransitionGroup',
-    'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
-  } : {},
-  module : {
-    loaders : [
+  output: {
+    path: './demo-build',
+    filename: 'bundle.js'
+  },
+  module: {
+    loaders: [
       {
-        test: /\.jsx$/,
+        test: /.jsx?$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        loader: "babel",
-        include: APP_DIR,
         query: {
-          presets: isProd ? [ 'es2015', 'react'] : [ 'es2015', 'react', 'react-hmre' ]
+          presets: ['es2015', 'react']
         }
       },
       {
-        test: /\.less$/,
-        loader: "style!css!less"
+         test: /\.less$/,
+         loader: "style!css!less"
       }
     ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
   }
 };
 
-module.exports = config;
