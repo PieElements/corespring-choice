@@ -1,12 +1,6 @@
-module.exports = React.createClass({
+class CorespringFeedbackTick extends React.Component {
 
-  displayName: 'CorespringFeedbackTick',
-  
-  propTypes: {
-    correctness: React.PropTypes.string
-  },
-
-  render: function() {
+  render() {
     var correctClass = "correct-icon" + (this.props.correctness === 'correct' ? '' : ' hide');
     var incorrectClass = "incorrect-icon" + (this.props.correctness === 'incorrect' ? '' : ' hide');
 
@@ -34,4 +28,11 @@ module.exports = React.createClass({
       </div>
     );
   }
-});
+}
+
+CorespringFeedbackTick.propTypes = {
+  correctness: React.PropTypes.string
+}
+
+
+export default CorespringFeedbackTick

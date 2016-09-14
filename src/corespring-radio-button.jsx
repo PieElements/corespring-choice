@@ -1,48 +1,39 @@
 import RadioButton from 'material-ui/RadioButton';
 
-var CorespringFeedbackTick = require('./corespring-feedback-tick');
-var CorespringFeedback = require('./corespring-feedback');
+import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
+import CorespringFeedback from './corespring-feedback.jsx';
 
-module.exports = React.createClass({
-  displayName: 'CorespringRadioButton',
-  
-  propTypes: {
-    correct: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
-    'display-key': React.PropTypes.string,
-    feedback: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    label: React.PropTypes.string
-  },
+class CorespringRadioButton extends React.Component {
 
-  getInitialState: function() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       userValue: false,
       checked: false
     };
-  },
+  }
 
-  onCheck: function(el) {
+  onCheck(el) {
     var self = this;
     this.props.onChange({
       value: this.props.value
     });
     this.setState({userValue: !this.state.checked});
     this.setState({checked: !this.state.checked});
-  },
+  }
 
-  selectionChanged: function(value) {
+  selectionChanged(value) {
     if (this.props.value !== value) {
       this.state.checked = false;
       this.forceUpdate();
     }
-  },
+  }
 
-  _checked: function() {
+  _checked() {
     return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
-  },
+  }
 
-  render: function() {
+  render() {
     var self = this;
     return (
       <div className="corespring-radio-button">
@@ -51,11 +42,22 @@ module.exports = React.createClass({
           <RadioButton
             disabled={self.props.disabled}
             checked={self._checked()}
-            onCheck={self.onCheck}
+            onCheck={self.onCheck.bind(self)}
             label={self.props['display-key'] + '. ' + self.props.label} />
         </div>
         <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
       </div>
     );
   }
-});
+}
+
+CorespringRadioButton.propTypes = {
+  correct: React.PropTypes.bool,
+  disabled: React.PropTypes.bool,
+  'display-key': React.PropTypes.string,
+  feedback: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+  label: React.PropTypes.string
+}
+
+export default CorespringRadioButton
