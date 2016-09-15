@@ -49,7 +49,6 @@ export default class CorespringMultiplechoiceReact extends HTMLElement{
 
   attachedCallback(){
     console.log('attached');
-    this.innerHTML = '!!!';
   }
 
 }
