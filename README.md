@@ -15,6 +15,19 @@ npm start
 # the go to localhost:8080/demo.html
 ```
 
+## Build
+
+```
+npm run-script dist
+```
+
+## Rebuild after code change
+
+```
+npm run-script dist-watch
+```
+
+
 ## serve-pie 
 
 You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.

@@ -1,7 +1,3 @@
-const path = require("path");
-const webpack = require('webpack');
-
-
 module.exports = {
   entry: {
     demo: './src/demo.js'
