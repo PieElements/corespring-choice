@@ -4,16 +4,24 @@ A multiple choice component for [pie](http://github.com/PieLabs/pie).
 
 ## Setup
 
-    npm install
-    bower install
+```
+npm install
+```
 
-## Build
+## Demo Build
 
-    ./compile.sh
+```
+webpack
+cd demo-build
+python -m SimpleHTTPServer
+# the go to localhost:8000/demo.html
+```
 
-## Run
+## serve-pie 
 
 You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.
+
+> use branch `feature/npm-package-spike`
 
     git clone git@github.com/corespring/corespring-multiple-choice-react.git 
     cd corespring-multiple-choice-react

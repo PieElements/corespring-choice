@@ -25,7 +25,6 @@ class CorespringCheckbox extends React.Component {
   }
 
   _checked() {
-    console.log('checked', this.state.checked, this.props.correct)
     return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
   }
 

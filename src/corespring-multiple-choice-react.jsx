@@ -42,9 +42,7 @@ class CorespringMultipleChoiceReact extends React.Component {
   }
 
   isChecked(value) {
-    console.log("isChecked", value);
     if (this.props.session.value) {
-      console.log("isChecked", this.props.session.value.indexOf(value) >= 0);
       return this.props.session.value.indexOf(value) >= 0;
     } else {
       return false;
@@ -178,7 +176,6 @@ CorespringMultipleChoiceReact.propTypes = {
 };
 
 CorespringMultipleChoiceReact.defaultProps = {
-  outcomes: [],
   session: {
     value: []
   }

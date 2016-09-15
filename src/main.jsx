@@ -4,8 +4,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import CorespringMultipleChoiceReact from './corespring-multiple-choice-react.jsx';
+import _ from 'lodash';
 
-var style = require('!style!css!less!./index.less');
+require('!style!css!less!./index.less');
 
 class Main extends React.Component {
 
@@ -18,13 +19,13 @@ class Main extends React.Component {
           <CorespringMultipleChoiceReact
             model={this.props.model}
             outcomes={this.props.model.outcomes}
-            correctResponse={this.props.model.correctResponse}
+            correctResponse={this.props.model.config.correctResponse}
             prompt={this.props.model.prompt}
             choiceMode={this.props.model.choiceMode}
             keyMode={this.props.model.keyMode}
             choices={this.props.model.choices}
             session={this.props.session}
-            mode={this.props.model.mode} />
+            mode={this.props.model.env.mode} />
         </MuiThemeProvider>
       </div>
     );
@@ -42,3 +43,4 @@ Main.defaultProps = {
 }
 
 export default Main;
+
