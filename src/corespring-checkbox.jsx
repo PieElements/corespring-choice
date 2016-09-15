@@ -1,3 +1,4 @@
+import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
 
 import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
@@ -15,7 +16,6 @@ class CorespringCheckbox extends React.Component {
   }
 
   onCheck(el) {
-    var self = this;
     this.props.onChange({
       value: this.props.value, 
       selected: el.target.checked
@@ -38,7 +38,7 @@ class CorespringCheckbox extends React.Component {
             disabled={self.props.disabled}
             checked={self._checked()}
             onCheck={self.onCheck.bind(self)}
-            label={this.props['display-key'] + '. ' + this.props.label} />
+            label={self.props['display-key'] + '. ' + self.props.label} />
         </div>
         <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
       </div>

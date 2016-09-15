@@ -1,8 +1,10 @@
+import React from 'react';
+
 class CorespringFeedback extends React.Component {
 
   render() {
     var self = this;
-    var feedbackClass = "corespring-feedback " + this.props.correctness;
+    var feedbackClass = "corespring-feedback " + self.props.correctness;
     if (self.props.correctness && self.props.feedback) {
       return <div className={feedbackClass}>{self.props.feedback}</div>
     } else {
