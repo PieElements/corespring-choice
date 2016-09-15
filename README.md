@@ -8,13 +8,11 @@ A multiple choice component for [pie](http://github.com/PieLabs/pie).
 npm install
 ```
 
-## Demo Build
+## Development/Demo Build
 
 ```
-webpack
-cd demo-build
-python -m SimpleHTTPServer
-# the go to localhost:8000/demo.html
+npm start
+# the go to localhost:8080/demo.html
 ```
 
 ## serve-pie 
