@@ -2,7 +2,7 @@ import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class CorespringMultiplechoiceReact extends HTMLElement{
+export default class CorespringMultipleChoiceReactElement extends HTMLElement{
 
   constructor(){
     super();

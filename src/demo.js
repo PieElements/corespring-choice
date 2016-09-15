@@ -1,3 +1,3 @@
-import Comp from './index.js';
+import CorespringMultipleChoiceReactElement from './index.js';
 
-document.registerElement('corespring-multiple-choice-react', Comp);
+document.registerElement('corespring-multiple-choice-react', CorespringMultipleChoiceReactElement);

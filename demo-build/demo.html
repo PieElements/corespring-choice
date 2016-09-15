@@ -7,8 +7,32 @@
     <script type="text/javascript">
 
       document.addEventListener('DOMContentLoaded', function(){
+
         console.log('content loaded');
-        //can't reliably expect the element to upgraded at this point.'
+
+        //use timeout bc. we can't reliably expect the element
+        //to be upgraded at this point.'
+        setTimeout(setModels, 1000);
+
+        //-----------------------------------------------
+
+        function setModels(){
+          var el = document.querySelector('#gather');
+          el.model = makeModel('gather', 'gather');
+          el.session = makeSession();
+
+          var el = document.querySelector('#view');
+          el.model = makeModel('view', 'view');
+          el.session = makeSession();
+
+          var el = document.querySelector('#evaluate-correct');
+          el.model = makeModel('correct answer', 'evaluate', [{value:'apple', correct: true}, {value:'banana', correct:true}]);
+          el.session = makeSession(['apple', 'banana']);
+
+          var el = document.querySelector('#evaluate-incorrect');
+          el.model = makeModel('incorrect answer', 'evaluate', [{value:'carrot', correct: false}], ["apple", "banana"]);
+          el.session = makeSession();
+        }
 
         function makeModel(prompt, mode, outcomes, correctResponse) {
           return {
@@ -47,24 +71,6 @@
           return {value: values || ['carrot']};
         }
 
-        setTimeout(function(){
-        var el = document.querySelector('#gather');
-        el.model = makeModel('gather', 'gather');
-        el.session = makeSession();
-
-        var el = document.querySelector('#view');
-        el.model = makeModel('view', 'view');
-        el.session = makeSession();
-
-        var el = document.querySelector('#evaluate-correct');
-        el.model = makeModel('correct answer', 'evaluate', [{value:'apple', correct: true}, {value:'banana', correct:true}]);
-        el.session = makeSession(['apple', 'banana']);
-
-        var el = document.querySelector('#evaluate-incorrect');
-        el.model = makeModel('incorrect answer', 'evaluate', [{value:'carrot', correct: false}], ["apple", "banana"]);
-        el.session = makeSession();
-
-        }, 1000);
       })
     </script>
   </head>
