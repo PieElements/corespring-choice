@@ -10,45 +10,68 @@
         console.log('content loaded');
         //can't reliably expect the element to upgraded at this point.'
 
-        setTimeout(function(){
-        var el = document.querySelector('corespring-multiple-choice-react');
-
-        el.model = { 
-          env : {
-            mode: 'gather'
-          },
-          config: {},
-          outcomes: [],
-          "prompt": "Choose the 2 tastiest things",
-          "choiceMode": "checkbox",
-          "keyMode": "numbers",
-          "disabled": false,
-          "choices": [
-            {
-              "label": "Apple",
-              "value": "apple"
+        function makeModel(prompt, mode, outcomes, correctResponse) {
+          return {
+            env: {
+              mode: mode || 'gather'
             },
-            {
-              "label": "Banana",
-              "value": "banana"
+            config: {
+              correctResponse: correctResponse || null,
             },
-            {
-              "label": "Carrot",
-              "value": "carrot"
-            },
-            {
-              "label": "Donut",
-              "value": "donut"
-            }]
+            outcomes: outcomes || [],
+            "prompt": "Choose the 2 tastiest things (" + prompt + ')',
+            "choiceMode": "checkbox",
+            "keyMode": "numbers",
+            "disabled": false,
+            "choices": [
+              {
+                "label": "Apple",
+                "value": "apple"
+              },
+              {
+                "label": "Banana",
+                "value": "banana"
+              },
+              {
+                "label": "Carrot",
+                "value": "carrot"
+              },
+              {
+                "label": "Donut",
+                "value": "donut"
+              }]
           };
+        }
 
-          el.session = {};
+        function makeSession(values) {
+          return {value: values || ['carrot']};
+        }
 
-        }, 100);
+        setTimeout(function(){
+        var el = document.querySelector('#gather');
+        el.model = makeModel('gather', 'gather');
+        el.session = makeSession();
+
+        var el = document.querySelector('#view');
+        el.model = makeModel('view', 'view');
+        el.session = makeSession();
+
+        var el = document.querySelector('#evaluate-correct');
+        el.model = makeModel('correct answer', 'evaluate', [{value:'apple', correct: true}, {value:'banana', correct:true}], ["apple", "banana"]);
+        el.session = makeSession(['apple', 'banana']);
+
+        var el = document.querySelector('#evaluate-incorrect');
+        el.model = makeModel('incorrect answer', 'evaluate', [{value:'carrot', correct: false}], ["apple", "banana"]);
+        el.session = makeSession();
+
+        }, 1000);
       })
     </script>
   </head>
   <body>
-    <corespring-multiple-choice-react></corespring-multiple-choice-react>
+    <corespring-multiple-choice-react id="gather"></corespring-multiple-choice-react>
+    <corespring-multiple-choice-react id="view"></corespring-multiple-choice-react>
+    <corespring-multiple-choice-react id="evaluate-correct"></corespring-multiple-choice-react>
+    <corespring-multiple-choice-react id="evaluate-incorrect"></corespring-multiple-choice-react>
   </body>
 </html>

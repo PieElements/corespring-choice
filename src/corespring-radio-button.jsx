@@ -11,7 +11,7 @@ class CorespringRadioButton extends React.Component {
     super(props);
     this.state = {
       userValue: false,
-      checked: false
+      checked: props.checked
     };
   }
 
@@ -54,12 +54,13 @@ class CorespringRadioButton extends React.Component {
 }
 
 CorespringRadioButton.propTypes = {
+  'display-key': React.PropTypes.string,
+  checked: React.PropTypes.bool,
   correct: React.PropTypes.bool,
   disabled: React.PropTypes.bool,
-  'display-key': React.PropTypes.string,
   feedback: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  label: React.PropTypes.string
+  label: React.PropTypes.string,
+  onChange: React.PropTypes.func
 }
 
 export default CorespringRadioButton

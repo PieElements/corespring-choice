@@ -11,24 +11,6 @@ require('!style!css!less!./index.less');
 class Main extends React.Component {
 
   render () {
-    var starting;
-
-    if (this.props.session.response) {
-      starting = this.props.session.response;  
-    } else {
-      starting = _.map(this.props.model.choices, function() {
-        return 1;
-      });
-    }
-
-    var isStatic = this.props.model.env.mode !== 'gather';
-    var correct, message;
-    
-    if (this.props.model.outcomes && this.props.model.env.mode === 'evaluate') {
-      correct = this.props.model.outcomes.correctness === 'correct';
-      message = this.props.model.outcomes.feedback;
-    }
-
     console.log('props', this.props);
 
     return (
@@ -51,3 +33,4 @@ class Main extends React.Component {
 }
 
 export default Main;
+
