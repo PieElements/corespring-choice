@@ -22,8 +22,8 @@ exports.model = function(question, session, env) {
   console.debug('[state] session:', JSON.stringify(session, null, '  '));
   console.debug('[state] env:', JSON.stringify(env, null, '  '));
 
-  function createOutcomes(allCorrect) {
-    return _.map(session.value, function (v) {
+  function createOutcomes(responses, allCorrect) {
+    return _.map(responses, function (v) {
       var correct = _.includes(question.correctResponse, v);
       var feedback = lookup(question.feedback[v]);
       return { value: v, correct: correct, feedback: allCorrect ? null : feedback };
@@ -49,13 +49,15 @@ exports.model = function(question, session, env) {
 
   if (env.mode === 'evaluate') {
 
-    var allCorrect = _.isEqual(session.value.sort(), question.correctResponse.sort());
-    console.log('session.value: allCorrect', allCorrect, session.value, typeof (session.value), 'question.correctResponse: ', question.correctResponse, typeof (question.correctResponse));
+    var responses = _.isArray(session.value) ? session.value : [];
+
+    var allCorrect = _.isEqual(responses, question.correctResponse.sort());
+    console.log('session.value: allCorrect', allCorrect, responses, typeof (session.value), 'question.correctResponse: ', question.correctResponse, typeof (question.correctResponse));
 
     if (!allCorrect) {
       base.config.correctResponse = question.correctResponse;
     }
-    base.outcomes = createOutcomes(allCorrect);
+    base.outcomes = createOutcomes(responses, allCorrect);
   }
 
   var correct = _.isEqual(question.correctResponse, session.response);
