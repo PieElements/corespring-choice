@@ -17,9 +17,11 @@ python -m SimpleHTTPServer
 # the go to localhost:8000/demo.html
 ```
 
-~~## ServePie - Run~~
+## serve-pie 
 
 You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.
+
+> use branch `feature/npm-package-spike`
 
     git clone git@github.com/corespring/corespring-multiple-choice-react.git 
     cd corespring-multiple-choice-react
