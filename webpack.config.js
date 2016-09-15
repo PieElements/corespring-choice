@@ -1,12 +1,15 @@
+const path = require("path");
 const webpack = require('webpack');
+
 
 module.exports = {
   entry: {
     demo: './src/demo.js'
   },
   output: {
-    path: './demo-build',
-    filename: 'bundle.js'
+    path: "./demo-build",
+    filename: 'bundle.js',
+    publicPath: '/demo-build'
   },
   module: {
     loaders: [
