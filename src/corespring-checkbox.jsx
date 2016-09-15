@@ -11,7 +11,7 @@ class CorespringCheckbox extends React.Component {
     super(props);
     this.state = {
       userValue: false,
-      checked: false
+      checked: props.checked
     };
   }
 
@@ -25,6 +25,7 @@ class CorespringCheckbox extends React.Component {
   }
 
   _checked() {
+    console.log('checked', this.state.checked, this.props.correct)
     return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
   }
 
@@ -47,12 +48,13 @@ class CorespringCheckbox extends React.Component {
 }
 
 CorespringCheckbox.propTypes = {
+  'display-key': React.PropTypes.string,
+  checked: React.PropTypes.bool,
   correct: React.PropTypes.bool,
   disabled: React.PropTypes.bool,
-  'display-key': React.PropTypes.string,
   feedback: React.PropTypes.string,
-  onChange: React.PropTypes.func,
   label: React.PropTypes.string,
+  onChange: React.PropTypes.func,
   value: React.PropTypes.string
 }
 

@@ -4,7 +4,9 @@ import {render} from 'react-dom';
 import _ from 'lodash';
 
 var model = {
-  prompt: "Pie Chart ",
+  choiceMode: "radio",
+  prompt: "Multiple Choice",
+  mode: "gather",
   choices: [
     {
       label: "Section A",
@@ -29,13 +31,13 @@ var modelWithSession = _.extend(_.cloneDeep(model), {
 });
 
 var modelWithOutcomes = _.extend(_.cloneDeep(model), {
-  prompt: 'with Outcomes',
-  outcomes: [true, false],
-  disabled: true
+  prompt: 'with Session & Outcomes',
+  mode: "evaluate",
+  outcomes: [true, false]
 });
 
 var modelWithOutcomesAndCorrectResponse = _.extend(_.cloneDeep(modelWithOutcomes), {
-  prompt: 'with Outcomes and Correct Response',
+  prompt: 'with Session,  Outcomes and Correct Response',
   correctResponse: ["a"]
 });
 
@@ -43,8 +45,8 @@ render(
   <div>
     <Main model={model} />
     <Main model={modelWithSession} session={session}/>
-    <Main model={modelWithOutcomes} />
-    <Main model={modelWithOutcomesAndCorrectResponse} />
+    <Main model={modelWithOutcomes}  session={session}/>
+    <Main model={modelWithOutcomesAndCorrectResponse}  session={session}/>
   </div>
   , document.getElementById('app')
 );

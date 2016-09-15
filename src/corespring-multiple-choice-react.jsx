@@ -42,7 +42,9 @@ class CorespringMultipleChoiceReact extends React.Component {
   }
 
   isChecked(value) {
+    console.log("isChecked", value);
     if (this.props.session.value) {
+      console.log("isChecked", this.props.session.value.indexOf(value) >= 0);
       return this.props.session.value.indexOf(value) >= 0;
     } else {
       return false;
@@ -120,15 +122,17 @@ class CorespringMultipleChoiceReact extends React.Component {
                   return (
                     <div className={choiceClass} key={index}>
                       <CorespringCheckbox
-                          disabled={self.disabled()}
-                          onChange={self.onChange.bind(self)}
+                          checked={self.isChecked(choice.value)}
+                          component-id={componentId}
                           correct={self._correct(choice)}
                           correctness={self._correctness(choice)}
+                          disabled={self.disabled()}
+                          display-key={self._indexToSymbol(index)}
                           feedback={self._feedback(choice)}
                           label={choice.label}
+                          onChange={self.onChange.bind(self)}
                           value={choice.value}
-                          component-id={componentId}
-                          display-key={self._indexToSymbol(index)} />
+                      />
                     </div>
                   );
                 })
@@ -141,16 +145,17 @@ class CorespringMultipleChoiceReact extends React.Component {
                   return (
                     <div className={choiceClass} key={index}>
                       <CorespringRadioButton
-                          ref={ref}
-                          disabled={self.disabled()}
-                          onChange={self.onChange.bind(self)}
+                          checked={self.isChecked(choice.value)}
+                          component-id={componentId}
                           correct={self._correct(choice)}
                           correctness={self._correctness(choice)}
+                          disabled={self.disabled()}
+                          display-key={self._indexToSymbol(index)}
                           feedback={self._feedback(choice)}
                           label={choice.label}
+                          onChange={self.onChange.bind(self)}
                           value={choice.value}
-                          component-id={componentId}
-                          display-key={self._indexToSymbol(index)} />
+                      />
                     </div>
                   );
                 })
