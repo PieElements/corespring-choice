@@ -6,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CorespringMultipleChoiceReact from './corespring-multiple-choice-react.jsx';
 import _ from 'lodash';
 
-var style = require('!style!css!less!./index.less');
+require('!style!css!less!./index.less');
 
 class Main extends React.Component {
 

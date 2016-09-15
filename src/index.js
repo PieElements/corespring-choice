@@ -2,8 +2,6 @@ import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-var style = require('!style!css!less!./index.less');
-
 export default class CorespringMultiplechoiceReact extends HTMLElement{
 
   constructor(){
