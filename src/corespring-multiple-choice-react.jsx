@@ -109,7 +109,7 @@ class CorespringMultipleChoiceReact extends React.Component {
 
     return (
       <div className="corespring-multiple-choice-react">
-        <CorespringShowCorrectAnswerToggle show={self.props.outcomes.length !== 0} onClick={self.toggle.bind(self)} toggle={self.state.showCorrect}/>
+        <CorespringShowCorrectAnswerToggle show={self.props.correctResponse} onClick={self.toggle.bind(self)} toggle={self.state.showCorrect}/>
         <div className="prompt">{this.props.prompt}</div>
         <div>{
           (function() {

@@ -57,7 +57,7 @@
         el.session = makeSession();
 
         var el = document.querySelector('#evaluate-correct');
-        el.model = makeModel('correct answer', 'evaluate', [{value:'apple', correct: true}, {value:'banana', correct:true}], ["apple", "banana"]);
+        el.model = makeModel('correct answer', 'evaluate', [{value:'apple', correct: true}, {value:'banana', correct:true}]);
         el.session = makeSession(['apple', 'banana']);
 
         var el = document.querySelector('#evaluate-incorrect');
