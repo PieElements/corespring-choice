@@ -49,9 +49,8 @@ class CorespringCheckbox extends React.Component {
   }
 
   render() {
-    var self = this;
-
-    var muiTheme = self.getTheme();
+    const self = this;
+    const muiTheme = self.getTheme();
 
     return (
       <div className="corespring-checkbox">

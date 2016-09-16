@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {RadioButtonGroup} from 'material-ui/RadioButton';
+
 import CorespringShowCorrectAnswerToggle from './corespring-show-correct-answer-toggle.jsx';
 import CorespringRadioButton from './corespring-radio-button.jsx';
 import CorespringCheckbox from './corespring-checkbox.jsx';
@@ -9,7 +11,8 @@ class CorespringMultipleChoiceReact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCorrect: false
+      showCorrect: false,
+      update: 0
     }
   }
 
@@ -34,7 +37,11 @@ class CorespringMultipleChoiceReact extends React.Component {
       this.props.session.value = [value];
     } else {
       if (selected && index < 0) {
-        this.props.session.value.push(value);
+        if(this.props.choiceMode === 'radio') {
+          this.props.session.value = [value];
+        } else {
+          this.props.session.value.push(value);
+        }
       } else if (!selected && index >= 0) {
         this.props.session.value.splice(index, 1);
       }
