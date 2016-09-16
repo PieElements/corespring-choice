@@ -1,9 +1,11 @@
 import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {amber600} from 'material-ui/styles/colors';
 
 import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
 import CorespringFeedback from './corespring-feedback.jsx';
-
 
 class CorespringCheckbox extends React.Component {
 
@@ -28,17 +30,40 @@ class CorespringCheckbox extends React.Component {
     return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
   }
 
+  getTheme() {
+    if(this.props.correctness === 'correct'){
+      return getMuiTheme({
+        checkbox: {
+          disabledColor: "green"
+        }
+      });
+    } else if(this.props.correctness === 'incorrect'){
+      return getMuiTheme({
+        checkbox: {
+          disabledColor: amber600
+        }
+      });
+    } else {
+      return getMuiTheme();
+    }
+  }
+
   render() {
     var self = this;
+
+    var muiTheme = self.getTheme();
+
     return (
       <div className="corespring-checkbox">
         <CorespringFeedbackTick correctness={self.props.correctness} />
         <div className="checkbox-holder">
-          <Checkbox
-            disabled={self.props.disabled}
-            checked={self._checked()}
-            onCheck={self.onCheck.bind(self)}
-            label={self.props['display-key'] + '. ' + self.props.label} />
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <Checkbox
+              disabled={self.props.disabled}
+              checked={self._checked()}
+              onCheck={self.onCheck.bind(self)}
+              label={self.props['display-key'] + '. ' + self.props.label} />
+          </MuiThemeProvider>
         </div>
         <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
       </div>

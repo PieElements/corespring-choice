@@ -7,12 +7,10 @@ class CorespringFeedbackTick extends React.Component {
     var self = this;
 
     var correctness = this.props.correctness;
-    var correctClass = "correct-icon";
-    var incorrectClass = "incorrect-icon";
 
-    function incorrectIcon(cssCass){
-      return <svg key={1}
-        className={cssCass}
+    function incorrectIcon(){
+      return <svg key="1"
+        className="incorrect-icon"
         preserveAspectRatio="xMinYMin meet"
         x="0px"
         y="0px"
@@ -35,9 +33,9 @@ class CorespringFeedbackTick extends React.Component {
       </svg>
     }
 
-    function correctIcon(cssCass){
-      return <svg key={2}
-        className={cssCass}
+    function correctIcon(){
+      return <svg key="2"
+        className="correct-icon"
         preserveAspectRatio="xMinYMin meet"
         version="1.1"
         x="0px"
@@ -53,19 +51,21 @@ class CorespringFeedbackTick extends React.Component {
       </svg>
     }
 
+    function chooseIcon(correctness) {
+      if (correctness === 'incorrect') {
+        return incorrectIcon();
+      } else if( correctness === 'correct'){
+        return correctIcon();
+      }
+    }
+
     return (
       <div className="feedback-tick">
         <ReactCSSTransitionGroup
-          transitionName="example"
+          transitionName="feedback-tick"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>{
-          (function () {
-            if (correctness === 'incorrect') {
-              return incorrectIcon(incorrectClass);
-            } else if( correctness === 'correct'){
-              return correctIcon(correctClass);
-            }
-          })()
+          chooseIcon(correctness)
         }</ReactCSSTransitionGroup>
       </div>
     );
