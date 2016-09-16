@@ -33,7 +33,7 @@
           el.session = makeSession(['apple', 'banana']);
 
           var el = document.querySelector('#' + choiceMode + '-evaluate-incorrect');
-          el.model = makeModel('incorrect answer', choiceMode, 'evaluate', [{value:'carrot', correct: false}], ["apple", "banana"]);
+          el.model = makeModel('incorrect answer', choiceMode, 'evaluate', [{value:'carrot', correct: false, feedback: 'nice try'}], ["apple", "banana"]);
           el.session = makeSession();
         }
 

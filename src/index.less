@@ -1,24 +1,5 @@
 .corespring-multiple-choice-react {
 
-  .feedback-tick-enter {
-    left: -50px;
-  }
-
-  .feedback-tick-enter.feedback-tick-enter-active {
-    left: 0px;
-    transition: left 500ms ease-in;
-  }
-
-  .feedback-tick-leave {
-    left: 0px;
-  }
-
-  .feedback-tick-leave.feedback-tick-leave-active {
-    left: -50px;
-    transition: left 300ms ease-in;
-    display: none;
-  }
-  
   .prompt {
     color: black;
     height: 43px;
@@ -106,6 +87,25 @@
       border-color: #a2d4f2;
     }
 
+    .feedback-tick-enter {
+      left: -50px;
+    }
+
+    .feedback-tick-enter.feedback-tick-enter-active {
+      left: 0px;
+      transition: left 500ms ease-in;
+    }
+
+    .feedback-tick-leave {
+      left: 0px;
+    }
+
+    .feedback-tick-leave.feedback-tick-leave-active {
+      left: -50px;
+      transition: left 300ms ease-in;
+      display: none;
+    }
+
     .feedback-tick {
       position: relative;
       width: 33px;
@@ -151,18 +151,36 @@
 
   }
 
+  .corespring-feedback-enter {
+    height: 0;
+  }
+
+  .corespring-feedback-enter.corespring-feedback-enter-active {
+    height: 45px;
+    transition: height 500ms ease-in;
+  }
+
+  .corespring-feedback-leave {
+    height: 45px;
+  }
+
+  .corespring-feedback-leave.corespring-feedback-leave-active {
+    height: 0;
+    transition: height 300ms ease-in;
+  }
+
   .corespring-feedback {
-    font-family: 'Roboto', 'Noto', sans-serif;
     -webkit-font-smoothing: antialiased;
-    display: block;
+    background-color: #f8f6f6;
     border-radius: 6px;
-    padding: 10px;
-    margin: 0px;
-    width: 100%;
+    display: block;
+    font-family: 'Roboto', 'Noto', sans-serif;
     font-size: 12px;
     line-height: 25px;
+    margin: 0px;
+    padding: 10px;
     vertical-align: middle;
-    background-color: #f8f6f6;
+    width: 100%;
 
     &.incorrect {
       color: #946202;
