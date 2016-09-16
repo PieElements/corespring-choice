@@ -152,21 +152,25 @@
   }
 
   .corespring-feedback-enter {
+    opacity: 0;
     height: 0;
   }
 
   .corespring-feedback-enter.corespring-feedback-enter-active {
+    opacity: 1;
     height: 25px;
-    transition: height 500ms;
+    transition: height 500ms, opacity 500ms;
   }
 
   .corespring-feedback-leave {
+    opacity: 1;
     height: 25px;
   }
 
   .corespring-feedback-leave.corespring-feedback-leave-active {
+    opacity: 0;
     height: 0;
-    transition: height 300ms;
+    transition: height 300ms, opacity 300ms;
   }
 
   .corespring-feedback {
