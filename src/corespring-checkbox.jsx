@@ -9,25 +9,15 @@ import CorespringFeedback from './corespring-feedback.jsx';
 
 class CorespringCheckbox extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      userValue: false,
-      checked: props.checked
-    };
-  }
-
   onCheck(el) {
     this.props.onChange({
       value: this.props.value, 
       selected: el.target.checked
     });
-    this.setState({userValue: !this.state.checked});
-    this.setState({checked: !this.state.checked});
   }
 
   _checked() {
-    return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
+    return (this.props.correct !== undefined) ? this.props.correct : this.props.checked;
   }
 
   getTheme() {

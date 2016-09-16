@@ -10,25 +10,10 @@ import CorespringFeedback from './corespring-feedback.jsx';
 
 class CorespringRadioButton extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      userValue: false
-    };
-  }
-
   onCheck(el) {
     this.props.onChange({
       value: this.props.value
     });
-    this.setState({userValue: !this.state.checked});
-  }
-
-  selectionChanged(value) {
-    if (this.props.value !== value) {
-      this.props.checked = false;
-      this.forceUpdate();
-    }
   }
 
   _checked() {
