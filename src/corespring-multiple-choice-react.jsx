@@ -38,18 +38,20 @@ class CorespringMultipleChoiceReact extends React.Component {
     } else {
       if (selected && index < 0) {
         if(this.props.choiceMode === 'radio') {
-          this.props.session.value = [value];
-        } else {
-          this.props.session.value.push(value);
+          this.props.session.value.pop();
         }
+        this.props.session.value.push(value);
       } else if (!selected && index >= 0) {
         this.props.session.value.splice(index, 1);
       }
     }
+
+    this.forceUpdate();
   }
 
   isChecked(value) {
     if (this.props.session.value) {
+      console.log('isChecked', value, this.props.session.value.indexOf(value) >= 0)
       return this.props.session.value.indexOf(value) >= 0;
     } else {
       return false;

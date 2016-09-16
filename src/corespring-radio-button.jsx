@@ -13,8 +13,7 @@ class CorespringRadioButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userValue: false,
-      checked: props.checked
+      userValue: false
     };
   }
 
@@ -23,18 +22,17 @@ class CorespringRadioButton extends React.Component {
       value: this.props.value
     });
     this.setState({userValue: !this.state.checked});
-    this.setState({checked: !this.state.checked});
   }
 
   selectionChanged(value) {
     if (this.props.value !== value) {
-      this.state.checked = false;
+      this.props.checked = false;
       this.forceUpdate();
     }
   }
 
   _checked() {
-    return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
+    return (this.props.correct !== undefined) ? this.props.correct : this.props.checked;
   }
 
   getTheme() {
