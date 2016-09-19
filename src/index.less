@@ -152,36 +152,34 @@
   }
 
   .corespring-feedback-enter {
-    transform: scale(1,0);
     height: 1px;
   }
 
   .corespring-feedback-enter.corespring-feedback-enter-active {
-    transform: scale(1,1);
     height: 45px;
-    transition: height 500ms, transform 500ms;
+    transition: height 500ms;
   }
 
   .corespring-feedback-leave {
-    transform: scale(1,1);
     height: 45px;
   }
 
   .corespring-feedback-leave.corespring-feedback-leave-active {
-    transform: scale(1,0);
     height: 1px;
-    transition: height 200ms, transform 200ms;
+    transition: height 200ms;
   }
 
   .corespring-feedback {
     transform-origin: 0% 0px 0px;
     width: 100%;
+    display: block;
+    overflow: hidden;
 
     .content {
       -webkit-font-smoothing: antialiased;
       background-color: #f8f6f6;
       border-radius: 6px;
-      display: block;
+
       font-family: 'Roboto', 'Noto', sans-serif;
       font-size: 12px;
       line-height: 25px;
