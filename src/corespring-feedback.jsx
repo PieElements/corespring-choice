@@ -20,7 +20,7 @@ class CorespringFeedback extends React.Component {
     return (
         <ReactCSSTransitionGroup
           transitionName="corespring-feedback"
-          transitionEnterTimeout={500}
+          transitionEnterTimeout={700}
           transitionLeaveTimeout={200}>
           {chooseFeedback(correctness)}
         </ReactCSSTransitionGroup>
