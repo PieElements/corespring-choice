@@ -63,7 +63,7 @@ class CorespringFeedbackTick extends React.Component {
       <div className="feedback-tick">
         <ReactCSSTransitionGroup
           transitionName="feedback-tick"
-          transitionEnterTimeout={500}
+          transitionEnterTimeout={700}
           transitionLeaveTimeout={300}>
         {chooseIcon(correctness)}
         </ReactCSSTransitionGroup>
