@@ -11,21 +11,19 @@ class CorespringFeedback extends React.Component {
     function chooseFeedback(correctness){
       if (correctness && feedback) {
         var feedbackClass = "corespring-feedback " + correctness;
-        return <div key="hasFeedback" className={feedbackClass}>{feedback}</div>
+        return <div key="hasFeedback" className={feedbackClass}><div className="content">{feedback}</div></div>
       } else {
-        return ''; //<div key="noFeedback"></div>
+        return null;
       }
     }
 
     return (
-      <div>
         <ReactCSSTransitionGroup
           transitionName="corespring-feedback"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}>
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={200}>
           {chooseFeedback(correctness)}
         </ReactCSSTransitionGroup>
-      </div>
     )
   }
 }

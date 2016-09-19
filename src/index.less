@@ -152,39 +152,43 @@
   }
 
   .corespring-feedback-enter {
-    opacity: 0;
-    height: 0;
+    transform: scale(1,0);
+    height: 1px;
   }
 
   .corespring-feedback-enter.corespring-feedback-enter-active {
-    opacity: 1;
-    height: 25px;
-    transition: height 500ms, opacity 500ms;
+    transform: scale(1,1);
+    height: 45px;
+    transition: height 500ms, transform 500ms;
   }
 
   .corespring-feedback-leave {
-    opacity: 1;
-    height: 25px;
+    transform: scale(1,1);
+    height: 45px;
   }
 
   .corespring-feedback-leave.corespring-feedback-leave-active {
-    opacity: 0;
-    height: 0;
-    transition: height 300ms, opacity 300ms;
+    transform: scale(1,0);
+    height: 1px;
+    transition: height 200ms, transform 200ms;
   }
 
   .corespring-feedback {
-    -webkit-font-smoothing: antialiased;
-    background-color: #f8f6f6;
-    border-radius: 6px;
-    display: block;
-    font-family: 'Roboto', 'Noto', sans-serif;
-    font-size: 12px;
-    line-height: 25px;
-    margin: 0px;
-    padding: 10px;
-    vertical-align: middle;
+    transform-origin: 0% 0px 0px;
     width: 100%;
+
+    .content {
+      -webkit-font-smoothing: antialiased;
+      background-color: #f8f6f6;
+      border-radius: 6px;
+      display: block;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 12px;
+      line-height: 25px;
+      margin: 0px;
+      padding: 10px;
+      vertical-align: middle;
+    }
 
     &.incorrect {
       color: #946202;
