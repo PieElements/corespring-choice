@@ -5,3 +5,6 @@ dist/
 *.iml
 .bower*
 npm-debug.log
+jsconfig.json
+typings
+typings.json

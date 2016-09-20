@@ -2,36 +2,48 @@ import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class CorespringMultipleChoiceReactElement extends HTMLElement{
+export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
-  constructor(){
+  constructor() {
     super();
     this._model = null;
     this._session = null;
   }
 
-  get model(){
-    return this._model;
-  }
-  
-  set model(s){
+  set model(s) {
     this._model = s;
     this._rerender();
   }
 
-  get session(){
+  get session() {
     return this._session;
   }
-  
-  set session(s){
+
+  set session(s) {
     this._session = s;
     this._rerender();
   }
 
+  _onChange(data) {
+    var event = new CustomEvent('pie', {
+      bubbles: true,
+      detail: {
+        type: 'sessionChanged',
+        component: this.tagName.toLowerCase()
+      }
+    });
+
+    this.dispatchEvent(event);
+  };
+
   _rerender() {
-    console.log('_rerender...');
     if (this._model && this._session) {
-      var element = React.createElement(Main, { model: this._model, session: this._session });
+      var element = React.createElement(Main,
+        {
+          model: this._model,
+          session: this._session,
+          onChange: this._onChange.bind(this)
+        });
       ReactDOM.render(element, this, function () {
         console.log('rendered');
       });
@@ -41,12 +53,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement{
   }
 
   createdCallback() {
-    console.log('created');
     this._rerender();
-  }
-
-  attachedCallback(){
-    console.log('attached');
   }
 
 }

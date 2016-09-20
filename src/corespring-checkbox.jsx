@@ -7,7 +7,7 @@ import {amber600} from 'material-ui/styles/colors';
 import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
 import CorespringFeedback from './corespring-feedback.jsx';
 
-class CorespringCheckbox extends React.Component {
+export default class CorespringCheckbox extends React.Component {
 
   onCheck(el) {
     this.props.onChange({
@@ -39,26 +39,23 @@ class CorespringCheckbox extends React.Component {
   }
 
   render() {
-    const self = this;
-    const muiTheme = self.getTheme();
+    const muiTheme = this.getTheme();
 
-    return (
-      <div className="corespring-checkbox">
-        <CorespringFeedbackTick correctness={self.props.correctness} />
+    return <div className="corespring-checkbox">
+        <CorespringFeedbackTick correctness={this.props.correctness} />
         <div className="checkbox-holder">
           <MuiThemeProvider muiTheme={muiTheme}>
             <Checkbox
-              disabled={self.props.disabled}
-              checked={self._checked()}
-              onCheck={self.onCheck.bind(self)}
-              label={self.props['display-key'] + '. ' + self.props.label} />
+              disabled={this.props.disabled}
+              checked={this._checked.bind(this)()}
+              onCheck={this.onCheck.bind(this)}
+              label={this.props['display-key'] + '. ' + this.props.label} />
           </MuiThemeProvider>
         </div>
-        <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
+        <CorespringFeedback feedback={this.props.feedback} correctness={this.props.correctness} />
       </div>
-    );
   }
-}
+};
 
 CorespringCheckbox.propTypes = {
   'display-key': React.PropTypes.string,
@@ -69,6 +66,5 @@ CorespringCheckbox.propTypes = {
   label: React.PropTypes.string,
   onChange: React.PropTypes.func,
   value: React.PropTypes.string
-}
+};
 
-export default CorespringCheckbox

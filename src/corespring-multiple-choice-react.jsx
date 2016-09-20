@@ -6,7 +6,7 @@ import CorespringShowCorrectAnswerToggle from './corespring-show-correct-answer-
 import CorespringRadioButton from './corespring-radio-button.jsx';
 import CorespringCheckbox from './corespring-checkbox.jsx';
 
-class CorespringMultipleChoiceReact extends React.Component {
+export default class CorespringMultipleChoiceReact extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,8 +21,11 @@ class CorespringMultipleChoiceReact extends React.Component {
   }
 
   onChange(options) {
-    console.log('onChange', options, this.props, this)
     this.props.session.value = this.props.session.value || [];
+
+    if(this.props.onChange){
+      this.props.onChange(options);
+    }
 
     var value = options.value;
     var selected = options.selected;
@@ -51,7 +54,6 @@ class CorespringMultipleChoiceReact extends React.Component {
 
   isChecked(value) {
     if (this.props.session.value) {
-      console.log('isChecked', value, this.props.session.value.indexOf(value) >= 0)
       return this.props.session.value.indexOf(value) >= 0;
     } else {
       return false;
@@ -190,6 +192,3 @@ CorespringMultipleChoiceReact.defaultProps = {
     value: []
   }
 };
-
-
-export default CorespringMultipleChoiceReact;
