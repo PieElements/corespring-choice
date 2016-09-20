@@ -56,4 +56,10 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     this._rerender();
   }
 
+  attachedCallback(){
+    console.log('attached');
+    var event = new CustomEvent('pie', { bubbles: true, detail: {type: 'register'}});
+    this.dispatchEvent(event);
+  }
+
 }

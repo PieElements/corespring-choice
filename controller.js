@@ -6,7 +6,7 @@ exports.model = function(question, session, env) {
 
     var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
     var map = ((question.translations || {})[localeKey] || {});
-    if (value.indexOf('$') === 0) {
+    if (value && value.indexOf('$') === 0) {
       var key = value.substring(1);
       var out = map[key];
       if (!out) {
@@ -30,17 +30,16 @@ exports.model = function(question, session, env) {
     });
   }
 
-  var cfg = _.assign({}, question.model);
-  
-  cfg.prompt = lookup(cfg.prompt);
-  cfg.choices = _.map(cfg.choices, function (c) {
+
+  var base = _.assign({}, question.model);
+  base.outcomes = [];
+  base.prompt = lookup(base.prompt);
+  base.choices = _.map(base.choices, function (c) {
     c.label = lookup(c.label)
     return c;
   });
 
-  var base = _.assign({}, question.model); 
-  base.outcomes = [];
-
+  var cfg = _.assign({}, question.model);
   base.config = cfg;
 
   if (env.mode !== 'gather') {
@@ -48,7 +47,6 @@ exports.model = function(question, session, env) {
   }
 
   if (env.mode === 'evaluate') {
-
     var responses = _.isArray(session.value) ? session.value : [];
 
     var allCorrect = _.isEqual(responses, question.correctResponse.sort());
@@ -59,9 +57,6 @@ exports.model = function(question, session, env) {
     }
     base.outcomes = createOutcomes(responses, allCorrect);
   }
-
-  var correct = _.isEqual(question.correctResponse, session.response);
-  var feedback = question.model.feedback || { correct: 'correct', incorrect: 'incorrect'}  
 
   base.env = env;
 
