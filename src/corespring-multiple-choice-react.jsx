@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react';
 
 import {RadioButtonGroup} from 'material-ui/RadioButton';
@@ -21,6 +22,7 @@ export default class CorespringMultipleChoiceReact extends React.Component {
   }
 
   onChange(options) {
+    console.log('onChange', options, this.props, this)
     this.props.session.value = this.props.session.value || [];
 
     if(this.props.onChange){
