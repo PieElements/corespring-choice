@@ -54,11 +54,45 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
+	var _controller = __webpack_require__(394);
+
+	var _controller2 = _interopRequireDefault(_controller);
+
+	var _clientSidePieControllers = __webpack_require__(395);
+
+	var _clientSidePieControllers2 = _interopRequireDefault(_clientSidePieControllers);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	document.registerElement('pie-player', _piePlayer2.default);
 
 	document.registerElement('corespring-multiple-choice-react', _index2.default);
+
+	var model = {};
+
+	var controllerMap = {
+	  'corespring-multiple-choice-react': _controller2.default
+	};
+
+	var controllers = new _clientSidePieControllers2.default(model, controllerMap);
+
+	document.addEventListener('DOMContentLoaded', function () {
+
+	  var player = document.querySelector('pie-player');
+
+	  player.addEventListener('pie-player-ready', function (event) {
+	    console.log('got pie-player-ready');
+
+	    event.target.env = {
+	      mode: 'gather'
+	    };
+
+	    event.target.session = {};
+
+	    //TODO - how to plugin the controller here + data?
+	    event.target.controllers = controllers;
+	  });
+	});
 
 /***/ },
 /* 1 */
@@ -97,7 +131,34 @@
 	    value: function attachedCallback() {
 	      console.log('attached');
 	      var event = new CustomEvent('pie-player-ready', { bubbles: true });
-	      this.dispathEvent(event);
+	      this.dispatchEvent(event);
+	    }
+	  }, {
+	    key: '_update',
+	    value: function _update() {
+	      if (this._controllers && this._env && this._session) {
+	        this._controllers.model({}, this._session, this._env).then(function (models) {
+	          console.log('got models...');
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'controllers',
+	    set: function set(c) {
+	      this._controllers = c;
+	      this._update();
+	    }
+	  }, {
+	    key: 'env',
+	    set: function set(e) {
+	      this._env = e;
+	      this._update();
+	    }
+	  }, {
+	    key: 'session',
+	    set: function set(s) {
+	      this._session = s;
+	      this._update();
 	    }
 	  }]);
 
@@ -51059,6 +51120,130 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 394 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _ = __webpack_require__(389);
+
+	exports.model = function (question, session, env) {
+
+	  function lookup(value) {
+
+	    var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
+	    var map = (question.translations || {})[localeKey] || {};
+	    if (value.indexOf('$') === 0) {
+	      var key = value.substring(1);
+	      var out = map[key];
+	      if (!out) {
+	        console.warn('not able to find translation for: ' + key);
+	      }
+	      return out || value;
+	    } else {
+	      return value;
+	    }
+	  }
+
+	  console.debug('[state] question:', JSON.stringify(question, null, '  '));
+	  console.debug('[state] session:', JSON.stringify(session, null, '  '));
+	  console.debug('[state] env:', JSON.stringify(env, null, '  '));
+
+	  function createOutcomes(responses, allCorrect) {
+	    return _.map(responses, function (v) {
+	      var correct = _.includes(question.correctResponse, v);
+	      var feedback = lookup(question.feedback[v]);
+	      return { value: v, correct: correct, feedback: allCorrect ? null : feedback };
+	    });
+	  }
+
+	  var cfg = _.assign({}, question.model);
+
+	  cfg.prompt = lookup(cfg.prompt);
+	  cfg.choices = _.map(cfg.choices, function (c) {
+	    c.label = lookup(c.label);
+	    return c;
+	  });
+
+	  var base = _.assign({}, question.model);
+	  base.outcomes = [];
+
+	  base.config = cfg;
+
+	  if (env.mode !== 'gather') {
+	    base.config.disabled = true;
+	  }
+
+	  if (env.mode === 'evaluate') {
+
+	    var responses = _.isArray(session.value) ? session.value : [];
+
+	    var allCorrect = _.isEqual(responses, question.correctResponse.sort());
+	    console.log('session.value: allCorrect', allCorrect, responses, _typeof(session.value), 'question.correctResponse: ', question.correctResponse, _typeof(question.correctResponse));
+
+	    if (!allCorrect) {
+	      base.config.correctResponse = question.correctResponse;
+	    }
+	    base.outcomes = createOutcomes(responses, allCorrect);
+	  }
+
+	  // var correct = _.isEqual(question.correctResponse, session.response);
+	  // var feedback = question.model.feedback || { correct: 'correct', incorrect: 'incorrect'}  
+
+	  base.env = env;
+
+	  var map = {
+	    black_on_rose: 'black-on-rose',
+	    white_on_black: 'white-on-black',
+	    black_on_white: 'default'
+	  };
+
+	  if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
+	    base.className = map[env.accessibility.colorContrast];
+	  }
+
+	  console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
+	  return base;
+	};
+
+/***/ },
+/* 395 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ClientSidePieControllers = function () {
+	  function ClientSidePieControllers(model, controllerMap) {
+	    _classCallCheck(this, ClientSidePieControllers);
+
+	    this.model = model;
+	    this.controllerMap = controllerMap;
+	  }
+
+	  _createClass(ClientSidePieControllers, [{
+	    key: "model",
+	    value: function model(question, session, env) {
+	      console.log(question, session, env);
+	      return Promise.resolve({});
+	    }
+	  }]);
+
+	  return ClientSidePieControllers;
+	}();
+
+	exports.default = ClientSidePieControllers;
 
 /***/ }
 /******/ ]);
