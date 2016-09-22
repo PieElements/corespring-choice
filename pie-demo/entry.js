@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   player.addEventListener('pie-player-ready', function(event){
 
-    //Dont init this listener untile the player has been upgraded 
+    //Dont init this listener until the player has been upgraded 
     controlPanel.addEventListener('envChanged', (event) => {
       player.env = event.target.env;
     });
