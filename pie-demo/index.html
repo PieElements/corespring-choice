@@ -2,22 +2,6 @@
 <html>
   <head>
     <script type="text/javascript" src="bundle.js"></script>
-    <script type="text/javascript">
-
-      document.addEventListener('DOMContentLoaded', function(){
-
-        var player = document.querySelector('pie-player');
-
-        player.addEventListener('pie-player-ready', function(event){
-          console.log('got pie-player-ready');
-          event.target.env = {};
-          event.target.session = {};
-
-          //TODO - how to plugin the controller here + data?
-          event.target.controllers = {} //controllers;
-        });
-      });
-    </script>
   </head>
   <body>
     <pie-control-panel></pie-control-panel>
