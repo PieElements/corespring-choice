@@ -11,7 +11,7 @@ module.exports = {
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        exclude: /.*node_modules((?!pie-control-panel|pie-player|pie-client-side-controller).)*$/,
         query: {
           presets: ['es2015', 'react']
         }

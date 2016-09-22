@@ -1,22 +1,23 @@
-import PiePlayer from '../src/pie-player';
+import PiePlayer from 'pie-player';
 document.registerElement('pie-player', PiePlayer);
 
-import PieControlPanel from '../src/pie-control-panel';
+import PieControlPanel from 'pie-control-panel';
 document.registerElement('pie-control-panel', PieControlPanel);
 
 import CorespringMultipleChoiceReact from '../src/index';
 document.registerElement('corespring-multiple-choice-react', CorespringMultipleChoiceReact);
 
-import controller from '../controller';
-import PieControllers from '../src/client-side-pie-controllers';
+import ClientSideController from 'pie-client-side-controller';
 
 import model from './demo-data';
 
+import multipleChoiceController from '../controller';
+
 const controllerMap = {
-  'corespring-multiple-choice-react' : controller
+  'corespring-multiple-choice-react' : multipleChoiceController
 };
 
-const controllers = new PieControllers( model, controllerMap );
+const controller = new ClientSideController( model, controllerMap );
 
 window.session = [];
 
@@ -45,6 +46,6 @@ document.addEventListener('DOMContentLoaded', function(){
     console.log('d:', d);
     event.target.env = env;
     event.target.session = window.session;
-    event.target.controllers = controllers;
+    event.target.controllers = controller;
   });
 });
