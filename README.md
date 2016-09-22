@@ -33,8 +33,10 @@ This is a hot reloading demo page for Development:
 
 ```
 cd pie-demo
-webpack --hot --inline 
+webpack-dev-server --hot --inline 
 ```
+Then go to localhost:8080
+
 
 ## serve-pie 
 
