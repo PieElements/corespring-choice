@@ -1,77 +1,80 @@
 const _ = require('lodash'); 
 
-exports.model = function(question, session, env) {
+export class Controller {
 
-  function lookup(value) {
+  model(question, session, env) {
 
-    var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
-    var map = ((question.translations || {})[localeKey] || {});
-    if (value.indexOf('$') === 0) {
-      var key = value.substring(1);
-      var out = map[key];
-      if (!out) {
-        console.warn('not able to find translation for: ' + key);
+    function lookup(value) {
+
+      var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
+      var map = ((question.translations || {})[localeKey] || {});
+      if (value.indexOf('$') === 0) {
+        var key = value.substring(1);
+        var out = map[key];
+        if (!out) {
+          console.warn('not able to find translation for: ' + key);
+        }
+        return out || value;
+      } else {
+        return value;
       }
-      return out || value;
-    } else {
-      return value;
     }
-  }
 
-  console.debug('[state] question:', JSON.stringify(question, null, '  '));
-  console.debug('[state] session:', JSON.stringify(session, null, '  '));
-  console.debug('[state] env:', JSON.stringify(env, null, '  '));
+    console.debug('[state] question:', JSON.stringify(question, null, '  '));
+    console.debug('[state] session:', JSON.stringify(session, null, '  '));
+    console.debug('[state] env:', JSON.stringify(env, null, '  '));
 
-  function createOutcomes(responses, allCorrect) {
-    return _.map(responses, function (v) {
-      var correct = _.includes(question.correctResponse, v);
-      var feedback = lookup(question.feedback[v]);
-      return { value: v, correct: correct, feedback: allCorrect ? null : feedback };
+    function createOutcomes(responses, allCorrect) {
+      return _.map(responses, function (v) {
+        var correct = _.includes(question.correctResponse, v);
+        var feedback = lookup(question.feedback[v]);
+        return {value: v, correct: correct, feedback: allCorrect ? null : feedback};
+      });
+    }
+
+    var cfg = _.assign({}, question.model);
+
+    cfg.prompt = lookup(cfg.prompt);
+    cfg.choices = _.map(cfg.choices, function (c) {
+      c.label = lookup(c.label)
+      return c;
     });
-  }
 
-  var cfg = _.assign({}, question.model);
-  
-  cfg.prompt = lookup(cfg.prompt);
-  cfg.choices = _.map(cfg.choices, function (c) {
-    c.label = lookup(c.label)
-    return c;
-  });
+    var base = _.assign({}, question.model);
+    base.outcomes = [];
 
-  var base = _.assign({}, question.model); 
-  base.outcomes = [];
+    base.config = cfg;
 
-  base.config = cfg;
-
-  if (env.mode !== 'gather') {
-    base.config.disabled = true;
-  }
-
-  if (env.mode === 'evaluate') {
-
-    var responses = _.isArray(session.value) ? session.value : [];
-
-    var allCorrect = _.isEqual(responses, question.correctResponse.sort());
-    console.log('session.value: allCorrect', allCorrect, responses, typeof (session.value), 'question.correctResponse: ', question.correctResponse, typeof (question.correctResponse));
-
-    if (!allCorrect) {
-      base.config.correctResponse = question.correctResponse;
+    if (env.mode !== 'gather') {
+      base.config.disabled = true;
     }
-    base.outcomes = createOutcomes(responses, allCorrect);
+
+    if (env.mode === 'evaluate') {
+
+      var responses = _.isArray(session.value) ? session.value : [];
+
+      var allCorrect = _.isEqual(responses, question.correctResponse.sort());
+      console.log('session.value: allCorrect', allCorrect, responses, typeof (session.value), 'question.correctResponse: ', question.correctResponse, typeof (question.correctResponse));
+
+      if (!allCorrect) {
+        base.config.correctResponse = question.correctResponse;
+      }
+      base.outcomes = createOutcomes(responses, allCorrect);
+    }
+
+    base.env = env;
+
+    var map = {
+      black_on_rose: 'black-on-rose',
+      white_on_black: 'white-on-black',
+      black_on_white: 'default'
+    };
+
+    if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
+      base.className = map[env.accessibility.colorContrast];
+    }
+
+    console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
+    return Promise.resolve(base);
   }
-
-  base.env = env;
-
-  var map = {
-    black_on_rose: 'black-on-rose',
-    white_on_black: 'white-on-black',
-    black_on_white: 'default'
-  };
-
-  if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]){
-    base.className = map[env.accessibility.colorContrast];
-  }
-
-  console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
-  return Promise.resolve(base);
-};
+}
