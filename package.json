@@ -22,13 +22,14 @@
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "pie-client-side-controller" : "PieLabs/pie-client-side-controller",
+    "pie-control-panel" : "PieLabs/pie-control-panel",
+    "pie-player" : "PieLabs/pie-player",
     "postcss-loader": "^0.13.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.1",
-    "pie-control-panel" : "PieLabs/pie-control-panel",
-    "pie-player" : "PieLabs/pie-player",
-    "pie-client-side-controller" : "PieLabs/pie-client-side-controller"
+    "webpack-custom-loader": "PieLabs/webpack-custom-loader"
   },
   "dependencies": {
     "extract-text-webpack-plugin": "^1.0.1",

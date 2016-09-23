@@ -9,15 +9,11 @@ document.registerElement('corespring-multiple-choice-react', CorespringMultipleC
 
 import ClientSideController from 'pie-client-side-controller';
 
-import model from './demo-data';
+import item from './item.json';
 
-import multipleChoiceController from '../controller';
+import controllerMap from 'babel?presets[]=es2015!webpack-custom!./item.json';
 
-const controllerMap = {
-  'corespring-multiple-choice-react' : multipleChoiceController
-};
-
-const controller = new ClientSideController( model, controllerMap );
+const controller = new ClientSideController( item.components, controllerMap );
 
 window.session = [];
 
