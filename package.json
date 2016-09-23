@@ -25,7 +25,10 @@
     "postcss-loader": "^0.13.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.15.1"
+    "webpack-dev-server": "^1.15.1",
+    "pie-control-panel" : "PieLabs/pie-control-panel",
+    "pie-player" : "PieLabs/pie-player",
+    "pie-client-side-controller" : "PieLabs/pie-client-side-controller"
   },
   "dependencies": {
     "extract-text-webpack-plugin": "^1.0.1",

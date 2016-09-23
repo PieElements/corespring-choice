@@ -27,6 +27,16 @@ npm run-script dist
 npm run-script dist-watch
 ```
 
+## pie-demo 
+
+This is a hot reloading demo page for Development:
+
+```
+cd pie-demo
+webpack-dev-server --hot --inline 
+```
+Then go to localhost:8080
+
 
 ## serve-pie 
 

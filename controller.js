@@ -60,9 +60,6 @@ exports.model = function(question, session, env) {
     base.outcomes = createOutcomes(responses, allCorrect);
   }
 
-  var correct = _.isEqual(question.correctResponse, session.response);
-  var feedback = question.model.feedback || { correct: 'correct', incorrect: 'incorrect'}  
-
   base.env = env;
 
   var map = {
@@ -76,5 +73,5 @@ exports.model = function(question, session, env) {
   }
 
   console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
-  return base;
+  return Promise.resolve(base);
 };
