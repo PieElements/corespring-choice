@@ -29,12 +29,12 @@ document.addEventListener('DOMContentLoaded', function(){
     mode: 'gather'
   };
 
-  if(controlPanel){
-    controlPanel.env = env;
-  }
 
   player.addEventListener('pie-player-ready', function(event){
 
+    if(controlPanel){
+      controlPanel.env = env;
+    }
     //Dont init this listener until the player has been upgraded 
     controlPanel.addEventListener('envChanged', (event) => {
       player.env = event.target.env;
@@ -46,6 +46,6 @@ document.addEventListener('DOMContentLoaded', function(){
     console.log('d:', d);
     event.target.env = env;
     event.target.session = window.session;
-    event.target.controllers = controller;
+    event.target.controller = controller;
   });
 });
