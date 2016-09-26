@@ -30,6 +30,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
+  },
+  pieControllers: {
+    "corespring-multiple-choice-react" : "../controller.js"
   }
 };
 
