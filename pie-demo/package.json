@@ -8,7 +8,7 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "json-loader": "^0.5.4",
-    "webpack-custom-loader": "PieLabs/webpack-custom-loader"
+    "webpack-generate-controllers-loader": "PieLabs/webpack-generate-controllers-loader"
   },
   "dependencies": {
     "corespring-multiple-choice-react": "PieLabs/corespring-multiple-choice-react#feature/pie-build"
