@@ -9,9 +9,13 @@ document.registerElement('corespring-multiple-choice-react', CorespringMultipleC
 
 import ClientSideController from 'pie-client-side-controller';
 
+import ScoringProcessor from 'pie-default-scoring-processor';
+const scoringProcessor = new ScoringProcessor();
+
 import item from './item.json';
 
-import controllerMap from 'babel?presets[]=es2015!webpack-custom!./item.json';
+import controllerMap from 'babel?presets[]=es2015!webpack-generate-controllers!./item.json';
+
 
 const controller = new ClientSideController( item.components, controllerMap );
 
@@ -19,12 +23,11 @@ window.session = [];
 
 document.addEventListener('DOMContentLoaded', function(){
 
-  var controlPanel = document.querySelector('pie-control-panel');
-  var player = document.querySelector('pie-player');
-  var env = {
+  const controlPanel = document.querySelector('pie-control-panel');
+  const player = document.querySelector('pie-player');
+  const env = {
     mode: 'gather'
   };
-
 
   player.addEventListener('pie-player-ready', function(event){
 
@@ -37,11 +40,34 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     console.log('got pie-player-ready');
-    let p = Object.getPrototypeOf(event.target);
-    let d = Object.getOwnPropertyDescriptor(p, 'env');
+    const p = Object.getPrototypeOf(event.target);
+    const d = Object.getOwnPropertyDescriptor(p, 'env');
     console.log('d:', d);
     event.target.env = env;
     event.target.session = window.session;
     event.target.controller = controller;
+  });
+
+  player.addEventListener('pie', function(e){
+    console.log('pie event', e);
+    if(e.detail.type === 'modelUpdated') {
+      var model = e.detail.model;
+      //todo the controller needs a outcome method
+      //the score method could take arrays instead of maps?
+      var outcomes = {components:{}};
+      for(let i=0; i<model.length; i++){
+        let id = model[i].id;
+        let score = model[i].score;
+        outcomes.components[id] = {score};
+      }
+      var localSessions = {components:{}};
+      for(let i=0; i<window.session.length; i++){
+        let localSession = window.session[i];
+        let id = localSession.id;
+        localSessions.components[id] = localSession;
+      }
+      let score = scoringProcessor.score(item, localSessions, outcomes);
+      console.log(score);
+    }
   });
 });

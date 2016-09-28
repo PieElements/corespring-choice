@@ -24,6 +24,7 @@
     "less-loader": "^2.2.3",
     "pie-client-side-controller" : "PieLabs/pie-client-side-controller",
     "pie-control-panel" : "PieLabs/pie-control-panel",
+    "pie-default-scoring-processor": "PieLabs/pie-default-scoring-processor",
     "pie-player" : "PieLabs/pie-player",
     "postcss-loader": "^0.13.0",
     "style-loader": "^0.13.1",

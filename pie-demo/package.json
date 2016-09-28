@@ -11,6 +11,6 @@
     "webpack-generate-controllers-loader": "PieLabs/webpack-generate-controllers-loader"
   },
   "dependencies": {
-    "corespring-multiple-choice-react": "PieLabs/corespring-multiple-choice-react#feature/pie-build"
+    "pie-default-scoring-processor": "PieLabs/pie-default-scoring-processor"
   }
 }

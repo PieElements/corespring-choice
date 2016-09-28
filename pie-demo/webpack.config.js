@@ -13,7 +13,7 @@ module.exports = {
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
-        exclude: /.*node_modules((?!pie-control-panel|pie-player|pie-client-side-controller|corespring-multiple-choice-react).)*$/,
+        exclude: /.*node_modules((?!pie-control-panel|pie-player|pie-client-side-controller|pie-default-scoring-processor|corespring-multiple-choice-react).)*$/,
         query: {
           presets: ['es2015', 'react']
         }

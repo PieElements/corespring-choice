@@ -60,6 +60,7 @@ export class Controller {
         base.config.correctResponse = question.correctResponse;
       }
       base.outcomes = createOutcomes(responses, allCorrect);
+      base.score = allCorrect ? 1 : 0;
     }
 
     base.env = env;
