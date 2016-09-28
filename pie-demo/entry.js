@@ -53,20 +53,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(e.detail.type === 'modelUpdated') {
       var model = e.detail.model;
       //todo the controller needs a outcome method
-      //the score method could take arrays instead of maps?
-      var outcomes = {components:{}};
-      for(let i=0; i<model.length; i++){
-        let id = model[i].id;
-        let score = model[i].score;
-        outcomes.components[id] = {score};
-      }
-      var localSessions = {components:{}};
-      for(let i=0; i<window.session.length; i++){
-        let localSession = window.session[i];
-        let id = localSession.id;
-        localSessions.components[id] = localSession;
-      }
-      let score = scoringProcessor.score(item, localSessions, outcomes);
+      let score = scoringProcessor.score(item, window.session, model);
       console.log(score);
     }
   });
