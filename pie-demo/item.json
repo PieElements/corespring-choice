@@ -16,6 +16,7 @@
         "carrot": "good for your eyes",
         "donut": "Try not licking your lips"
       },
+      "weight": 0.7,
       "translations": {
         "default_locale": "en_US",
         "en_US": {
