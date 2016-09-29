@@ -11,6 +11,9 @@
     "webpack-generate-controllers-loader": "PieLabs/webpack-generate-controllers-loader"
   },
   "dependencies": {
-    "pie-default-scoring-processor": "PieLabs/pie-default-scoring-processor"
+    "pie-client-side-controller" : "PieLabs/pie-client-side-controller",
+    "pie-control-panel" : "PieLabs/pie-control-panel",
+    "pie-default-scoring-processor": "PieLabs/pie-default-scoring-processor",
+    "pie-player" : "PieLabs/pie-player"
   }
 }

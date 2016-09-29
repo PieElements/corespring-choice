@@ -4,6 +4,10 @@ document.registerElement('pie-player', PiePlayer);
 import PieControlPanel from 'pie-control-panel';
 document.registerElement('pie-control-panel', PieControlPanel);
 
+import ScoreDisplay from './score-display.js';
+document.registerElement('score-display', ScoreDisplay);
+
+
 import CorespringMultipleChoiceReact from '../src/index';
 document.registerElement('corespring-multiple-choice-react', CorespringMultipleChoiceReact);
 
@@ -25,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   const controlPanel = document.querySelector('pie-control-panel');
   const player = document.querySelector('pie-player');
+  const scoreDisplay = document.querySelector('score-display');
   const env = {
     mode: 'gather'
   };
@@ -49,12 +54,16 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   player.addEventListener('pie', function(e){
-    console.log('pie event', e);
     if(e.detail.type === 'modelUpdated') {
-      var model = e.detail.model;
-      //todo the controller needs a outcome method
-      let score = scoringProcessor.score(item, window.session, model);
-      console.log(score);
+      const ids = [];
+      for(let i=0; i<item.components.length; i++){
+        ids.push(item.components[i].id);
+      }
+      controller.outcome(ids, window.session, env).then(function(outcomes){
+        let weightedScore = scoringProcessor.score(item, window.session, outcomes);
+        console.log("outcome", weightedScore, outcomes);
+        scoreDisplay.score = weightedScore.summary;
+      });
     }
   });
 });
