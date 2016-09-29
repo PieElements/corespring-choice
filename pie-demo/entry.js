@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', function(){
     mode: 'gather'
   };
 
+  //add an element via code
+  let el = document.createElement('corespring-multiple-choice-react');
+  el.setAttribute('data-id', '2')
+  console.log("el", el)
+  player.appendChild(el)
+
   player.addEventListener('pie-player-ready', function(event){
 
     if(controlPanel){
@@ -54,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   player.addEventListener('pie', function(e){
+    console.log('Pie event: ', e.detail.type);
     if(e.detail.type === 'modelUpdated') {
       const ids = item.components.map(c => c.id);
       controller.outcome(ids, window.session, env).then(function(outcomes){
@@ -61,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function(){
         console.log("outcome", weightedScore);
         scoreDisplay.score = weightedScore.summary;
       });
+    } else if(e.detail.type === 'sessionChanged') {
+      console.log("session", session);
     }
   });
 });
