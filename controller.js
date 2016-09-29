@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
-//see https://pielabs.github.io/pie-docs/developing/controller.html
+//For the documentation of pie controllers see
+//https://pielabs.github.io/pie-docs/developing/controller.html
 
 export class Controller {
 
@@ -11,13 +12,12 @@ export class Controller {
     const raw = allCorrect ? 1 : 0;
     const min = 0;
     const max = 1;
-    const scaled = (raw - min) * 100 / (max - min);
+    const scaled = (raw - min) / (max - min);
 
+    const id = question.id;
     const score = {
       scaled, raw, min, max
     };
-
-    const id = question.id;
     const completed = true;
     const duration = "PT1M"; //one minute, see https://en.wikipedia.org/wiki/ISO_8601#Durations
     const extensions = {};
