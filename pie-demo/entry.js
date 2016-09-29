@@ -55,13 +55,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
   player.addEventListener('pie', function(e){
     if(e.detail.type === 'modelUpdated') {
-      const ids = [];
-      for(let i=0; i<item.components.length; i++){
-        ids.push(item.components[i].id);
-      }
+      const ids = item.components.map(c => c.id);
       controller.outcome(ids, window.session, env).then(function(outcomes){
         let weightedScore = scoringProcessor.score(item, window.session, outcomes);
-        console.log("outcome", weightedScore, outcomes);
+        console.log("outcome", weightedScore);
         scoreDisplay.score = weightedScore.summary;
       });
     }
