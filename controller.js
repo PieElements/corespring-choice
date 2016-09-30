@@ -1,11 +1,11 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-//For the documentation of pie controllers see
-//https://pielabs.github.io/pie-docs/developing/controller.html
+/** 
+ * For the documentation of pie controllers see
+ * https://pielabs.github.io/pie-docs/developing/controller.html
+ */
 
-export class Controller {
-
-  outcome(question, session, env) {
+export function outcome(question, session, env) {
     const responses = _.isArray(session.value) ? session.value : [];
     const allCorrect = _.isEqual(responses.sort(), question.correctResponse.sort());
 
@@ -26,9 +26,9 @@ export class Controller {
     };
 
     return Promise.resolve(outcome);
-  }
+}
 
-  model(question, session, env) {
+export function model(question, session, env) {
 
     function lookup(value) {
 
@@ -106,5 +106,8 @@ export class Controller {
 
     console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
     return Promise.resolve(base);
-  }
 }
+
+
+
+
