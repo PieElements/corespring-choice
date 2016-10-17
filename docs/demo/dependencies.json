@@ -1,6 +1,3 @@
 {
-  "dependencies" : {
-    "corespring-multiple-choice-react" : "../.."
-  },
-  "resolutions" : {}
+  "corespring-multiple-choice-react" : "../.."
 }

@@ -1,56 +1,70 @@
+import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {amber600} from 'material-ui/styles/colors';
 
-var CorespringFeedbackTick = require('./corespring-feedback-tick');
-var CorespringFeedback = require('./corespring-feedback');
+import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
+import CorespringFeedback from './corespring-feedback.jsx';
 
-module.exports = React.createClass({
-  displayName: 'CorespringCheckbox',
+export default class CorespringCheckbox extends React.Component {
 
-  propTypes: {
-    correct: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
-    'display-key': React.PropTypes.string,
-    feedback: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    label: React.PropTypes.string,
-    value: React.PropTypes.string
-  },
-
-  getInitialState: function() {
-    return {
-      userValue: false,
-      checked: false
-    };
-  },
-
-  onCheck: function(el) {
-    var self = this;
+  onCheck(el) {
     this.props.onChange({
       value: this.props.value, 
       selected: el.target.checked
     });
-    this.setState({userValue: !this.state.checked});
-    this.setState({checked: !this.state.checked});
-  },
-
-  _checked: function() {
-    return (this.props.correct !== undefined) ? this.props.correct : this.state.checked;
-  },
-
-  render: function() {
-    var self = this;
-    return (
-      <div className="corespring-checkbox">
-        <CorespringFeedbackTick correctness={self.props.correctness} />
-        <div className="checkbox-holder">
-          <Checkbox
-            disabled={self.props.disabled}
-            checked={self._checked()}
-            onCheck={self.onCheck}
-            label={this.props['display-key'] + '. ' + this.props.label} />
-        </div>
-        <CorespringFeedback feedback={self.props.feedback} correctness={self.props.correctness} />
-      </div>
-    );
   }
-});
+
+  _checked() {
+    return (this.props.correct !== undefined) ? this.props.correct : this.props.checked;
+  }
+
+  getTheme() {
+    if(this.props.correctness === 'correct'){
+      return getMuiTheme({
+        checkbox: {
+          disabledColor: "green"
+        }
+      });
+    } else if(this.props.correctness === 'incorrect'){
+      return getMuiTheme({
+        checkbox: {
+          disabledColor: amber600
+        }
+      });
+    } else {
+      return getMuiTheme();
+    }
+  }
+
+  render() {
+    const muiTheme = this.getTheme();
+
+    return <div className="corespring-checkbox">
+        <CorespringFeedbackTick correctness={this.props.correctness} />
+        <div className="checkbox-holder">
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <Checkbox
+              disabled={this.props.disabled}
+              checked={this._checked.bind(this)()}
+              onCheck={this.onCheck.bind(this)}
+              label={this.props['display-key'] + '. ' + this.props.label} />
+          </MuiThemeProvider>
+        </div>
+        <CorespringFeedback feedback={this.props.feedback} correctness={this.props.correctness} />
+      </div>
+  }
+};
+
+CorespringCheckbox.propTypes = {
+  'display-key': React.PropTypes.string,
+  checked: React.PropTypes.bool,
+  correct: React.PropTypes.bool,
+  disabled: React.PropTypes.bool,
+  feedback: React.PropTypes.string,
+  label: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+  value: React.PropTypes.string
+};
+

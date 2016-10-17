@@ -1,18 +1,30 @@
-const webpack = require('webpack');
 module.exports = {
-  entry: './dist/index.js',
+  entry: {
+    demo: './src/demo.js'
+  },
   output: {
-    path: './dist',
-    filename: 'bundle.js'
+    path: "./demo-build",
+    filename: 'bundle.js',
+    publicPath: '/demo-build'
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'react-dom/server': 'ReactDOMServer',
-    'react/lib/ReactTransitionGroup': 'React.addons.TransitionGroup',
-    'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
+  module: {
+    loaders: [
+      {
+        test: /.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'react']
+        }
+      },
+      {
+         test: /\.less$/,
+         loader: "style!css!less"
+      }
+    ]
   },
-  plugins: [
-    //new webpack.IgnorePlugin(/^react$/)
-  ]
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  }
 };
+
