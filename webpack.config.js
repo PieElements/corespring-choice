@@ -10,11 +10,11 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /.jsx?$/,
+        test: /.jsx$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react']
+          presets: ['react']
         }
       },
       {
@@ -22,9 +22,6 @@ module.exports = {
          loader: "style!css!less"
       }
     ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
   }
 };
 
