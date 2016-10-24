@@ -16,10 +16,8 @@ class Main extends React.Component {
     this.props.onChange(opts);
   };
 
-  _getMuiTheme(contrast) {
-
-
-    if (contrast === 'white-on-black') {
+  _getMuiTheme(className) {
+    if (className === 'white-on-black') {
       return getMuiTheme(darkBaseTheme, {
         correctColor: green200,
         incorrectColor: amber500,
@@ -27,7 +25,7 @@ class Main extends React.Component {
           textColor: 'white'
         }
       });
-    } else if (contrast === 'black-on-rose') {
+    } else if (className === 'black-on-rose') {
       return getMuiTheme({
         correctColor: green500,
         incorrectColor: amber600
