@@ -4,7 +4,10 @@
       "id": "1",
       "pie": {
         "name": "corespring-multiple-choice-react",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "langs": [
+          "en-US", "es-ES"
+        ]
       },
       "correctResponse" : ["apple", "carrot"],
       "feedback" : {
@@ -14,8 +17,8 @@
         "donut" : "Try not licking your lips"
       },
       "translations" : {
-        "default_locale" : "en_US",
-        "en_US" : {
+        "default_locale" : "en-US",
+        "en-US" : {
           "PROMPT" : "Choose the 2 tastiest things",
           "LABEL_APPLE" : "Apple",
           "LABEL_BANANA" : "Banaa",
@@ -23,7 +26,7 @@
           "LABEL_DONUT" : "Donut",
           "FB_APPLE" : "Apples are so tasty"
         },
-        "es_ES" : {
+        "es-ES" : {
           "PROMPT" : "Elija las 2 cosas más sabrosas",
           "LABEL_APPLE" : "manzana",
           "LABEL_BANANA" : "plátano",
@@ -39,19 +42,19 @@
         "disabled": false,
         "choices": [
           {
-            "label": "Apple",
+            "label": "$LABEL_APPLE",
             "value": "apple"
           },
           {
-            "label": "Banana",
+            "label": "$LABEL_BANANA",
             "value": "banana"
           },
           {
-            "label": "Carrot",
+            "label": "$LABEL_CARROT",
             "value": "carrot"
           },
           {
-            "label": "Donut",
+            "label": "$LABEL_DONUT",
             "value": "donut"
           }
         ]
