@@ -2,6 +2,10 @@ import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+/**
+ * 1. css variables explor
+ * 2. theming material ui
+ */
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
   constructor() {
