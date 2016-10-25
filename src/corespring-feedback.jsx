@@ -1,37 +1,57 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
 class CorespringFeedback extends React.Component {
+
+  getStyle(correctness) {
+
+    let color = this.props.muiTheme.palette.textColor;
+    if (correctness === 'correct') {
+      color = this.props.muiTheme.correctColor;
+    } else if (correctness === 'incorrect') {
+      color = this.props.muiTheme.incorrectColor;
+    }
+
+    return {
+      color: color,
+      'background-color': this.props.muiTheme.palette.canvasColor
+    }
+  }
 
   render() {
     var self = this;
     var correctness = self.props.correctness;
     var feedback = self.props.feedback;
 
-    function chooseFeedback(correctness){
+    function chooseFeedback(correctness) {
       if (correctness && feedback) {
         var feedbackClass = "corespring-feedback " + correctness;
-        return <div key="hasFeedback" className={feedbackClass}><div className="content">{feedback}</div></div>
+        return <div
+          key="hasFeedback"
+          className={feedbackClass}>
+          <div className="content"
+            style={this.getStyle(correctness)}>{feedback}</div>
+        </div>
       } else {
         return null;
       }
     }
 
-    return (
-        <ReactCSSTransitionGroup
-          transitionName="corespring-feedback"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={200}>
-          {chooseFeedback(correctness)}
-        </ReactCSSTransitionGroup>
-    )
+    return <ReactCSSTransitionGroup
+      transitionName="corespring-feedback"
+      transitionEnterTimeout={500}
+      transitionLeaveTimeout={200}>
+      {chooseFeedback.bind(this)(correctness)}
+    </ReactCSSTransitionGroup>;
+
   }
 }
 
 CorespringFeedback.propTypes = {
   correctness: React.PropTypes.string,
-    feedback: React.PropTypes.string
+  feedback: React.PropTypes.string
 }
 
 
-export default CorespringFeedback
+export default muiThemeable()(CorespringFeedback);

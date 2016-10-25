@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="demo-build/bundle.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+
+    window.demo = {
+      env: {
+        mode: 'gather',
+        accessibility: {
+          colorContrast: 'black_on_white'
+        }
+      }
+    };
+
+
+    function setData(){
+      if(!window.demo.element){
+        return;
+      }
+
+      window.demo.element.session = {};
+      window.demo.element.model = {
+        env: {
+          mode: 'gather'
+        },
+        outcomes: [
+          {
+            value: 'apple',
+            correct: false,
+            feedback: 'NO!!'
+          },
+          {
+            value: 'banana',
+            correct: true,
+            feedback: 'Yes ...'
+          },
+        ],
+        correctResponse: ['banana'],
+        className: 'white-on-black',
+        "prompt": "Choose the 2 tastiest things",
+        "choiceMode": "checkbox",
+        "keyMode": "numbers",
+        "disabled": true,
+        "choices": [
+          {
+            "label": "Apple",
+            "value": "apple"
+          },
+          {
+            "label": "Banana",
+            "value": "banana"
+          },
+          {
+            "label": "Carrot",
+            "value": "carrot"
+          },
+          {
+            "label": "Donut",
+            "value": "donut"
+          }
+        ]
+      }
+    }
+    
+    document.addEventListener('pie.register', function(event){
+      window.demo.element = event.target;
+      setData();
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+      var panel = document.querySelector('pie-control-panel');
+      panel.env = window.demo.env; 
+      panel.addEventListener('envChanged', function(event){
+        console.log(window.demo.env);   
+        setData(); 
+
+        var body = document.querySelector('body');
+        body.setAttribute('class', window.demo.env.accessibility.colorContrast)
+
+      });
+    });
+
+  </script>
+  <style>
+    body.white_on_black {
+      background-color: black;
+    }
+    
+    body.black_on_rose {
+      background-color: mistyrose;
+    }
+  </style>
+</head>
+
+<body>
+  <pie-control-panel></pie-control-panel>
+  <corespring-multiple-choice-react pie-id="1"></corespring-multiple-choice-react>
+</body>
+
+</html

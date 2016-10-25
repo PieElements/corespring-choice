@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Checkbox from 'material-ui/Checkbox';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {amber600} from 'material-ui/styles/colors';
-
+import {amber600, green500} from 'material-ui/styles/colors';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
 import CorespringFeedbackTick from './corespring-feedback-tick.jsx';
 import CorespringFeedback from './corespring-feedback.jsx';
 
-export default class CorespringCheckbox extends React.Component {
+export class CorespringCheckbox extends React.Component {
 
   onCheck(el) {
     this.props.onChange({
@@ -21,50 +23,54 @@ export default class CorespringCheckbox extends React.Component {
   }
 
   getTheme() {
+    let theme = cloneDeep(this.props.muiTheme);
+
+    let disabledColor = theme.checkbox.disabledColor;
     if(this.props.correctness === 'correct'){
-      return getMuiTheme({
-        checkbox: {
-          disabledColor: "green"
-        }
-      });
-    } else if(this.props.correctness === 'incorrect'){
-      return getMuiTheme({
-        checkbox: {
-          disabledColor: amber600
-        }
-      });
-    } else {
-      return getMuiTheme();
+      theme.checkbox.disabledColor = theme.correctColor;
+    } else if (this.props.correctness === 'incorrect'){
+      theme.checkbox.disabledColor = theme.incorrectColor;
     }
+    return theme;
   }
-
+  
   render() {
-    const muiTheme = this.getTheme();
 
+    const muiTheme = this.getTheme();
+   /**
+    * TODO: should only really have 1 theme provider in the component tree.
+    * but the way Checkbox is set up you can't tweak the styles via the props fully.
+    * So have to use an additional MuiThemeProvider for now.
+    */
     return <div className="corespring-checkbox">
         <CorespringFeedbackTick correctness={this.props.correctness} />
         <div className="checkbox-holder">
-          <MuiThemeProvider muiTheme={muiTheme}>
+        <MuiThemeProvider muiTheme={muiTheme}>
             <Checkbox
               disabled={this.props.disabled}
               checked={this._checked.bind(this)()}
               onCheck={this.onCheck.bind(this)}
               label={this.props['display-key'] + '. ' + this.props.label} />
-          </MuiThemeProvider>
+        </MuiThemeProvider>
         </div>
-        <CorespringFeedback feedback={this.props.feedback} correctness={this.props.correctness} />
+        <CorespringFeedback feedback={this.props.feedback} correctness={this.props.correctness} /> 
       </div>
   }
 };
 
 CorespringCheckbox.propTypes = {
-  'display-key': React.PropTypes.string,
-  checked: React.PropTypes.bool,
-  correct: React.PropTypes.bool,
-  disabled: React.PropTypes.bool,
-  feedback: React.PropTypes.string,
-  label: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  value: React.PropTypes.string
+  'display-key': PropTypes.string,
+  checked: PropTypes.bool,
+  correct: PropTypes.bool,
+  disabled: PropTypes.bool,
+  feedback: PropTypes.string,
+  label: PropTypes.string,
+  onChange: PropTypes.func,
+  value: PropTypes.string
 };
 
+
+CorespringCheckbox.defaultProps = {
+};
+
+export default muiThemeable()(CorespringCheckbox);
