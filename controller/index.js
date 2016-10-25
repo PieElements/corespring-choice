@@ -31,7 +31,6 @@ export function outcome(question, session, env) {
 export function model(question, session, env) {
 
     function lookup(value) {
-
       var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
       var map = ((question.translations || {})[localeKey] || {});
       if (value.indexOf('$') === 0) {
@@ -62,18 +61,15 @@ export function model(question, session, env) {
       });
     }
 
-    var cfg = _.assign({}, question.model);
-
-    cfg.prompt = lookup(cfg.prompt);
-    cfg.choices = _.map(cfg.choices, function(c) {
-      c.label = lookup(c.label)
+    var base = _.assign({}, _.cloneDeep(question.model));
+    base.prompt = lookup(base.prompt);
+    base.choices = _.map(base.choices, function(c) {
+      c.label = lookup(c.label);
       return c;
     });
 
-    var base = _.assign({}, question.model);
     base.outcomes = [];
-
-    base.config = cfg;
+    base.config = {};
 
     if (env.mode !== 'gather') {
       base.config.disabled = true;
