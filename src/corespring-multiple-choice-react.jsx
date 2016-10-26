@@ -18,7 +18,7 @@ export default class CorespringMultipleChoiceReact extends React.Component {
      * to ensure the function context is correct.
      */ 
     
-    this.toggle = () => {
+    this.onToggle = () => {
       if(this.props.mode === 'evaluate'){
         this.setState({showCorrect: !this.state.showCorrect});
       }
@@ -141,11 +141,18 @@ export default class CorespringMultipleChoiceReact extends React.Component {
       </div>;
     };
     
+    let maybeToggle  = () => {
+      if(this.props.correctResponse){
+        return <CorespringShowCorrectAnswerToggle 
+         initialValue={this.state.showCorrect}
+         onToggle={this.onToggle.bind(this)}/>
+      } else {
+        return;
+      }
+    }
+
     return <div className="corespring-multiple-choice-react">
-       <CorespringShowCorrectAnswerToggle 
-         show={!!this.props.correctResponse} 
-         onClick={this.toggle} 
-         toggle={this.state.showCorrect}/>
+      {maybeToggle()}
        <div className="prompt">{this.props.prompt}</div>
        {this.props.choices.map(choiceToTag)}
     </div>;
