@@ -8,6 +8,17 @@
     "dist": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js",
     "dist-watch": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js -d --watch"
   },
+  "dependencies": {
+    "extract-text-webpack-plugin": "^1.0.1",
+    "less": "^2.7.1",
+    "lodash": "^4.15.0",
+    "material-ui": "^0.15.4",
+    "react": "~15.3.1",
+    "react-addons-css-transition-group": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-tap-event-plugin": "^1.0.0",
+    "corespring-show-correct-answer-toggle-react" : "PieLabs/corespring-show-correct-answer-toggle-react#develop"
+  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-cli": "^6.11.4",
@@ -26,15 +37,5 @@
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^1.15.1",
     "pie-control-panel": "PieLabs/pie-control-panel#develop"
-  },
-  "dependencies": {
-    "extract-text-webpack-plugin": "^1.0.1",
-    "less": "^2.7.1",
-    "lodash": "^4.15.0",
-    "material-ui": "^0.15.4",
-    "react": "~15.3.1",
-    "react-addons-css-transition-group": "^15.3.1",
-    "react-dom": "^15.3.1",
-    "react-tap-event-plugin": "^1.0.0"
   }
 }
