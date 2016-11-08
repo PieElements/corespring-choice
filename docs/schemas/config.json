@@ -1,0 +1,16 @@
+{
+
+  "title" : "corespring-multiple-choice-react schema for config", 
+  "properties" : {
+    "model" : {
+      "type" : "object",
+      "properties" : {
+        "prompt" : {
+          "type" : "string"
+         }
+      },
+      "required" : ["prompt"]
+    }
+  },
+  "required" : ["model"]
+}
