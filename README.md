@@ -2,6 +2,8 @@
 
 A [pie](http://github.com/PieLabs/pie) choice component.
 
+![choice.png](choice.png)
+
 ## Usage 
 
 To use this pie, you need to configure a `pie-question`. This means that you'll need to add it to the `index.html` and `config.json` files.
@@ -23,7 +25,6 @@ To use this pie, you need to configure a `pie-question`. This means that you'll 
 ```
 
 ### Pie Demo 
-
 There is a demo in `docs/demo` that you can run to see an example of it's usage.
 
 To preview it in that context you'll need the [pie](/PieLabs/pie-cli) tool.
