@@ -1,13 +1,13 @@
 {
-  "name": "corespring-multiple-choice-react",
-  "version": "0.0.1",
-  "private": true,
+  "name": "corespring-choice",
+  "description": "A pie choice component",
+  "version": "1.0.0-prerelease",
   "main": "src/index.js",
-  "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --inline --hot",
-    "dist": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js",
-    "dist-watch": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js -d --watch"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PieElements/corespring-choice.git"
   },
+  "scripts": {},
   "dependencies": {
     "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
@@ -17,7 +17,7 @@
     "react-addons-css-transition-group": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-tap-event-plugin": "^1.0.0",
-    "corespring-show-correct-answer-toggle-react" : "PieLabs/corespring-show-correct-answer-toggle-react#develop"
+    "corespring-show-correct-answer-toggle-react": "PieLabs/corespring-show-correct-answer-toggle-react#develop"
   },
   "devDependencies": {
     "babel": "^6.5.2",

@@ -1,51 +1,32 @@
-# corespring-pie-multiple-choice
+# corespring-choice
 
+A [pie](http://github.com/PieLabs/pie) choice component.
 
-A multiple choice component for [pie](http://github.com/PieLabs/pie).
+## Pie Usage
 
-## Setup
+This component is typically rendered with the [pie-player](/PieLabs/pie-player). To preview it in that context you'll need the [pie](/PieLabs/pie-cli) tool.
 
-```
-npm install
-```
-
-## Development/Demo Build
-
-```
-npm start
-# the go to localhost:8080/demo.html
+```shell
+npm install -g pie 
+cd corespring-choice/docs/demo
+pie serve-question #will build and serve the pie... then go to http://localhost:4000
 ```
 
-## Build
+## Test 
 
-```
-npm run-script dist
-```
+> TODO: ... 
 
-## Rebuild after code change
-
-```
-npm run-script dist-watch
+```shell 
+npm test
 ```
 
-## pie-demo 
+### test client only 
 
-This is a hot reloading demo page for Development:
-
-```
-cd pie-demo
-webpack-dev-server --hot --inline 
-```
-Then go to localhost:8080
+### test controller only 
 
 
-## serve-pie 
 
-You must have [serve-pie](http://github.com/PieLabs/serve-pie) installed.
 
-> use branch `feature/npm-package-spike`
 
-    git clone git@github.com/corespring/corespring-multiple-choice-react.git 
-    cd corespring-multiple-choice-react
-    serve-pie 
-    # > go to localhost:5000
+
+

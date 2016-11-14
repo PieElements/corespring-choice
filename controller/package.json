@@ -1,6 +1,6 @@
 {
-  "name": "corespring-multiple-choice-react-controller",
-  "version": "1.0.0",
+  "name": "corespring-choice-controller",
+  "version": "1.0.0-prerelease",
   "main": "./index.js",
   "dependencies": {
     "lodash": "^4.16.4"
