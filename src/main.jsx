@@ -1,12 +1,9 @@
 import React from 'react';
-
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { green200, green500, amber300, amber500, amber600 } from 'material-ui/styles/colors';
-import CorespringMultipleChoiceReact from './corespring-multiple-choice-react.jsx';
-import _ from 'lodash';
+import { green200, green500, amber500, amber600 } from 'material-ui/styles/colors';
+import CorespringChoice from './corespring-choice.jsx';
 
 require('!style!css!less!./index.less');
 
@@ -49,7 +46,7 @@ class Main extends React.Component {
 
     return <div className={this.getClass(this.props.model.className)}>
       <MuiThemeProvider muiTheme={theme}>
-        <CorespringMultipleChoiceReact
+        <CorespringChoice
           model={this.props.model}
           outcomes={this.props.model.outcomes}
           correctResponse={this.props.model.config ? this.props.model.config.correctResponse : {}}

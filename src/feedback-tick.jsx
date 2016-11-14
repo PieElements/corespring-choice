@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-class CorespringFeedbackTick extends React.Component {
+class FeedbackTick extends React.Component {
 
   render() {
-    var self = this;
-
     var correctness = this.props.correctness;
 
     function incorrectIcon(){
@@ -72,9 +70,9 @@ class CorespringFeedbackTick extends React.Component {
   }
 }
 
-CorespringFeedbackTick.propTypes = {
+FeedbackTick.propTypes = {
   correctness: React.PropTypes.string
 }
 
 
-export default CorespringFeedbackTick
+export default FeedbackTick

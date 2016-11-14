@@ -2,7 +2,7 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-class CorespringFeedback extends React.Component {
+export class Feedback extends React.Component {
 
   getStyle(correctness) {
 
@@ -48,10 +48,10 @@ class CorespringFeedback extends React.Component {
   }
 }
 
-CorespringFeedback.propTypes = {
+Feedback.propTypes = {
   correctness: React.PropTypes.string,
   feedback: React.PropTypes.string
 }
 
 
-export default muiThemeable()(CorespringFeedback);
+export default muiThemeable()(Feedback);
