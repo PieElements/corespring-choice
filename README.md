@@ -2,9 +2,31 @@
 
 A [pie](http://github.com/PieLabs/pie) choice component.
 
-## Pie Usage
+## Usage 
 
-This component is typically rendered with the [pie-player](/PieLabs/pie-player). To preview it in that context you'll need the [pie](/PieLabs/pie-cli) tool.
+To use this pie, you need to configure a `pie-question`. This means that you'll need to add it to the `index.html` and `config.json` files.
+
+```html
+<corespring-choice pie-id="1"></corespring-choice>
+```
+
+```javascript
+{
+  "id" : "1",
+  "pie" : {
+    "name" : "corespring-choice",
+    "version" : "1.0.0"
+  },
+  "prompt" : "1 + 1 equals?",
+  // more configuration...
+}
+```
+
+### Pie Demo 
+
+There is a demo in `docs/demo` that you can run to see an example of it's usage.
+
+To preview it in that context you'll need the [pie](/PieLabs/pie-cli) tool.
 
 ```shell
 npm install -g pie 
@@ -23,10 +45,4 @@ npm test
 ### test client only 
 
 ### test controller only 
-
-
-
-
-
-
 
