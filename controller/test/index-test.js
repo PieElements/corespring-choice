@@ -29,23 +29,22 @@ describe('index', () => {
 
     let assertModel = (q, s, e, partialExpected) => {
       return (done) => {
-
-        if (_.isFunction(partialExpected) && partialExpected.name === 'Error') {
-          expect(() => controller.model(q, s, e)).to.throw(Error);
-          done();
-        } else {
-          controller.model(q, s, e)
-            .then(m => {
-
-              if (_.isFunction(partialExpected)) {
-                partialExpected(m);
-              } else {
-                expect(m).to.shallowDeepEqual(partialExpected);
-              }
+        controller.model(q, s, e)
+          .then(m => {
+            if (_.isFunction(partialExpected)) {
+              partialExpected(m);
+            } else {
+              expect(m).to.shallowDeepEqual(partialExpected);
+            }
+            done();
+          })
+          .catch(e => {
+            if (_.isFunction(partialExpected) && partialExpected.name === 'Error') {
               done();
-            })
-            .catch(done);
-        }
+            } else {
+              done(e);
+            }
+          });
       }
     }
 
@@ -106,39 +105,94 @@ describe('index', () => {
       }));
     });
 
-    xdescribe('with translations', () => {
-      it('looks up translations for prompt', () => { });
-      it('looks up translations for choices.label', () => { });
-      it('looks up translations for outcomes.feedback', () => { });
+    describe('with translations', () => {
+
+      let model = {
+        correctResponse: ['a', 'b'],
+        translations: {
+          en_US: {
+            PROMPT: 'hi',
+            LABEL: 'Apple',
+            A_FEEDBACK: 'Feedback'
+          },
+          es_ES: {
+            PROMPT: 'hola',
+            LABEL: 'Ahoy',
+            A_FEEDBACK: 'Fuego'
+          }
+        },
+        feedback: {
+          a: '$A_FEEDBACK',
+          b: '$B_FEEDBACK'
+        },
+        model: {
+          prompt: '$PROMPT',
+          choices: [
+            { label: '$LABEL', value: 'a' }
+          ]
+        }
+      };
+
+      let session = {};
+      let env = {};
+
+      it('looks up translations for prompt', assertModel(model, session, env, { prompt: 'hi' }));
+      it('looks up translations for label', assertModel(model, session, env, { choices: [{ label: 'Apple' }] }));
+      it('looks up translations for prompt in spanish', assertModel(model, session, { locale: 'es_ES' }, { prompt: 'hola' }));
+      it('looks up translations for label in spanish', assertModel(model, session, { locale: 'es_ES' }, { choices: [{ label: 'Ahoy' }] }));
+      it('looks up translations for feedback', assertModel(model, { value: ['a'] }, { mode: 'evaluate' }, { outcomes: [{ feedback: 'Feedback' }] }));
+      it('looks up translations for feedback in spanish', assertModel(model, { value: ['a'] }, { mode: 'evaluate', locale: 'es_ES' }, { outcomes: [{ feedback: 'Fuego' }] }));
     });
 
   });
 
   describe('outcome', () => {
 
-    it('returns an outome?', (done) => {
-
-      controller.outcome({
-        id: '1',
-        correctResponse: []
-      }, {}, {})
-        .then(o => {
-          expect(o).to.eql({
-            completed: true,
-            duration: 'PT1M',
-            extensions: {},
-            id: '1',
-            score: {
-              max: 1,
-              min: 0,
-              raw: 1,
-              scaled: 1
-            }
+    let outcome = (q, s, e, handler) => {
+      return (done) => {
+        controller.outcome(q, s, e)
+          .then(o => {
+            handler(o);
+            done();
+          })
+          .catch(e => {
+            handler(e);
+            done();
           });
-          done();
-        })
-        .catch(done);
-    });
+      }
+    }
+
+    it('returns an error if the question is null', outcome(null, {}, {}, (result) => {
+      expect(result.message).to.eql('Question is missing required array: correctResponse');
+    }));
+
+    it('returns an error if the question.correctResponse', outcome({}, {}, {}, (result) => {
+      expect(result.message).to.eql('Question is missing required array: correctResponse');
+    }));
+
+    it('returns an error if the question.correctResponse is empty', outcome({ correctResponse: [] }, {}, {}, (result) => {
+      expect(result.message).to.eql('Question is missing required array: correctResponse');
+    }));
+
+    it('returns score.scaled: 1 for a correct response', outcome({
+      correctResponse: ['a']
+    }, { value: ['a'] }, null, (result) => {
+      expect(result).to.eql({
+        score: {
+          scaled: 1
+        }
+      })
+    }));
+
+    it('returns score.scaled: 0 for an incorrect response', outcome({
+      correctResponse: ['a']
+    }, { value: ['b'] }, null, (result) => {
+      expect(result).to.eql({
+        score: {
+          scaled: 0
+        }
+      })
+    }));
 
   });
 });

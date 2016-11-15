@@ -5,27 +5,20 @@ import _ from 'lodash';
  * https://pielabs.github.io/pie-docs/developing/controller.html
  */
 
-export function outcome(question, session, env) {
-  const responses = _.isArray(session.value) ? session.value : [];
-  const allCorrect = _.isEqual(responses.sort(), question.correctResponse.sort());
-
-  const raw = allCorrect ? 1 : 0;
-  const min = 0;
-  const max = 1;
-  const scaled = (raw - min) / (max - min);
-
-  const id = question.id;
-  const score = {
-    scaled, raw, min, max
-  };
-  const completed = true;
-  const duration = "PT1M"; //one minute, see https://en.wikipedia.org/wiki/ISO_8601#Durations
-  const extensions = {};
-  const outcome = {
-    id, score, completed, duration, extensions
-  };
-
-  return Promise.resolve(outcome);
+export function outcome(question, session = { value: [] }) {
+  session.value = session.value || [];
+  return new Promise((resolve, reject) => {
+    if (!question || !question.correctResponse || _.isEmpty(question.correctResponse)) {
+      reject(new Error('Question is missing required array: correctResponse'));
+    } else {
+      const allCorrect = _.isEqual(session.value.sort(), question.correctResponse.sort());
+      resolve({
+        score: {
+          scaled: allCorrect ? 1 : 0
+        }
+      });
+    }
+  });
 }
 
 export function model(question, session, env) {
@@ -45,10 +38,6 @@ export function model(question, session, env) {
     }
   }
 
-  console.debug('[state] question:', JSON.stringify(question, null, '  '));
-  console.debug('[state] session:', JSON.stringify(session, null, '  '));
-  console.debug('[state] env:', JSON.stringify(env, null, '  '));
-
   function createOutcomes(responses, allCorrect) {
     return _.map(responses, function (v) {
       var correct = _.includes(question.correctResponse, v);
@@ -61,46 +50,53 @@ export function model(question, session, env) {
     });
   }
 
-  var base = _.assign({}, _.cloneDeep(question.model));
-  base.prompt = lookup(base.prompt);
-  base.choices = _.map(base.choices, function (c) {
-    c.label = lookup(c.label);
-    return c;
-  });
+  return new Promise((resolve/*, reject*/) => {
+    console.debug('[state] question:', JSON.stringify(question, null, '  '));
+    console.debug('[state] session:', JSON.stringify(session, null, '  '));
+    console.debug('[state] env:', JSON.stringify(env, null, '  '));
 
-  base.outcomes = [];
-  base.config = {};
+    var base = _.assign({}, _.cloneDeep(question.model));
 
-  if (env.mode !== 'gather') {
-    base.config.disabled = true;
-  }
+    base.prompt = lookup(base.prompt);
+    base.choices = _.map(base.choices, function (c) {
+      c.label = lookup(c.label);
+      return c;
+    });
 
-  if (env.mode === 'evaluate') {
+    base.outcomes = [];
+    base.config = {};
 
-    var responses = _.isArray(session.value) ? session.value : [];
-
-    var allCorrect = _.isEqual(responses, question.correctResponse.sort());
-
-    if (!allCorrect) {
-      base.config.correctResponse = question.correctResponse;
+    if (env.mode !== 'gather') {
+      base.config.disabled = true;
     }
-    base.outcomes = createOutcomes(responses, allCorrect);
-  }
 
-  base.env = env;
+    if (env.mode === 'evaluate') {
 
-  var map = {
-    black_on_rose: 'black-on-rose',
-    white_on_black: 'white-on-black',
-    black_on_white: 'default'
-  };
+      var responses = _.isArray(session.value) ? session.value : [];
 
-  if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
-    base.className = map[env.accessibility.colorContrast];
-  }
+      var allCorrect = _.isEqual(responses, question.correctResponse.sort());
 
-  console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
-  return Promise.resolve(base);
+      if (!allCorrect) {
+        base.config.correctResponse = question.correctResponse;
+      }
+      base.outcomes = createOutcomes(responses, allCorrect);
+    }
+
+    base.env = env;
+
+    var map = {
+      black_on_rose: 'black-on-rose',
+      white_on_black: 'white-on-black',
+      black_on_white: 'default'
+    };
+
+    if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
+      base.className = map[env.accessibility.colorContrast];
+    }
+
+    console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
+    resolve(base);
+  });
 }
 
 
