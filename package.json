@@ -8,7 +8,10 @@
     "url": "https://github.com/PieElements/corespring-choice.git"
   },
   "license": "ISC",
-  "scripts": {},
+  "scripts": {
+    "client-test": "mocha  --require test/setup test/**/*-test.js",
+    "test": "npm run client-test"
+  },
   "dependencies": {
     "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
