@@ -6,7 +6,7 @@ import proxyquire from 'proxyquire';
 import _ from 'lodash';
 import ChoiceInput from '../src/choice-input';
 
-describe('ChoiceInput', () => {
+describe('CorespringChoice', () => {
 
   let wrapper, CorespringChoice, toggle;
 
