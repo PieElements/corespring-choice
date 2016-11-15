@@ -37,7 +37,7 @@ class Main extends React.Component {
 
   getClass(className) {
     className = className || '';
-    return `corespring-multiple-choice-react-root ${className}`
+    return `corespring-choice-root ${className}`
   }
 
   render() {
