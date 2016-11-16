@@ -22,7 +22,7 @@
     "react-addons-css-transition-group": "^15.3.2",
     "react-dom": "^15.3.1",
     "react-tap-event-plugin": "^1.0.0",
-    "corespring-correct-answer-toggle": "PieLabs/corespring-correct-answer-toggle"
+    "corespring-correct-answer-toggle": "^1.0.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",
