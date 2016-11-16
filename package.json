@@ -1,6 +1,7 @@
 {
   "name": "corespring-choice",
   "description": "A pie choice component",
+  "keywords" : ["pie"],
   "version": "1.0.0-prerelease",
   "main": "src/index.js",
   "repository": {
