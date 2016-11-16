@@ -51,9 +51,6 @@ export function model(question, session, env) {
   }
 
   return new Promise((resolve/*, reject*/) => {
-    console.debug('[state] question:', JSON.stringify(question, null, '  '));
-    console.debug('[state] session:', JSON.stringify(session, null, '  '));
-    console.debug('[state] env:', JSON.stringify(env, null, '  '));
 
     var base = _.assign({}, _.cloneDeep(question.model));
 
@@ -94,7 +91,6 @@ export function model(question, session, env) {
       base.className = map[env.accessibility.colorContrast];
     }
 
-    console.debug('[state] return: ' + JSON.stringify(base, null, '  '));
     resolve(base);
   });
 }

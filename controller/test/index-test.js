@@ -20,11 +20,6 @@ describe('index', () => {
     return o;
   }
 
-
-  before(() => {
-    console.debug = () => { } //console.log.bind(console);
-  });
-
   describe('model', () => {
 
     let assertModel = (q, s, e, partialExpected) => {
