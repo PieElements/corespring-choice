@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import CorespringShowCorrectAnswerToggle from 'corespring-show-correct-answer-toggle-react';
-import CorespringRadioButton from './corespring-radio-button.jsx';
-import CorespringCheckbox from './corespring-checkbox.jsx';
+import ChoiceInput from './choice-input.jsx';
 
-export default class CorespringMultipleChoiceReact extends React.Component {
+export default class CorespringChoice extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       showCorrect: false,
       update: 0
@@ -16,18 +15,18 @@ export default class CorespringMultipleChoiceReact extends React.Component {
     /**
      * Note: component handlers are defined below using => 
      * to ensure the function context is correct.
-     */ 
-    
+     */
+
     this.onToggle = () => {
-      if(this.props.mode === 'evaluate'){
-        this.setState({showCorrect: !this.state.showCorrect});
+      if (this.props.mode === 'evaluate') {
+        this.setState({ showCorrect: !this.state.showCorrect });
       }
     };
-    
+
     this.onChange = (options) => {
       this.props.session.value = this.props.session.value || [];
 
-      if(this.props.onChange){
+      if (this.props.onChange) {
         this.props.onChange(options);
       }
 
@@ -36,15 +35,10 @@ export default class CorespringMultipleChoiceReact extends React.Component {
       var index = this.props.session.value.indexOf(value);
 
       if (selected === undefined) {
-        for (var i in this.refs) {
-          if (this.refs[i].selectionChanged) {
-            this.refs[i].selectionChanged(value);
-          }
-        }
         this.props.session.value = [value];
       } else {
         if (selected && index < 0) {
-          if(this.props.choiceMode === 'radio') {
+          if (this.props.choiceMode === 'radio') {
             this.props.session.value.pop();
           }
           this.props.session.value.push(value);
@@ -52,7 +46,7 @@ export default class CorespringMultipleChoiceReact extends React.Component {
           this.props.session.value.splice(index, 1);
         }
       }
-
+      //TODO: We shouldn't be calling this, should we be moving the session props into state and calling setState instead?
       this.forceUpdate();
     }
   }
@@ -67,6 +61,7 @@ export default class CorespringMultipleChoiceReact extends React.Component {
 
   _correctness(choice) {
     var outcome, response;
+    //TODO: this looks to be unecessarily complex - we should derive correctnes from one source.
     if (this.state.showCorrect && this.props.correctResponse) {
       for (var i in this.props.correctResponse) {
         response = this.props.correctResponse[i];
@@ -116,59 +111,62 @@ export default class CorespringMultipleChoiceReact extends React.Component {
   }
 
   render() {
-    
-    if(this.props.mode !== 'evaluate'){
+
+    if (this.props.mode !== 'evaluate') {
       this.state.showCorrect = false;
     }
-    
+
     let disabled = this.props.mode !== 'gather';
 
-    const ChoiceTag = (this.props.choiceMode === 'checkbox' ? CorespringCheckbox : CorespringRadioButton);
 
     let choiceToTag = (choice, index) => {
       var choiceClass = 'choice' + (index === this.props.choices.length - 1 ? ' last' : '');
       return <div className={choiceClass} key={index}>
-         <ChoiceTag
-           checked={this.isChecked(choice.value)}
-           correct={this._correct(choice)}
-           correctness={this._correctness(choice)}
-           disabled={disabled}
-           display-key={this._indexToSymbol(index)}
-           feedback={this._feedback(choice)}
-           label={choice.label}
-           onChange={this.onChange}
-           value={choice.value} />
+        <ChoiceInput
+          choiceMode={this.props.choiceMode}
+          checked={this.isChecked(choice.value)}
+          correct={this._correct(choice)}
+          correctness={this._correctness(choice)}
+          disabled={disabled}
+          display-key={this._indexToSymbol(index)}
+          feedback={this._feedback(choice)}
+          label={choice.label}
+          onChange={this.onChange}
+          value={choice.value} />
       </div>;
     };
-    
-    let maybeToggle  = () => {
-      if(this.props.correctResponse){
-        return <CorespringShowCorrectAnswerToggle 
-         initialValue={this.state.showCorrect}
-         onToggle={this.onToggle.bind(this)}/>
+
+    let maybeToggle = () => {
+      if (this.props.correctResponse) {
+        return <CorespringShowCorrectAnswerToggle
+          initialValue={this.state.showCorrect}
+          onToggle={this.onToggle.bind(this)} />
       } else {
         return;
       }
     }
 
-    return <div className="corespring-multiple-choice-react">
+    return <div className="corespring-choice">
       {maybeToggle()}
-       <div className="prompt">{this.props.prompt}</div>
-       {this.props.choices.map(choiceToTag)}
+      <div className="prompt">{this.props.prompt}</div>
+      {this.props.choices.map(choiceToTag)}
     </div>;
   }
 }
 
-CorespringMultipleChoiceReact.propTypes = {
-  choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']),
-  keyMode: React.PropTypes.oneOf(['numbers', 'letters']),
-  model: React.PropTypes.object,
-  outcomes: React.PropTypes.array,
-  prompt: React.PropTypes.string,
-  session: React.PropTypes.object
+CorespringChoice.propTypes = {
+  mode: PropTypes.oneOf(['gather', 'view', 'evaluate']),
+  choiceMode: PropTypes.oneOf(['radio', 'checkbox']),
+  keyMode: PropTypes.oneOf(['numbers', 'letters']),
+  model: PropTypes.object,
+  outcomes: PropTypes.array,
+  correctResponse: PropTypes.array,
+  choices: PropTypes.array,
+  prompt: PropTypes.string,
+  session: PropTypes.object
 };
 
-CorespringMultipleChoiceReact.defaultProps = {
+CorespringChoice.defaultProps = {
   session: {
     value: []
   }

@@ -37,13 +37,9 @@ pie serve-question #will build and serve the pie... then go to http://localhost:
 
 ## Test 
 
-> TODO: ... 
-
 ```shell 
-npm test
+npm test # run client and controller tests
+npm run client-test # run client tests
+npm run controller-test # run controller tests
 ```
-
-### test client only 
-
-### test controller only 
 
