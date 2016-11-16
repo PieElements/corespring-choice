@@ -1,5 +1,7 @@
 # corespring-choice
 
+[![Build Status](https://travis-ci.org/PieElements/corespring-choice.svg?branch=develop)](https://travis-ci.org/PieElements/corespring-choice)
+1
 A [pie](http://github.com/PieLabs/pie) choice component.
 
 ![choice.png](choice.png)
