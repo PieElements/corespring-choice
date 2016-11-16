@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import CorespringShowCorrectAnswerToggle from 'corespring-show-correct-answer-toggle-react';
+import CorespringCorrectAnswerToggle from 'corespring-correct-answer-toggle';
 import ChoiceInput from './choice-input.jsx';
 
 export default class CorespringChoice extends React.Component {
@@ -138,7 +138,7 @@ export default class CorespringChoice extends React.Component {
 
     let maybeToggle = () => {
       if (this.props.correctResponse) {
-        return <CorespringShowCorrectAnswerToggle
+        return <CorespringCorrectAnswerToggle
           initialValue={this.state.showCorrect}
           onToggle={this.onToggle.bind(this)} />
       } else {

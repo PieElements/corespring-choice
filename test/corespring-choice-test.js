@@ -19,7 +19,7 @@ describe('CorespringChoice', () => {
     toggle['@noCallThru'] = true;
 
     CorespringChoice = proxyquire('../src/corespring-choice', {
-      'corespring-show-correct-answer-toggle-react': toggle
+      'corespring-correct-answer-toggle': toggle
     }).default;
   });
 
