@@ -1,6 +1,7 @@
 import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Icon from './icon';
 
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
@@ -54,6 +55,30 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
   connectedCallback() {
     this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
+
+    let strikeThrough = {
+      icon: (toolbar) => {
+
+        let e = React.createElement(Icon);
+        ReactDOM.render(e, toolbar);
+        // let div = document.createElement('div');
+        // div.textContent = 'strikethrough';
+        // div.addEventListener('click', () => {
+        //   console.log('strikethrough click...');
+        //   this._model.strikeThroughEnabled = !this._model.strikeThroughEnabled;
+        //   this._rerender();
+        // });
+        // toolbar.appendChild(div);
+      }
+    }
+    this.dispatchEvent(new CustomEvent('toolbar-contribution', {
+      bubbles: true,
+      detail: {
+        actions: [
+          strikeThrough
+        ]
+      }
+    }))
     this._rerender();
   }
 

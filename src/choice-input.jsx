@@ -9,6 +9,15 @@ import Feedback from './feedback.jsx';
 
 export class ChoiceInput extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      strikeThroughEnabled: this.props.strikeThroughEnabled || false,
+      strikedOut: this.props.strikedOut
+    }
+  }
+
   onCheck(el) {
     this.props.onChange({
       value: this.props.value,
@@ -30,6 +39,13 @@ export class ChoiceInput extends React.Component {
     return theme;
   }
 
+  componentWillReceiveProps(next) {
+    this.setState({
+      // strikedOut: next.strikedOut,
+      strikeThroughEnabled: next.strikeThroughEnabled
+    });
+  }
+
   render() {
 
     const muiTheme = this.getTheme();
@@ -40,6 +56,23 @@ export class ChoiceInput extends React.Component {
      * but the way Checkbox is set up you can't tweak the styles via the props fully.
      * So have to use an additional MuiThemeProvider for now.
      */
+
+    const labelStyle = this.state.strikedOut ? {
+      textDecoration: 'line-through'
+    } : {};
+
+    console.log('>> strikedOut? ', this.state.strikedOut, 'strikeThroughEnabled:', this.state.strikeThroughEnabled);
+
+    const onTagClick = (el) => {
+      if (this.state.strikeThroughEnabled) {
+        this.setState({ strikedOut: !this.state.strikedOut }, () => {
+          this.props.onStrikedOut(this.state.strikedOut);
+        });
+      } else {
+        this.onCheck(el);
+      }
+    }
+
     return <div className={"corespring-" + classSuffix}>
       <FeedbackTick correctness={this.props.correctness} />
       <div className="checkbox-holder">
@@ -47,7 +80,8 @@ export class ChoiceInput extends React.Component {
           <Tag
             disabled={this.props.disabled}
             checked={this._checked.bind(this)()}
-            onCheck={this.onCheck.bind(this)}
+            onCheck={onTagClick}
+            labelStyle={labelStyle}
             label={this.props['display-key'] + '. ' + this.props.label} />
         </MuiThemeProvider>
       </div>
@@ -58,7 +92,7 @@ export class ChoiceInput extends React.Component {
 
 ChoiceInput.propTypes = {
   choiceMode: React.PropTypes.oneOf(['radio', 'checkbox']),
-  'display-key': React.PropTypes.string, 
+  'display-key': React.PropTypes.string,
   choiceMode: PropTypes.string,
   checked: PropTypes.bool,
   correct: PropTypes.bool,
@@ -67,11 +101,15 @@ ChoiceInput.propTypes = {
   feedback: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
-  value: PropTypes.string
+  value: PropTypes.string,
+  strikeThroughEnabled: PropTypes.bool,
+  strikedOut: PropTypes.bool
 };
 
 
 ChoiceInput.defaultProps = {
+  strikeThroughEnabled: false,
+  strikedOut: false
 };
 
 export default muiThemeable()(ChoiceInput);

@@ -48,6 +48,7 @@ class Main extends React.Component {
       <MuiThemeProvider muiTheme={theme}>
         <CorespringChoice
           model={this.props.model}
+          strikeThroughEnabled={this.props.model.strikeThroughEnabled}
           outcomes={this.props.model.outcomes}
           correctResponse={this.props.model.config ? this.props.model.config.correctResponse : {}}
           prompt={this.props.model.prompt}
