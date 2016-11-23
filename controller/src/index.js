@@ -24,6 +24,9 @@ export function outcome(question, session = { value: [] }) {
 export function model(question, session, env) {
 
   function lookup(value) {
+    if (!value) {
+      return;
+    }
     var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
     var map = ((question.translations || {})[localeKey] || {});
     if (value.indexOf('$') === 0) {
