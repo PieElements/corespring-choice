@@ -41,7 +41,6 @@ export class ChoiceInput extends React.Component {
 
   componentWillReceiveProps(next) {
     this.setState({
-      // strikedOut: next.strikedOut,
       strikeThroughEnabled: next.strikeThroughEnabled
     });
   }
@@ -60,8 +59,6 @@ export class ChoiceInput extends React.Component {
     const labelStyle = this.state.strikedOut ? {
       textDecoration: 'line-through'
     } : {};
-
-    console.log('>> strikedOut? ', this.state.strikedOut, 'strikeThroughEnabled:', this.state.strikeThroughEnabled);
 
     const onTagClick = (el) => {
       if (this.state.strikeThroughEnabled) {

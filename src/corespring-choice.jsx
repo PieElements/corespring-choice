@@ -117,14 +117,10 @@ export default class CorespringChoice extends React.Component {
     }
     let strikeThroughEnabled = this.props.strikeThroughEnabled && this.props.mode === 'gather';
 
-    console.log('strikeThroughEnabled?', strikeThroughEnabled);
 
     let disabled = this.props.mode !== 'gather';
 
-
-    const onStrikedOut = (choice, strikedOut) => {
-      console.log('onStrikedOut: ', choice.value, strikedOut);
-    }
+    const onStrikedOut = (choice, strikedOut) => {}
 
     let choiceToTag = (choice, index) => {
       var choiceClass = 'choice' + (index === this.props.choices.length - 1 ? ' last' : '');
