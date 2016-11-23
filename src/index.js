@@ -57,36 +57,24 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
 
     let strikeThrough = {
-      icon: (holder) => {
-
-        let renderIcon = (disabled) => {
-          let e = React.createElement(Icon, {
-            disabled: disabled
-          });
-          ReactDOM.render(e, holder);
-        }
-
-        /**
-         * Note: we can't build a click handler into the react component due to event retargeting in the shadow dom
-         * which react doesn't handle.
-         */
-        holder.addEventListener('click', () => {
-          this._model.strikeThroughEnabled = !this._model.strikeThroughEnabled;
-          renderIcon(!this._model.strikeThroughEnabled);
+      name: 'strikethrough',
+      observable: (o) => {
+        o.onUpdate((newValue) => {
+          this._model.strikeThroughEnabled = newValue;
           this._rerender();
         });
-
-        renderIcon(true);
       }
-    }
+    };
+
     this.dispatchEvent(new CustomEvent('toolbar-contribution', {
       bubbles: true,
       detail: {
-        actions: [
+        capabilities: [
           strikeThrough
         ]
       }
-    }))
+    }));
+
     this._rerender();
   }
 
