@@ -75,23 +75,25 @@ export class ChoiceInput extends React.Component {
 
     return <div className={"corespring-" + classSuffix}>
       <table>
-        <tr>
-          <td>
-            <FeedbackTick correctness={this.props.correctness} />
-          </td>
-          <td>
-            <div className="checkbox-holder">
-              <MuiThemeProvider muiTheme={muiTheme}>
-                <Tag
-                  disabled={this.props.disabled}
-                  checked={this._checked.bind(this)()}
-                  onCheck={onTagClick}
-                  labelStyle={labelStyle}
-                  label={this.props['display-key'] + '. ' + this.props.label} />
-              </MuiThemeProvider>
-            </div>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>
+              <FeedbackTick correctness={this.props.correctness} />
+            </td>
+            <td>
+              <div className="checkbox-holder">
+                <MuiThemeProvider muiTheme={muiTheme}>
+                  <Tag
+                    disabled={this.props.disabled}
+                    checked={this._checked.bind(this)()}
+                    onCheck={onTagClick}
+                    labelStyle={labelStyle}
+                    label={this.props['display-key'] + '. ' + this.props.label} />
+                </MuiThemeProvider>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
       <Feedback feedback={this.props.feedback} correctness={this.props.correctness} />
     </div>
