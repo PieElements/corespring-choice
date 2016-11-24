@@ -72,7 +72,6 @@ export class ChoiceInput extends React.Component {
 
     const label = <span dangerouslySetInnerHTML={{ __html: `${this.props['display-key']}. ${this.props.label}` }}></span>;
 
-                    //this.props['display-key'] + '. ' + this.props.label} />
     return <div className={"corespring-" + classSuffix}>
       <table>
         <tbody>
