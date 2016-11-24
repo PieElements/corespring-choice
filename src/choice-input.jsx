@@ -70,7 +70,10 @@ export class ChoiceInput extends React.Component {
       }
     }
 
-    const label = <span dangerouslySetInnerHTML={{ __html: `${this.props['display-key']}. ${this.props.label}` }}></span>;
+    const label = <span 
+      //need to do this for the demo - to bootstrap doesn't set it .. maybe shadow dom is the better option?
+      style={{fontWeight: 'normal'}} 
+      dangerouslySetInnerHTML={{ __html: `${this.props['display-key']}. ${this.props.label}` }}></span>;
 
     return <div className={"corespring-" + classSuffix}>
       <table>
