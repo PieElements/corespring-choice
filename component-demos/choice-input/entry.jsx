@@ -31,7 +31,7 @@ let render = (id, opts) => {
 document.addEventListener('DOMContentLoaded', () => {
 
   render('#one', {
-    label: 'this is a label',
+    label: '<h1>hi</h1>this is a label',
     strikeThroughEnabled: true,
     onChange: () => console.log('onChange'),
     onStrikedOut: () => console.log('onStrikedOut')

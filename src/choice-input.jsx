@@ -70,6 +70,9 @@ export class ChoiceInput extends React.Component {
       }
     }
 
+    const label = <span dangerouslySetInnerHTML={{ __html: `${this.props['display-key']}. ${this.props.label}` }}></span>;
+
+                    //this.props['display-key'] + '. ' + this.props.label} />
     return <div className={"corespring-" + classSuffix}>
       <table>
         <tbody>
@@ -85,7 +88,7 @@ export class ChoiceInput extends React.Component {
                     checked={this._checked.bind(this)()}
                     onCheck={onTagClick}
                     labelStyle={labelStyle}
-                    label={this.props['display-key'] + '. ' + this.props.label} />
+                    label={label} />
                 </MuiThemeProvider>
               </div>
             </td>
