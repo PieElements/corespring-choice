@@ -120,7 +120,7 @@ export default class CorespringChoice extends React.Component {
 
     let disabled = this.props.mode !== 'gather';
 
-    const onStrikedOut = (choice, strikedOut) => {}
+    const onStrikedOut = (choice, strikedOut) => { }
 
     let choiceToTag = (choice, index) => {
       var choiceClass = 'choice' + (index === this.props.choices.length - 1 ? ' last' : '');
@@ -142,18 +142,15 @@ export default class CorespringChoice extends React.Component {
       </div>;
     };
 
-    let maybeToggle = () => {
-      if (this.props.correctResponse) {
-        return <CorespringCorrectAnswerToggle
-          initialValue={this.state.showCorrect}
-          onToggle={this.onToggle.bind(this)} />
-      } else {
-        return;
-      }
-    }
+    const showToggle = this.props.correctResponse;
+
+    console.log('showToggle: ', showToggle);
 
     return <div className="corespring-choice">
-      {maybeToggle()}
+      <CorespringCorrectAnswerToggle
+        show={showToggle}
+        initialValue={this.state.showCorrect}
+        onToggle={this.onToggle.bind(this)} />
       <div className="prompt">{this.props.prompt}</div>
       {this.props.choices.map(choiceToTag)}
     </div>;
