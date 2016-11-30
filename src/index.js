@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Icon from './icon';
 
 const styles = require('!css-loader!less-loader!./index.less');
+const toggleStyles = require('!css-loader!less-loader!corespring-correct-answer-toggle/src/index.less');
 
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
@@ -14,9 +15,12 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
     console.log('styles: ', styles);
 
+
     sr.innerHTML = `
     <style>
-    ${styles} 
+    ${styles}
+    /*-- toggle styles -- */ 
+    ${toggleStyles}
     </style>
     <div id="root"></div>`;
 
