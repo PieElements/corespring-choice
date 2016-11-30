@@ -142,9 +142,8 @@ export default class CorespringChoice extends React.Component {
       </div>;
     };
 
-    const showToggle = this.props.correctResponse;
-
-    console.log('showToggle: ', showToggle);
+    let { correctResponse } = this.props;
+    const showToggle = correctResponse !== undefined && correctResponse.length > 0;
 
     return <div className="corespring-choice">
       <CorespringCorrectAnswerToggle
