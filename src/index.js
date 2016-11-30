@@ -3,10 +3,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Icon from './icon';
 
+const styles = require('!css-loader!less-loader!./index.less');
+
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
   constructor() {
     super();
+
+    let sr = this.attachShadow({ mode: 'open' });
+
+    console.log('styles: ', styles);
+
+    sr.innerHTML = `
+    <style>
+    ${styles} 
+    </style>
+    <div id="root"></div>`;
+
     this._model = null;
     this._session = null;
   }
@@ -45,9 +58,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
           session: this._session,
           onChange: this._onChange.bind(this)
         });
-      ReactDOM.render(element, this, function () {
-        console.log('rendered');
-      });
+      ReactDOM.render(element, this.shadowRoot.querySelector('#root'));
     } else {
       console.log('skip');
     }
