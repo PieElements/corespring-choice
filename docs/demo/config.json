@@ -1,15 +1,17 @@
 {
-  "pies": [
+  "elements": {
+    "corespring-choice": "../..",
+    "local-tester": "./local-tester.js"
+  },
+  "models": [
+    {
+      "id": "2",
+      "element": "local-tester",
+      "title": "hi there"
+    },
     {
       "id": "1",
-      "pie": {
-        "name": "corespring-choice",
-        "version": "1.0.0",
-        "langs": [
-          "en-US",
-          "es-ES"
-        ]
-      },
+      "element": "corespring-choice",
       "correctResponse": [
         "apple",
         "carrot"
