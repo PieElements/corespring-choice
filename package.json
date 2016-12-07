@@ -4,7 +4,7 @@
   "keywords": [
     "pie"
   ],
-  "version": "1.1.0",
+  "version": "1.2.0-prerelease",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -17,13 +17,12 @@
     "test": "npm run client-test && npm run controller-test"
   },
   "dependencies": {
-    "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
     "lodash": "^4.17.0",
     "material-ui": "^0.16.2",
-    "react": "~15.3.2",
-    "react-addons-css-transition-group": "^15.3.2",
-    "react-dom": "^15.3.1",
+    "react": "^15.4.1",
+    "react-addons-css-transition-group": "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-tap-event-plugin": "^1.0.0",
     "corespring-correct-answer-toggle": "^1.0.0"
   },
@@ -52,7 +51,7 @@
     "pie-control-panel": "PieLabs/pie-control-panel#develop",
     "postcss-loader": "^0.13.0",
     "proxyquire": "^1.7.10",
-    "react-addons-test-utils": "^15.3.2",
+    "react-addons-test-utils": "^15.4.1",
     "release-helper": "github:pielabs/release-helper#v1.3.0",
     "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
