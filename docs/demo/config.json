@@ -1,14 +1,11 @@
 {
+  "langs": [
+    "en-US"
+  ],
   "elements": {
-    "corespring-choice": "../..",
-    "local-tester": "./local-tester.js"
+    "corespring-choice": "../.."
   },
   "models": [
-    {
-      "id": "2",
-      "element": "local-tester",
-      "title": "hi there"
-    },
     {
       "id": "1",
       "element": "corespring-choice",
