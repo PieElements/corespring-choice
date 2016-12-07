@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/PieElements/corespring-choice.svg?branch=develop)](https://travis-ci.org/PieElements/corespring-choice)
 
 
-A [pie](http://github.com/PieLabs/pie) choice component.
+A [pie](https://pielabs.github.io/pie-docs/) choice component.
 
 ![choice.png](choice.png)
 
 ## Usage 
 
-To use this pie, you need to configure a `pie-question`. This means that you'll need to add it to the `index.html` and `config.json` files.
+To use this pie, you need to configure it within an Assessment Item. This means that you'll need to add it to the `index.html` and `config.json` files.
 
 ```html
 <corespring-choice pie-id="1"></corespring-choice>
