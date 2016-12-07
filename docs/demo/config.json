@@ -1,15 +1,14 @@
 {
-  "pies": [
+  "langs": [
+    "en-US"
+  ],
+  "elements": {
+    "corespring-choice": "../.."
+  },
+  "models": [
     {
       "id": "1",
-      "pie": {
-        "name": "corespring-choice",
-        "version": "1.0.0",
-        "langs": [
-          "en-US",
-          "es-ES"
-        ]
-      },
+      "element": "corespring-choice",
       "correctResponse": [
         "apple",
         "carrot"
