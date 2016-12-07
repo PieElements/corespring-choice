@@ -171,12 +171,19 @@ describe('CorespringChoice', () => {
 
     describe('show toggle', () => {
 
-      it('has no toggle if there is no correctResponse', () => {
-        expect(mkWrapper().find('toggle')).to.have.length(0);
+      it('has toggle if there is no correctResponse', () => {
+        expect(mkWrapper().find('toggle')).to.have.length(1);
+      });
+
+      it('toggle show is set to false', () => {
+        expect(mkWrapper().find('toggle').prop('show')).to.be.false;
       });
 
       it('has toggle if there is correctResponse', () => {
-        expect(mkWrapper({ correctResponse: [] }).find('toggle')).to.have.length(1);
+        expect(mkWrapper({ correctResponse: [{}] }).find('toggle')).to.have.length(1);
+      });
+      it('has toggle if there is correctResponse', () => {
+        expect(mkWrapper({ correctResponse: [{}] }).find('toggle').prop('show')).to.be.true;
       });
 
       it('sets the initialValue to true if showCorrect=true && mode=evaluate', () => {
