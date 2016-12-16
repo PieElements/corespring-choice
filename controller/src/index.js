@@ -1,5 +1,8 @@
-import _ from 'lodash';
-
+import isEqual from 'lodash/isEqual';
+import includes from 'lodash/includes';
+import isEmpty from 'lodash/isEmpty';
+import map from 'lodash/map';
+import isArray from 'lodash/isArray';
 /** 
  * For the documentation of pie controllers see
  * https://pielabs.github.io/pie-docs/developing/controller.html
@@ -81,14 +84,14 @@ export function model(question, session, env) {
 
     base.env = env;
 
-    var map = {
+    var colorMap = {
       black_on_rose: 'black-on-rose',
       white_on_black: 'white-on-black',
       black_on_white: 'default'
     };
 
-    if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
-      base.className = map[env.accessibility.colorContrast];
+    if (env.accessibility && env.accessibility.colorContrast && colorMap[env.accessibility.colorContrast]) {
+      base.className = colorMap[env.accessibility.colorContrast];
     }
 
     resolve(base);
