@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { green200, green500, amber500, amber600 } from 'material-ui/styles/colors';
 import CorespringChoice from './corespring-choice.jsx';
 
-require('!style!css!less!./index.less');
+require('./index.less');
 
 class Main extends React.Component {
 
