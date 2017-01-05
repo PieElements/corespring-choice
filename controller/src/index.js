@@ -1,5 +1,10 @@
-import _ from 'lodash';
-
+import isEqual from 'lodash/isEqual';
+import includes from 'lodash/includes';
+import isEmpty from 'lodash/isEmpty';
+import assign from 'lodash/assign';
+import cloneDeep from 'lodash/cloneDeep';
+import map from 'lodash/map';
+import isArray from 'lodash/isArray';
 /** 
  * For the documentation of pie controllers see
  * https://pielabs.github.io/pie-docs/developing/controller.html
@@ -8,10 +13,10 @@ import _ from 'lodash';
 export function outcome(question, session = { value: [] }) {
   session.value = session.value || [];
   return new Promise((resolve, reject) => {
-    if (!question || !question.correctResponse || _.isEmpty(question.correctResponse)) {
+    if (!question || !question.correctResponse || isEmpty(question.correctResponse)) {
       reject(new Error('Question is missing required array: correctResponse'));
     } else {
-      const allCorrect = _.isEqual(session.value.sort(), question.correctResponse.sort());
+      const allCorrect = isEqual(session.value.sort(), question.correctResponse.sort());
       resolve({
         score: {
           scaled: allCorrect ? 1 : 0
@@ -39,8 +44,8 @@ export function model(question, session, env) {
   }
 
   function createOutcomes(responses, allCorrect) {
-    return _.map(responses, function (v) {
-      var correct = _.includes(question.correctResponse, v);
+    return map(responses, function (v) {
+      var correct = includes(question.correctResponse, v);
       var feedback = lookup(question.feedback[v]);
       return {
         value: v,
@@ -52,10 +57,10 @@ export function model(question, session, env) {
 
   return new Promise((resolve/*, reject*/) => {
 
-    var base = _.assign({}, _.cloneDeep(question.model));
+    var base = assign({}, cloneDeep(question.model));
 
     base.prompt = lookup(base.prompt);
-    base.choices = _.map(base.choices, function (c) {
+    base.choices = map(base.choices, function (c) {
       c.label = lookup(c.label);
       return c;
     });
@@ -69,9 +74,9 @@ export function model(question, session, env) {
 
     if (env.mode === 'evaluate') {
 
-      var responses = _.isArray(session.value) ? session.value : [];
+      var responses = isArray(session.value) ? session.value : [];
 
-      var allCorrect = _.isEqual(responses, question.correctResponse.sort());
+      var allCorrect = isEqual(responses, question.correctResponse.sort());
 
       if (!allCorrect) {
         base.config.correctResponse = question.correctResponse;
@@ -81,14 +86,14 @@ export function model(question, session, env) {
 
     base.env = env;
 
-    var map = {
+    var colorMap = {
       black_on_rose: 'black-on-rose',
       white_on_black: 'white-on-black',
       black_on_white: 'default'
     };
 
-    if (env.accessibility && env.accessibility.colorContrast && map[env.accessibility.colorContrast]) {
-      base.className = map[env.accessibility.colorContrast];
+    if (env.accessibility && env.accessibility.colorContrast && colorMap[env.accessibility.colorContrast]) {
+      base.className = colorMap[env.accessibility.colorContrast];
     }
 
     resolve(base);
