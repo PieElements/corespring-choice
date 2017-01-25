@@ -182,20 +182,27 @@ describe('CorespringChoice', () => {
       it('has toggle if there is correctResponse', () => {
         expect(mkWrapper({ correctResponse: [{}] }).find('toggle')).to.have.length(1);
       });
+
       it('has toggle if there is correctResponse', () => {
         expect(mkWrapper({ correctResponse: [{}] }).find('toggle').prop('show')).to.be.true;
       });
 
-      it('sets the initialValue to true if showCorrect=true && mode=evaluate', () => {
+      it('sets toggle.toggled to false if showCorrect=false && mode=evaluate', () => {
         let w = mkWrapper({ correctResponse: [], mode: 'evaluate' });
-        w.setState({ showCorrect: true });
-        expect(w.find('toggle').prop('initialValue')).to.eql(true);
+        w.setState({ showCorrect: false });
+        expect(w.find('toggle').prop('toggled')).to.eql(false);
       });
 
-      it('sets the initialValue to false if showCorrect=true && mode!=evaluate', () => {
+      it('sets toggle.toggled to true if showCorrect=true && mode=evaluate', () => {
+        let w = mkWrapper({ correctResponse: [], mode: 'evaluate' });
+        w.setState({ showCorrect: true });
+        expect(w.find('toggle').prop('toggled')).to.eql(true);
+      });
+
+      it('sets the toggle.toggled to false if showCorrect=true && mode!=evaluate', () => {
         let w = mkWrapper({ correctResponse: [] });
         w.setState({ showCorrect: true });
-        expect(w.find('toggle').prop('initialValue')).to.eql(false);
+        expect(w.find('toggle').prop('toggled')).to.eql(false);
       });
     })
   });
