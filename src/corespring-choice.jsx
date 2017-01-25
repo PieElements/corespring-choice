@@ -51,6 +51,12 @@ export default class CorespringChoice extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.correctResponse) {
+      this.setState({ showCorrect: false });
+    }
+  }
+
   isChecked(value) {
     if (this.props.session.value) {
       return this.props.session.value.indexOf(value) >= 0;
@@ -142,7 +148,7 @@ export default class CorespringChoice extends React.Component {
     return <div className="corespring-choice">
       <CorespringCorrectAnswerToggle
         show={showToggle}
-        initialValue={this.state.showCorrect}
+        toggled={this.state.showCorrect}
         onToggle={this.onToggle.bind(this)} />
       <div className="prompt">{this.props.prompt}</div>
       {this.props.choices.map(choiceToTag)}
