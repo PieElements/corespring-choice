@@ -5,4 +5,3 @@ package.json
 pie.config.json
 .*
 *.tar.gz
-pie-catalog.bundle.js
