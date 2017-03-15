@@ -23,7 +23,15 @@
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
     "react-dom": "^15.4.1",
-    "corespring-correct-answer-toggle": "^3.0.0"
+    "react-tap-event-plugin": "^2.0.1",
+    "corespring-correct-answer-toggle": "^3.0.0",
+    "corespring-editable-html": "corespring/corespring-editable-html#master",
+    "corespring-feedback-config": "corespring/corespring-feedback-config#master",
+    "corespring-scoring-config": "corespring/corespring-scoring-config#master",
+    "jquery": "^3.1.1",
+    "draft-js": "^0.10.0",
+    "draft-js-export-html": "^0.5.2",
+    "draft-js-import-html": "^0.3.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",

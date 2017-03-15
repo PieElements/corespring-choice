@@ -12,8 +12,8 @@ export class ChoiceInput extends React.Component {
   onCheck(el) {
     this.props.onChange({
       value: this.props.value,
-      selected: el.target.checked
-    });
+      selected: !this.props.checked
+    })
   }
 
   _checked() {
@@ -45,11 +45,13 @@ export class ChoiceInput extends React.Component {
       <div className="checkbox-holder">
         <MuiThemeProvider muiTheme={muiTheme}>
           <Tag
+            style={{display: 'inline-block', width: 'auto', verticalAlign: 'middle', marginRight: '5px' }}
             disabled={this.props.disabled}
             checked={this._checked.bind(this)()}
             onCheck={this.onCheck.bind(this)}
-            label={this.props['display-key'] + '. ' + this.props.label} />
+            label={this.props['display-key'] + '. '} />
         </MuiThemeProvider>
+        <span style={{display: 'inline-block', verticalAlign: 'middle', cursor: 'pointer'}} onClick={this.onCheck.bind(this)} dangerouslySetInnerHTML={{__html: this.props.label}} />
       </div>
       <Feedback feedback={this.props.feedback} correctness={this.props.correctness} />
     </div>
