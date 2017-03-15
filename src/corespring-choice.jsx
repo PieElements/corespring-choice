@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import CorespringCorrectAnswerToggle from 'corespring-correct-answer-toggle';
-import ChoiceInput from './choice-input.jsx';
+import ChoiceInput from 'choice-input';
 
 export default class CorespringChoice extends React.Component {
 
