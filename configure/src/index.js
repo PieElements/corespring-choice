@@ -1,11 +1,15 @@
 import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { convert } from './convert';
 
 export default class ChoiceConfigReactElement extends HTMLElement {
 
   constructor() {
     super();
+
+    this.onRemoveChoice = this.onRemoveChoice.bind(this);
+    this.onAddChoice = this.onAddChoice.bind(this);
   }
 
   set model(s) {
@@ -13,30 +17,52 @@ export default class ChoiceConfigReactElement extends HTMLElement {
     this._rerender();
   }
 
-  onChoiceModeChanged(event, key, value) {
+  onChoiceModeChanged(event, value) {
     this._model.model.choiceMode = value;
     let detail = {
       update: this._model
     };
-    this.dispatchEvent(new CustomEvent('model.updated', {bubbles: true, detail}));
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
     this._rerender();
   }
 
-  onKeyModeChanged(event, key, value) {
+  onRemoveChoice(index) {
+    this._model.model.choices.splice(index, 1);
+    let detail = {
+      update: this._model
+    };
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
+    this._rerender();
+  }
+
+  onAddChoice() {
+    this._model.model.choices.push({
+      label: '',
+      value: ''
+    });
+    let detail = {
+      update: this._model
+    };
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
+    this._rerender();
+  }
+
+  onKeyModeChanged(event, value) {
     this._model.model.keyMode = value;
     let detail = {
       update: this._model
     };
-    this.dispatchEvent(new CustomEvent('model.updated', {bubbles: true, detail}));
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
     this._rerender();
   }
 
-  onChoicesChanged(choices) {
-    this._model.model.choices = choices;
+  onChoiceChanged(index, choice) {
+    this._model = applyChange(this._model, index, choice);
     let detail = {
       update: this._model
     };
-    this.dispatchEvent(new CustomEvent('model.updated', {bubbles: true, detail}));
+
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
     this._rerender();
   }
 
@@ -46,27 +72,21 @@ export default class ChoiceConfigReactElement extends HTMLElement {
     let detail = {
       update: this._model
     };
-    this.dispatchEvent(new CustomEvent('model.updated', {bubbles: true, detail}));
+    this.dispatchEvent(new CustomEvent('model.updated', { bubbles: true, detail }));
     this._rerender();
   }
 
-  onPartialScoringChanged(partialScoring) {
-    this._model.partialScoring = partialScoring;
-    let detail = {
-      update: this._model
-    };
-    this.dispatchEvent(new CustomEvent('model.updated', {bubbles: true, detail}));
-    this._rerender();
-  }
 
   _rerender() {
+    let configureModel = convert(this._model);
+
     let element = React.createElement(Main, {
-      model: this._model,
+      model: configureModel,
       onChoiceModeChanged: this.onChoiceModeChanged.bind(this),
       onKeyModeChanged: this.onKeyModeChanged.bind(this),
-      onChoicesChanged: this.onChoicesChanged.bind(this),
-      onFeedbackChanged: this.onFeedbackChanged.bind(this),
-      onPartialScoringChanged: this.onPartialScoringChanged.bind(this)
+      onChoiceChanged: this.onChoiceChanged.bind(this),
+      onRemoveChoice: this.onRemoveChoice,
+      onAddChoice: this.onAddChoice
     });
     ReactDOM.render(element, this);
   }
