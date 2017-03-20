@@ -5,6 +5,7 @@ import { Tab, Tabs } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import ChoiceConfig from './choice-config';
 import FeedbackSelector from 'corespring-feedback-config/src/feedback-selector.jsx';
+import Langs from './langs';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
@@ -136,6 +137,7 @@ class Main extends React.Component {
           <ChoiceType value={model.choiceMode} onChange={this.props.onChoiceModeChanged} />
           <KeyType value={model.keyMode} onChange={this.props.onKeyModeChanged} />
         </div>
+        <Langs />
         {model.choices.map((choice, index) => {
           const choiceProps = {
             choice,
