@@ -1,7 +1,8 @@
+import { applyChange, convert } from './convert';
+
 import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { convert } from './convert';
 
 export default class ChoiceConfigReactElement extends HTMLElement {
 

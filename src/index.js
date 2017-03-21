@@ -44,9 +44,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
           session: this._session,
           onChange: this._onChange.bind(this)
         });
-      ReactDOM.render(element, this, function () {
-        console.log('rendered');
-      });
+      ReactDOM.render(element, this);
     } else {
       console.log('skip');
     }

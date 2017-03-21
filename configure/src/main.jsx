@@ -23,27 +23,10 @@ class Main extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      activeLang: props.model.defaultLang
+    }
   }
-
-
-  // removeChoice(index) {
-  //   console.log(`remove choice at ${index}`);
-  //   this.props.model.model.choices.splice(index, 1);
-  //   this.props.onChoicesChanged(this.props.model.model.choices);
-  // }
-
-
-  // toggleCorrect(index) {
-  //   let choiceValue = this.props.model.model.choices[index].value;
-  //   let correctIndex = this.props.model.correctResponse.indexOf(choiceValue);
-  //   if (correctIndex >= 0) {
-  //     this.props.model.correctResponse.splice(correctIndex, 1);
-  //   } else {
-  //     this.props.model.correctResponse.push(choiceValue);
-  //   }
-  //   this.props.onChoicesChanged(this.props.model.model.choices);
-  // }
-
 
   onFeedbackChange(choiceValue, value) {
     if (value.feedbackType === 'none') {
@@ -58,72 +41,9 @@ class Main extends React.Component {
     this.props.onPartialScoringChanged(partialScoring);
   }
 
-  /** 
-   * <p>
-    In multiple choice, students select the best response from a list of options presented. This interaction allows for
-        either one or more correct answers. Setting more than one answer as correct allows for partial credit (see the scoring tab).
-      </p>
-
-      
-          <SelectField floatingLabelText="Response Type" value={this.props.model.model.choiceMode} onChange={this.props.onChoiceModeChanged}
-            <MenuItem value={Main.InputTypes.Radio} primaryText="Radio - One Answer" />
-            <MenuItem value={Main.InputTypes.Checkbox} primaryText="Checkbox - Multiple Answers" />
-          </SelectField>
-          <SelectField floatingLabelText="Choice Labels" value={this.props.model.model.keyMode} onChange={this.props.onKeyModeChanged}>
-            <MenuItem value={Main.KeyModes.Letters} primaryText="Letters" />
-            <MenuItem value={Main.KeyModes.Numbers} primaryText="Numbers" />
-          </SelectField>
-
-          
-          <table>
-            <tbody>{
-              this.props.model.model.choices.map((choice, index) => <ChoiceConfig choice={choice} />
-                return [<tr key={index}>
-                <td className="choice-symbol">
-                  <span>{this._indexToSymbol(index)}</span>
-                  <IconButton onClick={this.toggleCorrect.bind(this, index)}>
-                    <ActionDone color={this.isCorrect(index) ? green500 : '#000000'} />
-                  </IconButton>
-                </td>
-                <td>
-                  <EditableHTML model={this.props.model.model.choices[index].label} placeholder="Enter a choice" onChange={this.onChoiceChange.bind(this, index)} /></td>
-                <td>
-                  <IconButton onClick={this.removeChoice.bind(this, index)}><ActionDelete /></IconButton>
-                </td>
-              </tr>,
-                <tr>
-                <td></td>
-                <td>
-                  <div className="feedback-container">
-                    <Card>
-                      <CardHeader title="Feedback" showExpandableButton={true} />
-                      <CardText expandable={true}>
-                        If this choice is selected, show
-                              <FeedbackSelector
-                          feedback={this.props.model.feedback[choice.value]}
-                          feedbackType={this.props.model.feedback[choice.value] === undefined ? 'none' : 'custom'}
-                          onChange={this.onFeedbackChange.bind(this, choice.value)}
-                          placeholder="Enter customized feedback to be displayed to the student"
-                          keys={['none', 'custom']} />
-                      </CardText>
-                    </Card>
-                  </div>
-                </td>
-              </tr>,
-                <tr>
-                <td></td>
-                <td>
-                </td>
-              </tr>
-              ]
-              })
-            }</tbody>
-          </table>
-  */
   render() {
     let theme = getMuiTheme({});
-
-
+    console.log('this.state: ', this.state);
     const {
       onChoiceChanged,
       onRemoveChoice,
@@ -137,12 +57,17 @@ class Main extends React.Component {
           <ChoiceType value={model.choiceMode} onChange={this.props.onChoiceModeChanged} />
           <KeyType value={model.keyMode} onChange={this.props.onKeyModeChanged} />
         </div>
-        <Langs />
+        <hr className="divider" />
+        <Langs
+          langs={model.langs}
+          selected={this.state.activeLang}
+          onChange={(e, index, l) => this.setState({ activeLang: l })} />
         {model.choices.map((choice, index) => {
           const choiceProps = {
             choice,
             index,
             keyMode: model.keyMode,
+            activeLang: this.state.activeLang,
             onChoiceChanged: onChoiceChanged.bind(null, index),
             onRemoveChoice: onRemoveChoice.bind(null, index),
             onAddChoice: onAddChoice.bind(null, index)
@@ -199,11 +124,11 @@ const ChoiceType = (props) => {
     value: props.value,
     onChange: props.onChange,
     one: {
-      label: 'Radio - One answer',
+      label: 'Radio',
       value: 'radio'
     },
     two: {
-      label: 'Checkbox - Multiple answers',
+      label: 'Checkbox',
       value: 'checkbox'
     }
   }

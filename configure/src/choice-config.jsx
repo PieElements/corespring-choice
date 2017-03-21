@@ -4,48 +4,66 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import EditableHTML from 'corespring-editable-html';
 import IconButton from 'material-ui/IconButton';
+import LangInput from './lang-input';
+import TextField from 'material-ui/TextField';
+import cloneDeep from 'lodash/cloneDeep';
+import extend from 'lodash/extend';
 import { green500 } from 'material-ui/styles/colors';
 
 export default class ChoiceConfig extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.onChoiceLabelChanged = this.onChoiceLabelChanged.bind(this);
   }
 
   _indexToSymbol(index) {
     return ((this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase()).toString();
   }
 
-  onChoiceLabelChanged(l) {
-    let c = {
-      label: l,
-      value: this.props.choice.value
-    }
+  onTranslationChanged(t, update) {
+    let c = cloneDeep(this.props.choice);
+    let translation = c.translations.find(e => e.lang === t.lang);
+    translation.value = update;
     this.props.onChoiceChanged(c);
+  }
+
+  onValueChanged(update) {
+    let c = cloneDeep(this.props.choice);
+    c.value = update;
+    this.props.onChoiceChanged(c);
+  }
+
+  onToggleCorrect() {
+    this.props.onChoiceChanged(extend(this.props.choice, {
+      correct: !this.props.choice.correct
+    }));
   }
 
   render() {
     let {
       index,
       choice,
-      onToggleCorrect,
       onChoiceChanged,
-      onRemoveChoice } = this.props;
+      onRemoveChoice,
+      activeLang } = this.props;
 
+    const translation = choice.translations.find(t => t.lang === activeLang);
 
-    console.log('index:', index, JSON.stringify(choice));
+    const langInput = translation && <LangInput
+      {...translation}
+      onChange={(e, u) => this.onTranslationChanged(translation, u)} />
 
-    return <div>
-      <span>{this._indexToSymbol(index)}</span>
-      <IconButton onClick={onToggleCorrect}>
+    return <div className="choice-config">
+      <span className="index">{this._indexToSymbol(index)}</span>
+      <IconButton onClick={() => this.onToggleCorrect()}>
         <ActionDone color={choice.correct ? green500 : '#000000'} />
       </IconButton>
-      <input type="text" value={choice.label} />
-      { /*<EditableHTML
-        model={choice.label}
-        placeholder="Enter a choice"
-        onChange={this.onChoiceLabelChanged} /> */}
+      <TextField
+        floatingLabelText="value"
+        value={choice.value}
+        onChange={(e, u) => this.onValueChanged(u)}
+        style={{ width: '100px', maxWidth: '100px', marginRight: '10px' }} />
+      {langInput}
       <IconButton onClick={onRemoveChoice}><ActionDelete /></IconButton>
     </div>;
   }
