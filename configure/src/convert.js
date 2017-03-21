@@ -19,11 +19,20 @@ export function convert(pieModel) {
       if (lang === 'default_locale') {
         return null;
       }
-      let lookupKey = choice.label.startsWith('$') ? choice.label.substring(1) : choice.label;
-      let value = choice.label.startsWith('$') ?
-        lookup[lookupKey] || defaultTranslations[lookupKey] || choice.label :
-        choice.label;
-      return { lang, value, label: lookupKey }
+
+      let isLookup = choice.label.startsWith('$');
+
+      if (isLookup) {
+        let lookupKey = choice.label.substring(1);
+        let value = lookup[lookupKey] || '';
+        console.log('[choiceTranslations] LOOKUP :  choice', choice.value, 'value: ', value, 'label: ', lookupKey, 'lang: ', lang);
+        return { lang, value, label: lookupKey }
+      } else {
+        let value = choice.label;
+        let label = choice.label;
+        console.log('[choiceTranslations] value: ', value, 'label: ', label, 'lang: ', lang);
+        return { lang, value, label }
+      }
     }).compact().value();
   }
 
@@ -82,9 +91,7 @@ export function applyChange(pieModel, choiceIndex, choice) {
   //update translations
   choice.translations.forEach(({ lang, label, value }) => {
     let lookup = out.translations[lang]
-    if (lookup) {
-      lookup[label] = value;
-    }
+    lookup[label] = value;
   });
 
   return out;

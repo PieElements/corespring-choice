@@ -38,9 +38,10 @@ export default class ChoiceConfigReactElement extends HTMLElement {
 
   onAddChoice() {
     this._model.model.choices.push({
-      label: '',
+      label: '$' + '_choice_' + this._model.model.choices.length,
       value: ''
     });
+
     let detail = {
       update: this._model
     };
