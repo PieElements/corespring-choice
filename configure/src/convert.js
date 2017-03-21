@@ -1,39 +1,43 @@
 import cloneDeep from 'lodash/cloneDeep';
-
+import isString from 'lodash/isString';
+import mapValues from 'lodash/mapValues';
 /**
- * convert to a more react friendly form 
+ * convert pie item model to a component based structure 
  * @param {*} pieModel 
  */
 export function convert(pieModel) {
 
-  function choiceTranslations(choice) {
+  /**
+   * @param {*} label 
+   * @return string | [{value: string, lang: string}, ...]
+   */
+  function toStringOrTranslationArray(label) {
 
     if (!pieModel.translations) {
-      return [];
+      return label;
     }
 
     let defaultLocale = pieModel.translations.default_locale;
     let defaultTranslations = pieModel.translations[defaultLocale];
 
-    return _(pieModel.translations).map((lookup, lang) => {
-      if (lang === 'default_locale') {
-        return null;
-      }
+    let isLookup = label.startsWith('$');
 
-      let isLookup = choice.label.startsWith('$');
+    if (isLookup) {
+      let values = _(pieModel.translations).map((lookup, lang) => {
+        if (lang === 'default_locale') {
+          return null;
+        }
 
-      if (isLookup) {
-        let lookupKey = choice.label.substring(1);
+        let lookupKey = label.substring(1);
         let value = lookup[lookupKey] || '';
-        console.log('[choiceTranslations] LOOKUP :  choice', choice.value, 'value: ', value, 'label: ', lookupKey, 'lang: ', lang);
-        return { lang, value, label: lookupKey }
-      } else {
-        let value = choice.label;
-        let label = choice.label;
-        console.log('[choiceTranslations] value: ', value, 'label: ', label, 'lang: ', lang);
-        return { lang, value, label }
-      }
-    }).compact().value();
+        return { lang, value }
+      }).compact().value();
+
+      return values;
+
+    } else {
+      return label;
+    }
   }
 
   let out = cloneDeep(pieModel.model);
@@ -41,11 +45,13 @@ export function convert(pieModel) {
   out.choices = out.choices.map(c => {
     c.correct = pieModel.correctResponse.indexOf(c.value) !== -1;
     c.feedback = pieModel.feedback[c.value];
-    c.translations = choiceTranslations(c);
+    c.label = toStringOrTranslationArray(c.label);
     return c;
   });
   out.langs = _(pieModel.translations).keys().without('default_locale').value();
   out.defaultLang = pieModel.translations.default_locale;
+
+  out.prompt = toStringOrTranslationArray(out.prompt);
   return out;
 }
 
@@ -57,7 +63,7 @@ function addIfNeeded(arr, v) {
   return arr.sort();
 }
 
-function removeIfNeeded(arr, v) {
+export function removeIfNeeded(arr, v) {
   let i = arr.indexOf(v);
   if (i !== -1) {
     arr.splice(i, 1);
@@ -65,15 +71,47 @@ function removeIfNeeded(arr, v) {
   return arr.sort();
 }
 
-export function applyChange(pieModel, choiceIndex, choice) {
+export function clearTranslations(translations, label) {
+  return mapValues(translations, (val, key) => {
+    let lookup = label.startsWith('$') ? label.substring(1) : label;
+    delete val[lookup];
+    return val;
+  });
+}
+
+export function clearFeedback(fb, value) {
+  delete fb[value];
+  return fb;
+}
+
+export function removeChoice(model, index) {
+  let [deleted] = model.model.choices.splice(index, 1);
+  model.correctResponse = removeIfNeeded(model.correctResponse, deleted.value);
+  model.translations = clearTranslations(model.translations, deleted.label);
+  model.feedback = clearFeedback(model.feedback, deleted.value);
+  return model;
+}
+
+/**
+ * apply a ui model back to the pie item format.
+ * @param {*} pieModel 
+ * @param {*} choiceIndex 
+ * @param {*} choice 
+ */
+export function applyChoiceChange(pieModel, choiceIndex, choice) {
 
   let oldChoice = pieModel.model.choices[choiceIndex];
+  pieModel.translations = clearTranslations(pieModel.translations, oldChoice.label);
   pieModel.correctResponse = removeIfNeeded(pieModel.correctResponse, oldChoice.value);
+  pieModel.feedback = clearFeedback(pieModel.feedback, oldChoice.value);
 
   let out = cloneDeep(pieModel);
 
+  let choiceKey = '$choice_label_' + choiceIndex;
+  let choiceLabel = isString(choice.label) ? choice.label : choiceKey;
+
   out.model.choices.splice(choiceIndex, 1, {
-    label: choice.label,
+    label: choiceLabel,
     value: choice.value
   });
 
@@ -89,10 +127,29 @@ export function applyChange(pieModel, choiceIndex, choice) {
     out.feedback[choice.value] = null;
   }
   //update translations
-  choice.translations.forEach(({ lang, label, value }) => {
-    let lookup = out.translations[lang]
-    lookup[label] = value;
-  });
+
+  if (Array.isArray(choice.label)) {
+    choice.label.forEach(({ lang, value }) => {
+      if (!out.translations[lang]) {
+        out.translations[lang] = {}
+      }
+      out.translations[lang][choiceKey.substring(1)] = value;
+    });
+  }
 
   return out;
+}
+
+export function applyPromptChange(pieModel, update, lang) {
+  if (!lang) {
+    pieModel.model.prompt = update;
+    pieModel.translations = clearTranslations(pieModel.translations, 'PROMPT');
+  } else {
+    pieModel.translations[lang] = pieModel.translations[lang] || {};
+    pieModel.translations[lang]['PROMPT'] = update;
+    pieModel.model.prompt = '$PROMPT';
+  }
+
+  return pieModel;
+
 }

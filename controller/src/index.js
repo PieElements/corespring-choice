@@ -1,10 +1,10 @@
-import isEqual from 'lodash/isEqual';
-import includes from 'lodash/includes';
-import isEmpty from 'lodash/isEmpty';
 import assign from 'lodash/assign';
 import cloneDeep from 'lodash/cloneDeep';
-import map from 'lodash/map';
+import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import map from 'lodash/map';
 /** 
  * For the documentation of pie controllers see
  * https://pielabs.github.io/pie-docs/developing/controller.html
@@ -28,6 +28,12 @@ export function outcome(question, session = { value: [] }) {
 
 export function model(question, session, env) {
 
+  function defaultLocaleTranslation(key) {
+    var localeKey = (question.translations || {}).default_locale || 'en-US';
+    var map = ((question.translations || {})[localeKey] || {});
+    return map[key];
+  }
+
   function lookup(value) {
     if (value === undefined) {
       return undefined;
@@ -40,7 +46,7 @@ export function model(question, session, env) {
       if (!out) {
         console.warn('not able to find translation for: ' + key);
       }
-      return out || value;
+      return out || defaultLocaleTranslation(key) || value;
     } else {
       return value;
     }

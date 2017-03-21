@@ -8,10 +8,12 @@ import FeedbackSelector from 'corespring-feedback-config/src/feedback-selector.j
 import Langs from './langs';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MultiLangInput from './multi-lang-input';
 import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -43,10 +45,13 @@ class Main extends React.Component {
 
   render() {
     let theme = getMuiTheme({});
-    console.log('this.state: ', this.state);
+
     const {
       onChoiceChanged,
       onRemoveChoice,
+      onChoiceModeChanged,
+      onKeyModeChanged,
+      onPromptChanged,
       onAddChoice,
       model
     } = this.props;
@@ -54,14 +59,24 @@ class Main extends React.Component {
     return <MuiThemeProvider muiTheme={theme}>
       <div className="corespring-choice-config-root">
         <div className="base-types">
-          <ChoiceType value={model.choiceMode} onChange={this.props.onChoiceModeChanged} />
-          <KeyType value={model.keyMode} onChange={this.props.onKeyModeChanged} />
+          <ChoiceType value={model.choiceMode} onChange={onChoiceModeChanged} />
+          <KeyType value={model.keyMode} onChange={onKeyModeChanged} />
         </div>
         <hr className="divider" />
+
         <Langs
           langs={model.langs}
           selected={this.state.activeLang}
           onChange={(e, index, l) => this.setState({ activeLang: l })} />
+
+        <MultiLangInput
+          textFieldLabel="prompt"
+          value={model.prompt}
+          style={{ width: '100%' }}
+          lang={this.state.activeLang}
+          onChange={onPromptChanged} />
+
+
         {model.choices.map((choice, index) => {
           const choiceProps = {
             choice,
@@ -75,6 +90,8 @@ class Main extends React.Component {
           return <ChoiceConfig key={index} {...choiceProps} />;
         })}
 
+        <hr className="divider" />
+        <br />
         <RaisedButton label="Add a choice" onClick={onAddChoice} />
       </div>
     </MuiThemeProvider>
