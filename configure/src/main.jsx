@@ -101,7 +101,6 @@ class Main extends React.Component {
           return <ChoiceConfig key={index} {...choiceProps} />;
         })}
 
-        <hr className="divider" />
         <br />
         <RaisedButton label="Add a choice" onClick={onAddChoice} />
       </div>
