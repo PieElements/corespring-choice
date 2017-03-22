@@ -35,7 +35,10 @@ export default class MultiLangInput extends React.Component {
 
   render() {
 
-    const { lang, value, textFieldLabel, disableToggle } = this.props;
+    let { lang, value, textFieldLabel, disableToggle } = this.props;
+
+    //disable the toggle 
+    disableToggle = true;
 
     const renderValue = isString(value) ? value : value.find(t => t.lang === lang).value;
     return <div className="multi-lang-input">
