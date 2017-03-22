@@ -1,10 +1,11 @@
+import { assert, stub } from 'sinon';
+
+import ChoiceInput from '../src/choice-input';
 import React from 'react';
-import { shallow } from 'enzyme';
-import { stub, assert } from 'sinon';
+import _ from 'lodash';
 import { expect } from 'chai';
 import proxyquire from 'proxyquire';
-import _ from 'lodash';
-import ChoiceInput from '../src/choice-input';
+import { shallow } from 'enzyme';
 
 describe('CorespringChoice', () => {
 
@@ -30,13 +31,7 @@ describe('CorespringChoice', () => {
       mode: 'gather'
     }, opts) : opts;
 
-    return shallow(<CorespringChoice
-      choices={opts.choices}
-      correctResponse={opts.correctResponse}
-      prompt={opts.prompt}
-      onChange={opts.onChange}
-      session={opts.session}
-      mode={opts.mode} />);
+    return shallow(<CorespringChoice {...opts} />);
   }
 
   describe('render', () => {
@@ -45,10 +40,9 @@ describe('CorespringChoice', () => {
       beforeEach(() => {
         wrapper = mkWrapper({
           choices: [
-            { value: 'a', label: 'label a' },
+            { value: 'a', label: 'label a', correct: true, feedback: 'great' },
             { value: 'b', label: 'label b' }
-          ],
-          correctResponse: ['a']
+          ]
         });
       });
 
@@ -73,14 +67,14 @@ describe('CorespringChoice', () => {
         expect(first.props.label).to.eql('label a');
       });
 
-      it('sets the display-key on ChoiceInput', () => {
+      it('sets the displayKey on ChoiceInput', () => {
         let first = wrapper.find(ChoiceInput).get(0);
-        expect(first.props['display-key']).to.eql('A');
+        expect(first.props['displayKey']).to.eql('A');
         let second = wrapper.find(ChoiceInput).get(1);
-        expect(second.props['display-key']).to.eql('B');
+        expect(second.props['displayKey']).to.eql('B');
       });
 
-      it('sets the correctness from correctResponse', () => {
+      it('sets the correctness when showCorrect is true', () => {
         wrapper = wrapper.setProps({ mode: 'evaluate' });
         wrapper.setState({ showCorrect: true });
         let first = wrapper.find(ChoiceInput).get(0);
@@ -88,14 +82,16 @@ describe('CorespringChoice', () => {
       });
 
       it('sets the correctness from outcomes', () => {
-        wrapper = wrapper.setProps({ outcomes: [{ value: 'a', correct: true }] });
-        let first = wrapper.find(ChoiceInput).get(0);
-        expect(first.props.correctness).to.eql('correct');
+        wrapper = wrapper.setProps({ mode: 'evaluate', session: { value: ['a'] } });
+        let inputs = wrapper.find(ChoiceInput);
+        expect(inputs.get(0).props.correctness).to.eql('correct');
       });
 
       it('sets the feedback', () => {
-        wrapper = wrapper.setProps({ outcomes: [{ value: 'a', correct: true, feedback: 'great' }] });
         let first = wrapper.find(ChoiceInput).get(0);
+        expect(first.props.feedback).to.eql('');
+        wrapper = wrapper.setProps({ mode: 'evaluate', session: { value: ['a'] } });
+        first = wrapper.find(ChoiceInput).get(0);
         expect(first.props.feedback).to.eql('great');
       });
     });
@@ -117,93 +113,56 @@ describe('CorespringChoice', () => {
       });
     });
 
-    describe('onChange', () => {
-      let onChange, session;
+    describe('onChoiceChanged', () => {
+
+      let onChoiceChanged, session;
+
       beforeEach(() => {
-        onChange = stub();
+        onChoiceChanged = stub();
 
         session = {
           value: ['b']
         }
 
-        wrapper = mkWrapper({ choices: [], session: session, onChange: onChange }, false);
+        wrapper = mkWrapper({ choices: [], session: session, onChoiceChange: onChoiceChanged }, false);
       });
 
-      it('calls onChange handler', () => {
-        wrapper.instance().onChange({});
-        assert.calledWith(onChange, {});
-      });
-
-      it('adds the selection', () => {
-        wrapper.instance().onChange({ value: 'a', selected: true });
-        expect(session.value).to.eql(['b', 'a']);
-      });
-
-      it('removes the selection', () => {
-        wrapper.instance().onChange({ value: 'a', selected: true });
-        expect(session.value).to.eql(['b', 'a']);
-        wrapper.instance().onChange({ value: 'a', selected: false });
-        expect(session.value).to.eql(['b']);
-      });
-
-      describe('choiceMode=radio', () => {
-        beforeEach(() => {
-          wrapper.setProps({ choiceMode: 'radio' });
-        });
-
-        it('removes the selection when choiceMode=radio', () => {
-          wrapper.instance().onChange({ value: 'b', selected: false });
-          expect(session.value).to.eql([]);
-        });
-
-        it('adds a new choice when choiceMode', () => {
-          wrapper.instance().onChange({ value: 'b', selected: false });
-          wrapper.instance().onChange({ value: 'b', selected: true });
-          expect(session.value).to.eql(['b']);
-        });
-
-        it('removes the selection with a new selection when choiceMode=radio', () => {
-          wrapper.instance().onChange({ value: 'a', selected: true });
-          expect(session.value).to.eql(['a']);
+      it('sets callback on inputs', () => {
+        wrapper.find(ChoiceInput).forEach((n) => {
+          expect(n.prop('onChange')).to.eql(onChoiceChanged);
         });
       });
+
     });
 
-    describe('show toggle', () => {
+    describe('Toggle', () => {
 
-      it('has toggle if there is no correctResponse', () => {
-        expect(mkWrapper().find('toggle')).to.have.length(1);
+      it('toggle is rendered', () => {
+        expect(mkWrapper().find(toggle)).to.have.length(1);
       });
 
       it('toggle show is set to false', () => {
-        expect(mkWrapper().find('toggle').prop('show')).to.be.false;
+        expect(mkWrapper().find(toggle).prop('show')).to.be.false;
       });
 
-      it('has toggle if there is correctResponse', () => {
-        expect(mkWrapper({ correctResponse: [{}] }).find('toggle')).to.have.length(1);
+      it('shows toggle if mode is evaluate and responseCorrect is false', () => {
+        expect(mkWrapper({ mode: 'evaluate', responseCorrect: false }).find(toggle).prop('show')).to.be.true;
+      });
+      it('hides toggle if mode is evaluate and responseCorrect is false', () => {
+        expect(mkWrapper({ mode: 'evaluate', responseCorrect: true }).find(toggle).prop('show')).to.be.false;
       });
 
-      it('has toggle if there is correctResponse', () => {
-        expect(mkWrapper({ correctResponse: [{}] }).find('toggle').prop('show')).to.be.true;
-      });
-
-      it('sets toggle.toggled to false if showCorrect=false && mode=evaluate', () => {
-        let w = mkWrapper({ correctResponse: [], mode: 'evaluate' });
+      it('not toggled if showCorrect is false', () => {
+        let w = mkWrapper({ mode: 'evaluate' });
         w.setState({ showCorrect: false });
         expect(w.find('toggle').prop('toggled')).to.eql(false);
       });
 
-      it('sets toggle.toggled to true if showCorrect=true && mode=evaluate', () => {
-        let w = mkWrapper({ correctResponse: [], mode: 'evaluate' });
+      it('is toggled showCorrect=true && mode=evaluate', () => {
+        let w = mkWrapper({ mode: 'evaluate' });
         w.setState({ showCorrect: true });
         expect(w.find('toggle').prop('toggled')).to.eql(true);
       });
-
-      it('sets the toggle.toggled to false if showCorrect=true && mode!=evaluate', () => {
-        let w = mkWrapper({ correctResponse: [] });
-        w.setState({ showCorrect: true });
-        expect(w.find('toggle').prop('toggled')).to.eql(false);
-      });
-    })
+    });
   });
 });

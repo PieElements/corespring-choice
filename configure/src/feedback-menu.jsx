@@ -6,12 +6,17 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import React from 'react';
 
-export function FeedbackMenu(props) {
+export default function FeedbackMenu(props) {
 
-  const { value: feedback, onChange } = props;
+  const { value, onChange } = props;
 
-  const iconColor = feedback ? (Array.isArray(feedback) ? green500 : blue500) : grey500;
-  const tooltip = feedback ? (Array.isArray(feedback) ? 'Custom Feedback' : 'Default Feedback') : 'Feedback disabled';
+  const iconColor = value === 'custom' ?
+    green500 :
+    (value === 'default' ? blue500 : grey500);
+
+  const tooltip = value === 'custom' ?
+    'Custom Feedback' :
+    (value === 'default' ? 'Default Feedback' : 'Feedback disabled');
 
   const icon = <IconButton
     tooltip={tooltip}>

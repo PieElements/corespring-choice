@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+
+import ChoiceInput from './choice-input';
 import CorespringCorrectAnswerToggle from 'corespring-correct-answer-toggle';
-import ChoiceInput from './choice-input.jsx';
 
 export default class CorespringChoice extends React.Component {
 
@@ -8,48 +9,17 @@ export default class CorespringChoice extends React.Component {
     super(props);
 
     this.state = {
-      showCorrect: false,
-      update: 0
+      showCorrect: false
     }
 
-    /**
-     * Note: component handlers are defined below using => 
-     * to ensure the function context is correct.
-     */
-
-    this.onToggle = () => {
-      if (this.props.mode === 'evaluate') {
-        this.setState({ showCorrect: !this.state.showCorrect });
-      }
-    };
-
-    this.onChange = (options) => {
-      this.props.session.value = this.props.session.value || [];
-
-      if (this.props.onChange) {
-        this.props.onChange(options);
-      }
-
-      var value = options.value;
-      var selected = options.selected;
-      var index = this.props.session.value.indexOf(value);
-
-      if (selected === undefined) {
-        this.props.session.value = [value];
-      } else {
-        if (selected && index < 0) {
-          if (this.props.choiceMode === 'radio') {
-            this.props.session.value.pop();
-          }
-          this.props.session.value.push(value);
-        } else if (!selected && index >= 0) {
-          this.props.session.value.splice(index, 1);
-        }
-      }
-      //TODO: We shouldn't be calling this, should we be moving the session props into state and calling setState instead?
-      this.forceUpdate();
-    }
+    this.onToggle = this.onToggle.bind(this);
   }
+
+  onToggle() {
+    if (this.props.mode === 'evaluate') {
+      this.setState({ showCorrect: !this.state.showCorrect });
+    }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.correctResponse) {
@@ -57,7 +27,7 @@ export default class CorespringChoice extends React.Component {
     }
   }
 
-  isChecked(value) {
+  isSelected(value) {
     if (this.props.session.value) {
       return this.props.session.value.indexOf(value) >= 0;
     } else {
@@ -65,93 +35,59 @@ export default class CorespringChoice extends React.Component {
     }
   }
 
-  _correctness(choice) {
-    var outcome, response;
-    //TODO: this looks to be unecessarily complex - we should derive correctnes from one source.
-    if (this.state.showCorrect && this.props.correctResponse) {
-      for (var i in this.props.correctResponse) {
-        response = this.props.correctResponse[i];
-        if (response === choice.value) {
-          return 'correct';
-        }
-      }
-    } else if (this.props.outcomes) {
-      for (var i in this.props.outcomes) {
-        outcome = this.props.outcomes[i];
-        if (outcome.value === choice.value) {
-          return outcome.correct ? 'correct' : 'incorrect';
-        }
-      }
-    }
-  }
-
-  _correct(choice) {
-    var response;
-    if (this.state.showCorrect && this.props.correctResponse) {
-      for (var i in this.props.correctResponse) {
-        response = this.props.correctResponse[i];
-        if (response === choice.value) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return undefined;
-    }
-  }
-
-  _feedback(choice) {
-    if (this.props.outcomes && !this.state.showCorrect) {
-      var outcome;
-      for (var i in this.props.outcomes) {
-        outcome = this.props.outcomes[i];
-        if (outcome.value === choice.value) {
-          return outcome.feedback;
-        }
-      }
-    }
-  }
-
-  _indexToSymbol(index) {
+  indexToSymbol(index) {
     return ((this.props.keyMode === 'numbers') ? index + 1 : String.fromCharCode(97 + index).toUpperCase()).toString();
   }
 
   render() {
 
-    if (this.props.mode !== 'evaluate') {
-      this.state.showCorrect = false;
-    }
+    const {
+      mode,
+      disabled,
+      choices,
+      choiceMode,
+      prompt,
+      onChoiceChanged,
+      responseCorrect
+    } = this.props;
 
-    let disabled = this.props.mode !== 'gather';
+    const { showCorrect } = this.state;
+    const isEvaluateMode = mode === 'evaluate';
 
+    const correctness = (c) => c === true ? 'correct' : 'incorrect';
 
     let choiceToTag = (choice, index) => {
-      var choiceClass = 'choice' + (index === this.props.choices.length - 1 ? ' last' : '');
+      var choiceClass = 'choice' + (index === choices.length - 1 ? ' last' : '');
+
+      const checked = showCorrect ? (choice.correct || false) : this.isSelected(choice.value);
+
+      const feedback = !isEvaluateMode || showCorrect ? '' : choice.feedback;
+
+      const choiceProps = {
+        checked,
+        choiceMode,
+        disabled,
+        feedback,
+        value: choice.value,
+        correctness: checked && isEvaluateMode ? correctness(choice.correct) : undefined,
+        displayKey: this.indexToSymbol(index),
+        label: choice.label,
+        onChange: mode === 'gather' ? onChoiceChanged : () => { }
+      }
+
       return <div className={choiceClass} key={index}>
-        <ChoiceInput
-          choiceMode={this.props.choiceMode}
-          checked={this.isChecked(choice.value)}
-          correct={this._correct(choice)}
-          correctness={this._correctness(choice)}
-          disabled={disabled}
-          display-key={this._indexToSymbol(index)}
-          feedback={this._feedback(choice)}
-          label={choice.label}
-          onChange={this.onChange}
-          value={choice.value} />
+        <ChoiceInput {...choiceProps} />
       </div>;
     };
 
-    let { correctResponse } = this.props;
-    const showToggle = correctResponse !== undefined && correctResponse.length > 0;
 
     return <div className="corespring-choice">
       <CorespringCorrectAnswerToggle
-        show={showToggle}
+        show={isEvaluateMode && !responseCorrect}
         toggled={this.state.showCorrect}
         onToggle={this.onToggle.bind(this)} />
-      <div className="prompt">{this.props.prompt}</div>
-      {this.props.choices.map(choiceToTag)}
+      <div className="prompt">{prompt}</div>
+      {choices.map(choiceToTag)}
     </div>;
   }
 }
@@ -160,12 +96,10 @@ CorespringChoice.propTypes = {
   mode: PropTypes.oneOf(['gather', 'view', 'evaluate']),
   choiceMode: PropTypes.oneOf(['radio', 'checkbox']),
   keyMode: PropTypes.oneOf(['numbers', 'letters']),
-  model: PropTypes.object,
-  outcomes: PropTypes.array,
-  correctResponse: PropTypes.array,
   choices: PropTypes.array,
   prompt: PropTypes.string,
-  session: PropTypes.object
+  session: PropTypes.object,
+  onChoiceChanged: PropTypes.func.isRequired
 };
 
 CorespringChoice.defaultProps = {

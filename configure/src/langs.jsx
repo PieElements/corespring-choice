@@ -5,15 +5,13 @@ import React from 'react';
 export default class Langs extends React.Component {
 
   render() {
-    let { langs, selected, onChange } = this.props;
+    let { langs, selected, onChange, label } = this.props;
     return <div className="langs">
-      <div className="label">Language:</div>
+      <div className="label">{label}</div>
       <DropDownMenu
         value={selected}
         onChange={onChange}>
-        {
-          langs.map((l) => <MenuItem key={l} value={l} primaryText={l} />)
-        }
+        {langs.map((l) => <MenuItem key={l} value={l} primaryText={l} />)}
       </DropDownMenu>
     </div>;
   }

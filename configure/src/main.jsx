@@ -1,17 +1,12 @@
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { Tab, Tabs } from 'material-ui/Tabs';
 import { blue500, green500, green700, grey400, grey500, red500 } from 'material-ui/styles/colors';
 
-import Checkbox from 'material-ui/Checkbox';
 import ChoiceConfig from './choice-config';
 import Langs from './langs';
-import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MultiLangInput from './multi-lang-input';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -20,9 +15,6 @@ require('./index.less');
 
 injectTapEventPlugin();
 
-// This replaces the textColor value on the palette
-// and then update the keys for each component that depends on it.
-// More on Colors: http://www.material-ui.com/#/customization/colors
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: green500,
@@ -31,26 +23,13 @@ const muiTheme = getMuiTheme({
   }
 });
 
-class Main extends React.Component {
+export default class Main extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       activeLang: props.model.defaultLang
     }
-  }
-
-  onFeedbackChange(choiceValue, value) {
-    if (value.feedbackType === 'none') {
-      delete this.props.model.feedback[choiceValue];
-    } else {
-      this.props.model.feedback[choiceValue] = value.feedback;
-    }
-    this.props.onFeedbackChanged(this.props.model.feedback);
-  }
-
-  onPartialScoringChange(partialScoring) {
-    this.props.onPartialScoringChanged(partialScoring);
   }
 
   render() {
@@ -62,7 +41,8 @@ class Main extends React.Component {
       onKeyModeChanged,
       onPromptChanged,
       onAddChoice,
-      model
+      model,
+      onDefaultLangChanged
     } = this.props;
 
     return <MuiThemeProvider muiTheme={muiTheme}>
@@ -73,11 +53,18 @@ class Main extends React.Component {
         </div>
         <hr className="divider" />
 
-        <Langs
-          langs={model.langs}
-          selected={this.state.activeLang}
-          onChange={(e, index, l) => this.setState({ activeLang: l })} />
-
+        <div className="language-controls">
+          <Langs
+            label="Choose language to edit"
+            langs={model.langs}
+            selected={this.state.activeLang}
+            onChange={(e, index, l) => this.setState({ activeLang: l })} />
+          <Langs
+            label="Default language"
+            langs={model.langs}
+            selected={model.defaultLang}
+            onChange={(e, index, l) => onDefaultLangChanged(l)} />
+        </div>
         <MultiLangInput
           textFieldLabel="prompt"
           value={model.prompt}
@@ -85,41 +72,26 @@ class Main extends React.Component {
           lang={this.state.activeLang}
           onChange={onPromptChanged} />
 
-
         {model.choices.map((choice, index) => {
           const choiceProps = {
             choice,
             index,
+            choiceMode: model.choiceMode,
             keyMode: model.keyMode,
             activeLang: this.state.activeLang,
+            defaultLang: model.defaultLang,
             onChoiceChanged: onChoiceChanged.bind(null, index),
-            onRemoveChoice: onRemoveChoice.bind(null, index),
-            onAddChoice: onAddChoice.bind(null, index)
+            onRemoveChoice: onRemoveChoice.bind(null, index)
           }
           return <ChoiceConfig key={index} {...choiceProps} />;
         })}
 
         <br />
-        <RaisedButton label="Add a choice" onClick={onAddChoice} />
+        <RaisedButton label="Add a choice" onClick={() => onAddChoice(this.state.activeLang)} />
       </div>
     </MuiThemeProvider>
   }
-
 }
-
-Main.InputTypes = {
-  Radio: 'radio',
-  Checkbox: 'checkbox'
-};
-
-Main.KeyModes = {
-  Letters: 'letters',
-  Numbers: 'numbers'
-};
-
-export default Main;
-
-
 
 const TwoChoice = (props) => {
   return <div className="two-choice">
@@ -142,7 +114,7 @@ const TwoChoice = (props) => {
   </div>;
 }
 
-const ChoiceType = (props) => {
+export const ChoiceType = (props) => {
   let choiceProps = {
     header: 'Response Type',
     defaultSelected: 'radio',
@@ -160,7 +132,7 @@ const ChoiceType = (props) => {
   return <TwoChoice {...choiceProps} />;
 }
 
-const KeyType = (props) => {
+export const KeyType = (props) => {
   let choiceProps = {
     header: 'Choice Labels',
     defaultSelected: 'numbers',
