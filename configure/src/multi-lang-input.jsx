@@ -35,7 +35,7 @@ export default class MultiLangInput extends React.Component {
 
   render() {
 
-    const { lang, value, textFieldLabel } = this.props;
+    const { lang, value, textFieldLabel, disableToggle } = this.props;
 
     const renderValue = isString(value) ? value : value.find(t => t.lang === lang).value;
     return <div className="multi-lang-input">
@@ -45,12 +45,14 @@ export default class MultiLangInput extends React.Component {
         value={renderValue}
         style={{ flex: 1 }}
         onChange={this.onChange} />
-      <IconButton
-        tooltip={isString(value) ? 'langs disabled' : 'langs enabled'}
-        onClick={this.onToggleLangsSupport}>
-        <ActionLanguage
-          color={isString(value) ? grey500 : green500} />
-      </IconButton>
+      {!disableToggle &&
+        <IconButton
+          tooltip={isString(value) ? 'langs disabled' : 'langs enabled'}
+          onClick={this.onToggleLangsSupport}>
+          <ActionLanguage
+            color={isString(value) ? grey500 : green500} />
+        </IconButton>
+      }
     </div>;
   }
 }

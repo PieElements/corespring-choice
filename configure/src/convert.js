@@ -44,7 +44,8 @@ export function convert(pieModel) {
 
   out.choices = out.choices.map(c => {
     c.correct = pieModel.correctResponse.indexOf(c.value) !== -1;
-    c.feedback = pieModel.feedback[c.value];
+    let fb = pieModel.feedback[c.value];
+    c.feedback = fb && toStringOrTranslationArray(fb);
     c.label = toStringOrTranslationArray(c.label);
     return c;
   });
@@ -122,11 +123,19 @@ export function applyChoiceChange(pieModel, choiceIndex, choice) {
   }
 
   if (choice.feedback) {
-    out.feedback[choice.value] = choice.feedback;
+    if (Array.isArray(choice.feedback)) {
+      out.feedback[choice.value] = '$feedback_' + choice.value;
+      choice.feedback.forEach(({ lang, value }) => {
+        out.translations[lang] = out.translations[lang] || {};
+        out.translations[lang]['feedback_' + choice.value] = value;
+      });
+    } else {
+      out.feedback[choice.value] = choice.feedback;
+    }
   } else {
     out.feedback[choice.value] = null;
+    delete out.feedback[choice.value];
   }
-  //update translations
 
   if (Array.isArray(choice.label)) {
     choice.label.forEach(({ lang, value }) => {

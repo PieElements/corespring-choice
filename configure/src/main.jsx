@@ -1,6 +1,7 @@
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Tab, Tabs } from 'material-ui/Tabs';
+import { blue500, green500, green700, grey400, grey500, red500 } from 'material-ui/styles/colors';
 
 import Checkbox from 'material-ui/Checkbox';
 import ChoiceConfig from './choice-config';
@@ -20,6 +21,17 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 require('./index.less');
 
 injectTapEventPlugin();
+
+// This replaces the textColor value on the palette
+// and then update the keys for each component that depends on it.
+// More on Colors: http://www.material-ui.com/#/customization/colors
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: green500,
+    primary2Color: green700,
+    primary3Color: grey400,
+  }
+});
 
 class Main extends React.Component {
 
@@ -44,7 +56,6 @@ class Main extends React.Component {
   }
 
   render() {
-    let theme = getMuiTheme({});
 
     const {
       onChoiceChanged,
@@ -56,7 +67,7 @@ class Main extends React.Component {
       model
     } = this.props;
 
-    return <MuiThemeProvider muiTheme={theme}>
+    return <MuiThemeProvider muiTheme={muiTheme}>
       <div className="corespring-choice-config-root">
         <div className="base-types">
           <ChoiceType value={model.choiceMode} onChange={onChoiceModeChanged} />
