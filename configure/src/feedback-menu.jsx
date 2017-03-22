@@ -30,5 +30,4 @@ export function FeedbackMenu(props) {
     <MenuItem onClick={chooseFeedback('default')} primaryText="Default" />
     <MenuItem onClick={chooseFeedback('custom')} primaryText="Custom" />
   </IconMenu>
-}    /*anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-    targetOrigin={{ horizontal: 'left', vertical: 'top' }} >*/
+}    
