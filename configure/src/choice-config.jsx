@@ -6,7 +6,6 @@ import ActionDone from 'material-ui/svg-icons/action/done';
 import ActionFeedback from 'material-ui/svg-icons/action/feedback';
 import Checkbox from 'material-ui/Checkbox';
 import CheckboxIcon from 'material-ui/svg-icons/toggle/check-box';
-import EditableHTML from 'corespring-editable-html';
 import { FeedbackMenu } from './feedback-menu';
 import IconButton from 'material-ui/IconButton';
 import MultiLangInput from './multi-lang-input';

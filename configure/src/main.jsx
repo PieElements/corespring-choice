@@ -5,12 +5,10 @@ import { blue500, green500, green700, grey400, grey500, red500 } from 'material-
 
 import Checkbox from 'material-ui/Checkbox';
 import ChoiceConfig from './choice-config';
-import FeedbackSelector from 'corespring-feedback-config/src/feedback-selector.jsx';
 import Langs from './langs';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MultiLangInput from './multi-lang-input';
-import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
