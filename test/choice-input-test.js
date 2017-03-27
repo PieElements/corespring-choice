@@ -1,12 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { stub, assert } from 'sinon';
-import { expect } from 'chai';
-import proxyquire from 'proxyquire';
+import { assert, stub } from 'sinon';
+
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
+import React from 'react';
 import _ from 'lodash';
-
+import { expect } from 'chai';
+import proxyquire from 'proxyquire';
+import { shallow } from 'enzyme';
 
 describe('ChoiceInput', () => {
   let onChange, wrapper, muiTheme, ChoiceInput;
@@ -32,17 +32,10 @@ describe('ChoiceInput', () => {
     }, opts);
 
     return shallow(<ChoiceInput
-      display-key={opts.displayKey}
-      checked={opts.checked}
-      choiceMode={opts.choiceMode}
-      correctness={opts.correctness}
-      disabled={opts.disabled}
-      feedback={opts.feedback}
-      label={opts.label}
+      {...opts}
       onChange={onChange}
-      value={opts.value}
       muiTheme={muiTheme}
-      />, {});
+    />, {});
 
   }
 
@@ -58,21 +51,27 @@ describe('ChoiceInput', () => {
 
     describe('radio', () => {
       beforeEach(() => {
-        wrapper = mkWrapper({choiceMode: 'radio'});
+        wrapper = mkWrapper({ choiceMode: 'radio' });
       });
-      
+
       it('has a .corespring-radio-button class', () => {
         expect(wrapper.hasClass('corespring-radio-button')).to.eql(true);
       });
-      
+
       it('has a checkbox-holder', () => {
         let holder = wrapper.find('.checkbox-holder');
         expect(holder).to.have.length(1);
       });
 
-      it('sets the label on RadioButton', () => {
-        let cb = wrapper.find(RadioButton);
-        expect(cb.prop('label')).to.eql('1. label');
+      it('sets the label index', () => {
+        let rb = wrapper.find(RadioButton);
+        expect(rb.prop('label')).to.eql('1. ');
+      });
+
+      it('sets the label html', () => {
+        let l = wrapper.find('[className="label"]');
+        let danger = l.prop('dangerouslySetInnerHTML');
+        expect(danger).to.eql({ __html: 'label' });
       });
     });
 
@@ -87,9 +86,15 @@ describe('ChoiceInput', () => {
         expect(holder).to.have.length(1);
       });
 
-      it('sets the label on Checkbox', () => {
-        let cb = wrapper.find(Checkbox);
-        expect(cb.prop('label')).to.eql('1. label');
+      it('sets the label index', () => {
+        let b = wrapper.find(Checkbox);
+        expect(b.prop('label')).to.eql('1. ');
+      });
+
+      it('sets the label html', () => {
+        let l = wrapper.find('[className="label"]');
+        let danger = l.prop('dangerouslySetInnerHTML');
+        expect(danger).to.eql({ __html: 'label' });
       });
     });
   });
@@ -114,10 +119,10 @@ describe('ChoiceInput', () => {
     });
   });
 
-  describe('onCheck', () => {
+  describe('onToggleChoice', () => {
 
     it('calls handler', () => {
-      wrapper.instance().onCheck({ target: { checked: true } });
+      wrapper.instance().onToggleChoice({ target: { checked: true } });
       assert.calledWith(onChange, { value: 'value', selected: true });
     });
   });

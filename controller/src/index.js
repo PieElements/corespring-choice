@@ -10,13 +10,30 @@ import map from 'lodash/map';
  * https://pielabs.github.io/pie-docs/developing/controller.html
  */
 
+const colorMap = {
+  black_on_rose: 'black-on-rose',
+  white_on_black: 'white-on-black',
+  black_on_white: 'default'
+};
+
+const getCorrectResponse = (choices) => choices
+  .filter(c => c.correct)
+  .map(c => c.value)
+  .sort();
+
+function isResponseCorrect(question, session) {
+  let correctResponse = getCorrectResponse(question.choices);
+  return isEqual((session.value || []).sort(), correctResponse);
+}
+
 export function outcome(question, session = { value: [] }) {
   session.value = session.value || [];
   return new Promise((resolve, reject) => {
-    if (!question || !question.correctResponse || isEmpty(question.correctResponse)) {
-      reject(new Error('Question is missing required array: correctResponse'));
+
+    if (!question || !question.choices || isEmpty(question.choices)) {
+      reject(new Error('Question is missing required array: choices'));
     } else {
-      const allCorrect = isEqual(session.value.sort(), question.correctResponse.sort());
+      const allCorrect = isResponseCorrect(question, session);
       resolve({
         score: {
           scaled: allCorrect ? 1 : 0
@@ -28,87 +45,57 @@ export function outcome(question, session = { value: [] }) {
 
 export function model(question, session, env) {
 
-  function defaultLocaleTranslation(key) {
-    var localeKey = (question.translations || {}).default_locale || 'en-US';
-    var map = ((question.translations || {})[localeKey] || {});
-    return map[key];
-  }
+  function getLabel(arr, lang, fallbackLang) {
+    let label = arr.find(l => l.lang === lang);
 
-  function lookup(value) {
-    if (value === undefined) {
-      return undefined;
-    }
-    var localeKey = env.locale || (question.translations || {}).default_locale || 'en_US';
-    var map = ((question.translations || {})[localeKey] || {});
-    if (value.indexOf('$') === 0) {
-      var key = value.substring(1);
-      var out = map[key];
-      if (!out) {
-        console.warn('not able to find translation for: ' + key);
-      }
-      return out || defaultLocaleTranslation(key) || value;
+    if (label && !isEmpty(label.value)) {
+      return label.value;
     } else {
-      return value;
+      let out = arr.find(l => l.lang === fallbackLang);
+      if (!out) {
+        console.warn(`can't find translation for: ${fallbackLang} in ${JSON.stringify(arr)}`);
+      }
+      return out && !isEmpty(out.value) ? out.value : undefined;
     }
   }
 
-  function createOutcomes(responses, allCorrect) {
-    return map(responses, function (v) {
-      var correct = includes(question.correctResponse, v);
-      var feedback = lookup(question.feedback[v]);
-      return {
-        value: v,
-        correct: correct,
-        feedback: allCorrect ? null : feedback
-      };
-    });
-  }
-
-  return new Promise((resolve/*, reject*/) => {
-
-    var base = assign({}, cloneDeep(question.model));
-
-    base.prompt = lookup(base.prompt);
-    base.choices = map(base.choices, function (c) {
-      c.label = lookup(c.label);
-      return c;
-    });
-
-    base.outcomes = [];
-    base.config = {};
-
-    if (env.mode !== 'gather') {
-      base.config.disabled = true;
+  function prepareChoice(responseCorrect, choice) {
+    let out = {
+      value: choice.value,
+      label: getLabel(choice.label, env.locale, question.defaultLang)
     }
 
     if (env.mode === 'evaluate') {
-
-      var responses = isArray(session.value) ? session.value : [];
-
-      var allCorrect = isEqual(responses, question.correctResponse.sort());
-
-      if (!allCorrect) {
-        base.config.correctResponse = question.correctResponse;
+      out.correct = choice.correct;
+      const feedbackType = (choice.feedback && choice.feedback.type) || 'none';
+      if (feedbackType !== 'none' && !responseCorrect) {
+        let value = choice.feedback[feedbackType];
+        out.feedback = typeof value === 'string' ? value : getLabel(value, env.locale, question.defaultLang);
       }
-      base.outcomes = createOutcomes(responses, allCorrect);
     }
+    return out;
+  }
 
-    base.env = env;
-
-    var colorMap = {
-      black_on_rose: 'black-on-rose',
-      white_on_black: 'white-on-black',
-      black_on_white: 'default'
-    };
-
+  function addColorContrast() {
     if (env.accessibility && env.accessibility.colorContrast && colorMap[env.accessibility.colorContrast]) {
-      base.className = colorMap[env.accessibility.colorContrast];
+      return colorMap[env.accessibility.colorContrast];
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+
+    if (isEmpty(question)) {
+      reject(new Error('Empty model'));
     }
 
-    resolve(base);
+    let responseCorrect = env.mode === 'evaluate' ? isResponseCorrect(question, session) : undefined;
+    let out = cloneDeep(question);
+    out.choices = out.choices.map(prepareChoice.bind(null, responseCorrect));
+    out.prompt = getLabel(out.prompt, env.locale, question.defaultLang);
+    out.disabled = env.mode !== 'gather';
+    out.mode = env.mode;
+    out.responseCorrect = responseCorrect;
+    out.className = addColorContrast();
+    resolve(out);
   });
 }
-
-
-
-

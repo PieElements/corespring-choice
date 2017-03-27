@@ -1,9 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import _ from 'lodash';
 import { expect } from 'chai';
 import proxyquire from 'proxyquire';
-import _ from 'lodash';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { shallow } from 'enzyme';
 
 describe('CorespringFeedback', () => {
 
@@ -31,7 +31,7 @@ describe('CorespringFeedback', () => {
       correctness={opts.correctness}
       feedback={opts.feedback}
       muiTheme={muiTheme}
-      />,
+    />,
       {});
   }
 
@@ -67,9 +67,12 @@ describe('CorespringFeedback', () => {
       });
 
       it('has feedback content', () => {
-        expect(wrapper.find('.content').text()).to.eql('feedback');
+        let content = wrapper.find('.content');
+        let danger = content.prop('dangerouslySetInnerHTML');
+        expect(danger).to.eql({ __html: 'feedback' });
       });
     });
+
     describe('no correctness', () => {
       beforeEach(() => {
         wrapper = mkWrapper({ correctness: null });
@@ -103,21 +106,21 @@ describe('CorespringFeedback', () => {
     it('returns incorrect style', () => {
       expect(instance.getStyle('incorrect')).to.eql({
         color: 'red',
-        'background-color': 'white'
+        'backgroundColor': 'white'
       });
     });
 
     it('returns correct style', () => {
       expect(instance.getStyle('correct')).to.eql({
         color: 'green',
-        'background-color': 'white'
+        'backgroundColor': 'white'
       });
     });
 
     it('returns default style', () => {
       expect(instance.getStyle(null)).to.eql({
         color: 'black',
-        'background-color': 'white'
+        'backgroundColor': 'white'
       });
     });
   });

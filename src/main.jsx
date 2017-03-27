@@ -1,17 +1,19 @@
-import React from 'react';
+import { amber500, amber600, green200, green500 } from 'material-ui/styles/colors';
+
+import CorespringChoice from './corespring-choice.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { green200, green500, amber500, amber600 } from 'material-ui/styles/colors';
-import CorespringChoice from './corespring-choice.jsx';
 
 require('./index.less');
 
 class Main extends React.Component {
 
-  onChange(opts) {
-    this.props.onChange(opts);
-  };
+  constructor(props) {
+    super(props);
+  }
+
 
   _getMuiTheme(className) {
     if (className === 'white-on-black') {
@@ -42,21 +44,16 @@ class Main extends React.Component {
 
   render() {
 
-    let theme = this._getMuiTheme(this.props.model.className);
+    const { model, onChoiceChanged, session } = this.props;
 
-    return <div className={this.getClass(this.props.model.className)}>
+    let theme = this._getMuiTheme(model.className);
+
+    return <div className={this.getClass(model.className)}>
       <MuiThemeProvider muiTheme={theme}>
         <CorespringChoice
-          model={this.props.model}
-          outcomes={this.props.model.outcomes}
-          correctResponse={this.props.model.config ? this.props.model.config.correctResponse : {}}
-          prompt={this.props.model.prompt}
-          choiceMode={this.props.model.choiceMode}
-          keyMode={this.props.model.keyMode}
-          choices={this.props.model.choices}
-          session={this.props.session}
-          mode={this.props.model.env.mode}
-          onChange={this.onChange.bind(this)} />
+          {...model}
+          session={session}
+          onChoiceChanged={onChoiceChanged} />
       </MuiThemeProvider>
     </div>;
   }
@@ -65,7 +62,7 @@ class Main extends React.Component {
 Main.propTypes = {
   model: React.PropTypes.object,
   session: React.PropTypes.object,
-  onChange: React.PropTypes.func
+  onChoiceChanged: React.PropTypes.func
 };
 
 Main.defaultProps = {
