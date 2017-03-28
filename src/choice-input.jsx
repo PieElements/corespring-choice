@@ -96,7 +96,7 @@ ChoiceInput.propTypes = {
   disabled: PropTypes.bool.isRequired,
   feedback: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  onToggleChoice: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired
 };
 
