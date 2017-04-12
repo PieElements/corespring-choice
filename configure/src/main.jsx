@@ -8,8 +8,10 @@ import MultiLangInput from './multi-lang-input';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 require('./index.less');
 
@@ -31,7 +33,7 @@ export default class Main extends React.Component {
       activeLang: props.model.defaultLang
     }
   }
-
+  
   render() {
 
     const {
@@ -42,52 +44,63 @@ export default class Main extends React.Component {
       onPromptChanged,
       onAddChoice,
       model,
-      onDefaultLangChanged
+      onDefaultLangChanged,
+      onPartialScoringChanged
     } = this.props;
 
     return <MuiThemeProvider muiTheme={muiTheme}>
       <div className="corespring-choice-config-root">
-        <div className="base-types">
-          <ChoiceType value={model.choiceMode} onChange={onChoiceModeChanged} />
-          <KeyType value={model.keyMode} onChange={onKeyModeChanged} />
-        </div>
-        <hr className="divider" />
+        <Tabs>
+          <Tab label="Design">
+            <div className="base-types">
+              <ChoiceType value={model.choiceMode} onChange={onChoiceModeChanged} />
+              <KeyType value={model.keyMode} onChange={onKeyModeChanged} />
+            </div>
+            <hr className="divider" />
 
-        <div className="language-controls">
-          <Langs
-            label="Choose language to edit"
-            langs={model.langs}
-            selected={this.state.activeLang}
-            onChange={(e, index, l) => this.setState({ activeLang: l })} />
-          <Langs
-            label="Default language"
-            langs={model.langs}
-            selected={model.defaultLang}
-            onChange={(e, index, l) => onDefaultLangChanged(l)} />
-        </div>
-        <MultiLangInput
-          textFieldLabel="prompt"
-          value={model.prompt}
-          style={{ width: '100%' }}
-          lang={this.state.activeLang}
-          onChange={onPromptChanged} />
+            <div className="language-controls">
+              <Langs
+                label="Choose language to edit"
+                langs={model.langs}
+                selected={this.state.activeLang}
+                onChange={(e, index, l) => this.setState({ activeLang: l })} />
+              <Langs
+                label="Default language"
+                langs={model.langs}
+                selected={model.defaultLang}
+                onChange={(e, index, l) => onDefaultLangChanged(l)} />
+            </div>
+            <MultiLangInput
+              textFieldLabel="prompt"
+              value={model.prompt}
+              style={{ width: '100%' }}
+              lang={this.state.activeLang}
+              onChange={onPromptChanged} />
 
-        {model.choices.map((choice, index) => {
-          const choiceProps = {
-            choice,
-            index,
-            choiceMode: model.choiceMode,
-            keyMode: model.keyMode,
-            activeLang: this.state.activeLang,
-            defaultLang: model.defaultLang,
-            onChoiceChanged: onChoiceChanged.bind(null, index),
-            onRemoveChoice: onRemoveChoice.bind(null, index)
-          }
-          return <ChoiceConfig key={index} {...choiceProps} />;
-        })}
+            {model.choices.map((choice, index) => {
+              const choiceProps = {
+                choice,
+                index,
+                choiceMode: model.choiceMode,
+                keyMode: model.keyMode,
+                activeLang: this.state.activeLang,
+                defaultLang: model.defaultLang,
+                onChoiceChanged: onChoiceChanged.bind(null, index),
+                onRemoveChoice: onRemoveChoice.bind(null, index)
+              }
+              return <ChoiceConfig key={index} {...choiceProps} />;
+            })}
 
-        <br />
-        <RaisedButton label="Add a choice" onClick={() => onAddChoice(this.state.activeLang)} />
+            <br />
+            <RaisedButton label="Add a choice" onClick={() => onAddChoice(this.state.activeLang)} />
+          </Tab>
+          <Tab label="Scoring">
+            <PartialScoringConfig
+              partialScoring={this.props.partialScoring}
+              numberOfCorrectResponses={model.choices.filter(choice => choice.correct).length}
+              onPartialScoringChange={onPartialScoringChanged.bind(this)} />
+          </Tab>
+        </Tabs>
       </div>
     </MuiThemeProvider>
   }

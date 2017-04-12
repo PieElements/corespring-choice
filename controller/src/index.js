@@ -46,6 +46,10 @@ export function outcome(question, session = { value: [] }) {
 
 export function model(question, session, env) {
 
+  if (env.mode === 'evaluate') {
+    console.log('score', score(question, session));
+  }
+
   function getLabel(arr, lang, fallbackLang) {
     let label = arr.find(l => l.lang === lang);
 

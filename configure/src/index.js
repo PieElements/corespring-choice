@@ -25,6 +25,7 @@ export default class ChoiceConfigReactElement extends HTMLElement {
     this.onChoiceChanged = this.onChoiceChanged.bind(this);
     this.onPromptChanged = this.onPromptChanged.bind(this);
     this.onDefaultLangChanged = this.onDefaultLangChanged.bind(this);
+    this.onPartialScoringChanged = this.onPartialScoringChanged.bind(this);
   }
 
   set model(s) {
@@ -55,6 +56,12 @@ export default class ChoiceConfigReactElement extends HTMLElement {
 
   onRemoveChoice(index) {
     this._model.choices.splice(index, 1);
+    this.dispatchModelUpdated();
+    this._rerender();
+  }
+
+  onPartialScoringChanged(partialScoring) {
+    this._model.partialScoring = partialScoring;
     this.dispatchModelUpdated();
     this._rerender();
   }
@@ -124,7 +131,8 @@ export default class ChoiceConfigReactElement extends HTMLElement {
       onRemoveChoice: this.onRemoveChoice,
       onAddChoice: this.onAddChoice,
       onPromptChanged: this.onPromptChanged,
-      onDefaultLangChanged: this.onDefaultLangChanged
+      onDefaultLangChanged: this.onDefaultLangChanged,
+      onPartialScoringChanged: this.onPartialScoringChanged
     });
     ReactDOM.render(element, this);
   }
