@@ -5,6 +5,7 @@ import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import map from 'lodash/map';
+import { score } from './scoring.js';
 /** 
  * For the documentation of pie controllers see
  * https://pielabs.github.io/pie-docs/developing/controller.html
@@ -36,7 +37,7 @@ export function outcome(question, session = { value: [] }) {
       const allCorrect = isResponseCorrect(question, session);
       resolve({
         score: {
-          scaled: allCorrect ? 1 : 0
+          scaled: score(question, session)
         }
       });
     }
