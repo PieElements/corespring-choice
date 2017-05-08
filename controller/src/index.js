@@ -93,6 +93,8 @@ export function model(question, session, env) {
       reject(new Error('Empty model'));
     }
 
+
+
     let responseCorrect = env.mode === 'evaluate' ? isResponseCorrect(question, session) : undefined;
     let out = cloneDeep(question);
     out.choices = out.choices.map(prepareChoice.bind(null, responseCorrect));
@@ -101,6 +103,12 @@ export function model(question, session, env) {
     out.mode = env.mode;
     out.responseCorrect = responseCorrect;
     out.className = addColorContrast();
+
+    /** completeness - must have at least the correctResponse.length */
+    out.complete = {
+      min: out.choices.filter(c => c.correct).length
+    }
+
     resolve(out);
   });
 }

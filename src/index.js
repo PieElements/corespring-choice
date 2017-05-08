@@ -41,14 +41,13 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   }
 
   _onChange(data) {
-    this._session.value = this._session.value || [];
 
     updateSessionValue(this._session, this._model.choiceMode, data);
 
-    var event = new CustomEvent('pie', {
+    var event = new CustomEvent('response-changed', {
       bubbles: true,
       detail: {
-        type: 'sessionChanged',
+        complete: this.isComplete(),
         component: this.tagName.toLowerCase()
       }
     });
@@ -56,6 +55,21 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     this.dispatchEvent(event);
     this._rerender();
   };
+
+  isComplete() {
+    const { complete } = this._model;
+    if (complete) {
+      const { min = -1, max = -1 } = complete;
+      const choiceCount = this._session.value.length;
+      const overMin = min === -1 || choiceCount >= min;
+      const underMax = max === -1 || choiceCount <= max;
+      return overMin && underMax;
+    } else {
+      return true;
+    }
+  }
+
+
 
   connectedCallback() {
     this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
