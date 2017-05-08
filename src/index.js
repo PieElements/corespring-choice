@@ -20,15 +20,42 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
             onChoiceChanged: this._onChange.bind(this)
           });
         ReactDOM.render(element, this);
+
       } else {
         console.log('skip');
       }
+    }, 50, { leading: false, trailing: true });
+
+    this._dispatchResponseChanged = debounce(() => {
+
+      var event = new CustomEvent('response-changed', {
+        bubbles: true,
+        detail: {
+          complete: this.isComplete(),
+          component: this.tagName.toLowerCase()
+        }
+      });
+
+      this.dispatchEvent(event);
+    });
+
+    this._dispatchModelUpdated = debounce(() => {
+      this.dispatchEvent(new CustomEvent('model-updated', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          complete: this.isComplete(),
+          component: this.tagName.toLowerCase(),
+          hasModel: this._model !== undefined
+        }
+      }));
     }, 50, { leading: false, trailing: true });
   }
 
   set model(s) {
     this._model = s;
     this._rerender();
+    this._dispatchModelUpdated();
   }
 
   get session() {
@@ -38,21 +65,13 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   set session(s) {
     this._session = s;
     this._rerender();
+    this._dispatchResponseChanged();
   }
 
   _onChange(data) {
 
     updateSessionValue(this._session, this._model.choiceMode, data);
 
-    var event = new CustomEvent('response-changed', {
-      bubbles: true,
-      detail: {
-        complete: this.isComplete(),
-        component: this.tagName.toLowerCase()
-      }
-    });
-
-    this.dispatchEvent(event);
     this._rerender();
   };
 
