@@ -4,7 +4,7 @@
   "keywords": [
     "pie"
   ],
-  "version": "1.8.0-prerelease",
+  "version": "2.0.0-prerelease",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -14,7 +14,8 @@
   "scripts": {
     "client-test": "./node_modules/.bin/mocha  --require test/setup test/**/*-test.js",
     "controller-test": "./node_modules/.bin/mocha  --require test/setup controller/test/**/*-test.js",
-    "test": "npm run client-test && npm run controller-test"
+    "configure-test": "./node_modules/.bin/mocha  --require test/setup configure/test/**/*-test.js",
+    "test": "npm run client-test && npm run controller-test && npm run configure-test"
   },
   "dependencies": {
     "less": "^2.7.1",
@@ -23,7 +24,9 @@
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
     "react-dom": "^15.4.1",
-    "corespring-correct-answer-toggle": "^3.0.0"
+    "react-tap-event-plugin": "^2.0.1",
+    "corespring-correct-answer-toggle": "^3.0.0",
+    "corespring-scoring-config": "corespring/corespring-scoring-config"
   },
   "devDependencies": {
     "babel": "^6.5.2",

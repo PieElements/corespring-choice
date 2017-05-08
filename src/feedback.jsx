@@ -15,8 +15,8 @@ export class Feedback extends React.Component {
 
     return {
       color: color,
-      'background-color': this.props.muiTheme.palette.canvasColor
-    }
+      backgroundColor: this.props.muiTheme.palette.canvasColor
+    };
   }
 
   render() {
@@ -31,7 +31,7 @@ export class Feedback extends React.Component {
           key="hasFeedback"
           className={feedbackClass}>
           <div className="content"
-            style={this.getStyle(correctness)}>{feedback}</div>
+            style={this.getStyle(correctness)} dangerouslySetInnerHTML={{__html: feedback}}></div>
         </div>
       } else {
         return null;
