@@ -1,17 +1,17 @@
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import { Tab, Tabs } from 'material-ui/Tabs';
 import { blue500, green500, green700, grey400, grey500, red500 } from 'material-ui/styles/colors';
 
 import ChoiceConfig from './choice-config';
 import Langs from './langs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MultiLangInput from './multi-lang-input';
+import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import PartialScoringConfig from 'corespring-scoring-config/src/index.jsx';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import {Tabs, Tab} from 'material-ui/Tabs';
 
 require('./index.less');
 
@@ -33,7 +33,7 @@ export default class Main extends React.Component {
       activeLang: props.model.defaultLang
     }
   }
-  
+
   render() {
 
     const {
@@ -96,7 +96,7 @@ export default class Main extends React.Component {
           </Tab>
           <Tab label="Scoring">
             <PartialScoringConfig
-              partialScoring={this.props.partialScoring}
+              partialScoring={model.partialScoring}
               numberOfCorrectResponses={model.choices.filter(choice => choice.correct).length}
               onPartialScoringChange={onPartialScoringChanged.bind(this)} />
           </Tab>

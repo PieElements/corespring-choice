@@ -20,6 +20,10 @@ describe('main', () => {
   beforeEach(() => {
 
     mod = proxyquire('../src/main', {
+      'corespring-scoring-config/src/index.jsx': {
+        default: stub(),
+        '@noCallThru': true
+      },
       'react-tap-event-plugin': stub(),
       './index.less': {
         '@noCallThru': true,
@@ -41,6 +45,7 @@ describe('main', () => {
       onDefaultLangChanged: stub(),
       onPromptChanged: stub(),
       onAddChoice: stub(),
+      onPartialScoringChanged: stub(),
       model: {
         prompt: [
           { lang: 'en-US', value: 'What country is called the Emerald Isle?' }
