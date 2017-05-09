@@ -4,7 +4,7 @@
   "keywords": [
     "pie"
   ],
-  "version": "2.1.0-prerelease",
+  "version": "2.1.0",
   "main": "src/index.js",
   "repository": {
     "type": "git",
