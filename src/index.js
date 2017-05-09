@@ -1,6 +1,8 @@
 import Main from './main.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import debounce from 'lodash/debounce';
+import { updateSessionValue } from './session-updater';
 
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
@@ -8,6 +10,20 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     super();
     this._model = null;
     this._session = null;
+
+    this._rerender = debounce(() => {
+      if (this._model && this._session) {
+        var element = React.createElement(Main,
+          {
+            model: this._model,
+            session: this._session,
+            onChoiceChanged: this._onChange.bind(this)
+          });
+        ReactDOM.render(element, this);
+      } else {
+        console.log('skip');
+      }
+    }, 50, { leading: false, trailing: true });
   }
 
   set model(s) {
@@ -25,6 +41,10 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   }
 
   _onChange(data) {
+    this._session.value = this._session.value || [];
+
+    updateSessionValue(this._session, this._model.choiceMode, data);
+
     var event = new CustomEvent('pie', {
       bubbles: true,
       detail: {
@@ -34,23 +54,8 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     });
 
     this.dispatchEvent(event);
+    this._rerender();
   };
-
-  _rerender() {
-    if (this._model && this._session) {
-      var element = React.createElement(Main,
-        {
-          model: this._model,
-          session: this._session,
-          onChange: this._onChange.bind(this)
-        });
-      ReactDOM.render(element, this, function () {
-        console.log('rendered');
-      });
-    } else {
-      console.log('skip');
-    }
-  }
 
   connectedCallback() {
     this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
