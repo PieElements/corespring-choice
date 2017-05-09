@@ -30,6 +30,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
       var event = new CustomEvent('response-changed', {
         bubbles: true,
+        composed: true,
         detail: {
           complete: this.isComplete(),
           component: this.tagName.toLowerCase()
@@ -39,8 +40,8 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
       this.dispatchEvent(event);
     });
 
-    this._dispatchModelUpdated = debounce(() => {
-      this.dispatchEvent(new CustomEvent('model-updated', {
+    this._dispatchModelSet = debounce(() => {
+      this.dispatchEvent(new CustomEvent('model-set', {
         bubbles: true,
         composed: true,
         detail: {
@@ -55,7 +56,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   set model(s) {
     this._model = s;
     this._rerender();
-    this._dispatchModelUpdated();
+    this._dispatchModelSet();
   }
 
   get session() {
@@ -69,9 +70,8 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   }
 
   _onChange(data) {
-
     updateSessionValue(this._session, this._model.choiceMode, data);
-
+    this._dispatchResponseChanged();
     this._rerender();
   };
 
@@ -79,7 +79,7 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     const { complete } = this._model;
     if (complete) {
       const { min = -1, max = -1 } = complete;
-      const choiceCount = this._session.value.length;
+      const choiceCount = this._session && this._session.value ? this._session.value.length : 0;
       const overMin = min === -1 || choiceCount >= min;
       const underMax = max === -1 || choiceCount <= max;
       return overMin && underMax;
