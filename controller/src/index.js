@@ -36,9 +36,8 @@ export function outcome(question, session = { value: [] }) {
     } else {
       const allCorrect = isResponseCorrect(question, session);
       resolve({
-        score: {
-          scaled: score(question, session)
-        }
+        score: score(question, session),
+        complete: session.value.length >= question.choices.length
       });
     }
   });

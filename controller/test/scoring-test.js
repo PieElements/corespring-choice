@@ -1,4 +1,5 @@
 import { maxScore, score } from '../src/scoring';
+
 import _ from 'lodash';
 import chai from 'chai';
 
@@ -18,7 +19,7 @@ describe('score', () => {
 
   describe('default scoring', () => {
     let question = _.cloneDeep(baseQuestion);
-    
+
     describe('all correct', () => {
       let session = {
         value: _.cloneDeep(correctResponse)
@@ -69,7 +70,7 @@ describe('score', () => {
     });
 
     let weightFor = (count) => {
-      return question.partialScoring.find(({correctCount}) => count === correctCount).weight;
+      return question.partialScoring.find(({ correctCount }) => count === correctCount).weight;
     }
 
     describe('all correct', () => {
@@ -114,7 +115,11 @@ describe('score', () => {
 
   });
 
-  describe('weighted scoring', () => {
+  /**
+   * TODO: disabling this for now - it's not in the UI 
+   * And it allows values > 1.0 as a score which shouldn't be possible.
+   */
+  xdescribe('weighted scoring', () => {
 
     let question = {
       choices: correctResponse.map(choice => {
@@ -128,20 +133,22 @@ describe('score', () => {
 
     describe('some correct', () => {
       let session = {};
-      
+
       function sessionForCorrect(correct) {
         return {
           value: _.cloneDeep(correct)
         };
       }
 
-      it ('should return the sum of weights for correct choices', () => {
+      it('should return the sum of weights for correct choices', () => {
         const correctChoices = ['c1', 'c3'];
         let session = sessionForCorrect(correctChoices);
         let expectedScore = correctChoices.map((choice) => {
           return question.choices.find(({ value }) => value === choice).weight;
         }).reduce((a, b) => a + b, 0);
 
+        const s = score(question, session);
+        expect(s <= 1.0).to.be.true;
         expect(score(question, session)).to.eql(expectedScore);
       });
 
