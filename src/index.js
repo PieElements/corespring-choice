@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import debounce from 'lodash/debounce';
 import { updateSessionValue } from './session-updater';
 
+//TODO: import {REGISTER} from 'pie-events';
+
 export default class CorespringMultipleChoiceReactElement extends HTMLElement {
 
   constructor() {
@@ -88,10 +90,8 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
     }
   }
 
-
-
   connectedCallback() {
-    this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
+    this.dispatchEvent(new CustomEvent('register-pie', { bubbles: true }));
     this._rerender();
   }
 
