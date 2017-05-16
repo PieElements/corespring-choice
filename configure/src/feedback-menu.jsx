@@ -1,4 +1,4 @@
-import { blue500, green500, grey500 } from 'material-ui/styles/colors';
+import { blue500, cyan500, green500, grey500 } from 'material-ui/styles/colors';
 
 import ActionFeedback from 'material-ui/svg-icons/action/feedback';
 import IconButton from 'material-ui/IconButton';
@@ -12,7 +12,7 @@ export default function FeedbackMenu(props) {
 
   const iconColor = value === 'custom' ?
     green500 :
-    (value === 'default' ? blue500 : grey500);
+    (value === 'default' ? cyan500 : grey500);
 
   const tooltip = value === 'custom' ?
     'Custom Feedback' :

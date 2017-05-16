@@ -18,11 +18,11 @@ require('./index.less');
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
-  palette: {
+  /*palette: {
     primary1Color: green500,
     primary2Color: green700,
     primary3Color: grey400,
-  }
+  }*/
 });
 
 export default class Main extends React.Component {
