@@ -158,6 +158,21 @@ describe('index', () => {
         }
       }
 
+      const isSessionComplete = (session, expected) => outcome.bind(null,
+        { choices: [{ correct: true, value: 'a' }, { value: 'b' }] },
+        session,
+        null,
+        result => expect(result.complete).to.eql(expected)
+      );
+
+      it('returns complete:false if the no of answers is the >= correct length', () => {
+        isSessionComplete([], false);
+      });
+      it('returns complete:false if the no of answers is the >= correct length', () => {
+        isSessionComplete(['b'], true);
+      });
+
+
       it('returns an error if the question is null', outcome(null, {}, {}, (result) => {
         expect(result.message).to.eql('Question is missing required array: choices');
       }));
