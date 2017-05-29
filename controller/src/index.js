@@ -36,9 +36,8 @@ export function outcome(question, session = { value: [] }) {
     } else {
       const allCorrect = isResponseCorrect(question, session);
       resolve({
-        score: {
-          scaled: score(question, session)
-        }
+        score: score(question, session),
+        complete: session.value.length >= question.choices.length
       });
     }
   });
@@ -93,14 +92,24 @@ export function model(question, session, env) {
       reject(new Error('Empty model'));
     }
 
+
+
     let responseCorrect = env.mode === 'evaluate' ? isResponseCorrect(question, session) : undefined;
     let out = cloneDeep(question);
+
+    /** completeness - must have at least the correctResponse.length */
+    out.complete = {
+      min: out.choices.filter(c => c.correct).length
+    }
+
     out.choices = out.choices.map(prepareChoice.bind(null, responseCorrect));
     out.prompt = getLabel(out.prompt, env.locale, question.defaultLang);
     out.disabled = env.mode !== 'gather';
     out.mode = env.mode;
     out.responseCorrect = responseCorrect;
     out.className = addColorContrast();
+
+
     resolve(out);
   });
 }

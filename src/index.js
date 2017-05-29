@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import debounce from 'lodash/debounce';
 import { updateSessionValue } from './session-updater';
 
-export default class CorespringMultipleChoiceReactElement extends HTMLElement {
+export default class CorespringChoice extends HTMLElement {
 
   constructor() {
     super();
@@ -20,15 +20,43 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
             onChoiceChanged: this._onChange.bind(this)
           });
         ReactDOM.render(element, this);
+
       } else {
         console.log('skip');
       }
+    }, 50, { leading: false, trailing: true });
+
+    this._dispatchResponseChanged = debounce(() => {
+
+      var event = new CustomEvent('session-changed', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          complete: this.isComplete(),
+          component: this.tagName.toLowerCase()
+        }
+      });
+
+      this.dispatchEvent(event);
+    });
+
+    this._dispatchModelSet = debounce(() => {
+      this.dispatchEvent(new CustomEvent('model-set', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          complete: this.isComplete(),
+          component: this.tagName.toLowerCase(),
+          hasModel: this._model !== undefined
+        }
+      }));
     }, 50, { leading: false, trailing: true });
   }
 
   set model(s) {
     this._model = s;
     this._rerender();
+    this._dispatchModelSet();
   }
 
   get session() {
@@ -38,27 +66,29 @@ export default class CorespringMultipleChoiceReactElement extends HTMLElement {
   set session(s) {
     this._session = s;
     this._rerender();
+    this._dispatchResponseChanged();
   }
 
   _onChange(data) {
-    this._session.value = this._session.value || [];
-
     updateSessionValue(this._session, this._model.choiceMode, data);
-
-    var event = new CustomEvent('pie', {
-      bubbles: true,
-      detail: {
-        type: 'sessionChanged',
-        component: this.tagName.toLowerCase()
-      }
-    });
-
-    this.dispatchEvent(event);
+    this._dispatchResponseChanged();
     this._rerender();
   };
 
+  isComplete() {
+    const { complete } = this._model;
+    if (complete) {
+      const { min = -1, max = -1 } = complete;
+      const choiceCount = this._session && this._session.value ? this._session.value.length : 0;
+      const overMin = min === -1 || choiceCount >= min;
+      const underMax = max === -1 || choiceCount <= max;
+      return overMin && underMax;
+    } else {
+      return true;
+    }
+  }
+
   connectedCallback() {
-    this.dispatchEvent(new CustomEvent('pie.register', { bubbles: true }));
     this._rerender();
   }
 

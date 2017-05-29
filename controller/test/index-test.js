@@ -170,31 +170,16 @@ describe('index', () => {
         expect(result.message).to.eql('Question is missing required array: choices');
       }));
 
-      it('returns score.scaled: 1 for a correct response', outcome({
-        choices: [{
-          value: 'a',
-          correct: true
-        }]
-      }, { value: ['a'] }, null, (result) => {
-        expect(result).to.eql({
-          score: {
-            scaled: 1
-          }
-        })
-      }));
 
-      it('returns score.scaled: 0 for an incorrect response', outcome({
-        choices: [{
-          value: 'a',
-          correct: true
-        }]
-      }, { value: ['b'] }, null, (result) => {
-        expect(result).to.eql({
-          score: {
-            scaled: 0
-          }
-        })
-      }));
+      const justA = outcome.bind(null, {
+        choices: [{ value: 'a', correct: true }]
+      });
+
+      const eqls = (o) => (r) => expect(r).to.eql(o);
+
+      it('returns score: 1 for a correct response', justA({ value: ['a'] }, null, eqls({ score: 1, complete: true })));
+      it('returns score: 0 and complete: false for an empty response', justA({ value: [] }, null, eqls({ score: 0, complete: false })));
+      it('returns score: 0 for an incorrect response', justA({ value: ['b'] }, null, eqls({ score: 0, complete: true })));
     });
   });
 });
