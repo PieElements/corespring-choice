@@ -35,9 +35,11 @@ export function outcome(question, session = { value: [] }) {
       reject(new Error('Question is missing required array: choices'));
     } else {
       const allCorrect = isResponseCorrect(question, session);
+      const correct = question.choices.filter(c => c.correct);
+
       resolve({
         score: score(question, session),
-        complete: session.value.length >= question.choices.length
+        complete: session.value.length >= correct.length
       });
     }
   });
